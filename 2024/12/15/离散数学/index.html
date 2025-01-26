@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>离散数学 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="离散数学的学习笔记，包含数理逻辑、集合论、图论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离散数学">
+<meta property="og:url" content="http://example.com/2024/12/15/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="离散数学的学习笔记，包含数理逻辑、集合论、图论">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624203720.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624203747.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624210422.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624210335.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624211702.png">
+<meta property="article:published_time" content="2024-12-15T09:29:33.000Z">
+<meta property="article:modified_time" content="2025-01-08T06:40:02.269Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624203720.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-离散数学" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/12/15/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/" class="article-date">
+  <time class="dt-published" datetime="2024-12-15T09:29:33.000Z" itemprop="datePublished">2024-12-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      离散数学
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>离散数学的学习笔记，包含数理逻辑、集合论、图论</p>
+<span id="more"></span>
+
+<h1 id="数理逻辑"><a href="#数理逻辑" class="headerlink" title="数理逻辑"></a>数理逻辑</h1><h2 id="命题逻辑"><a href="#命题逻辑" class="headerlink" title="命题逻辑"></a>命题逻辑</h2><h3 id="联结词"><a href="#联结词" class="headerlink" title="联结词"></a>联结词</h3><h4 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h4><p>$$<br>\begin{align}<br>&amp;（否定）&amp;\quad &amp;\neg P \<br>&amp;（析取）&amp;\quad &amp;P \lor Q \<br>&amp;（合取）&amp;\quad &amp;P \land Q \<br>&amp;（蕴含）&amp;\quad &amp;P \rightarrow Q \<br>&amp;（双蕴含）&amp;\quad &amp;P \leftrightarrow Q \<br>&amp;（否定双蕴含&#x2F;不可兼析取）&amp;\quad &amp;P \overline{\lor} Q \<br>&amp;（否定蕴含）&amp;\quad &amp;P \xrightarrow{c} Q \<br>&amp;（否定合取）&amp;\quad &amp;P \uparrow Q \<br>&amp;（否定析取）&amp; &amp;P \downarrow Q<br>\end{align}<br>$$</p>
+<h4 id="真值表"><a href="#真值表" class="headerlink" title="真值表"></a>真值表</h4><table>
+<thead>
+<tr>
+<th>$P$</th>
+<th>$Q$</th>
+<th>$\neg P$</th>
+<th>$P \lor Q$</th>
+<th>$P \land Q$</th>
+<th>$P \rightarrow Q$</th>
+<th>$P\xrightarrow{c} Q$</th>
+<th>$P \leftrightarrow Q$</th>
+<th>$P \overline{\lor} Q$</th>
+<th>$P \uparrow Q$</th>
+<th>$P \downarrow Q$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$T$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$F$</td>
+<td>$F$</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>$F$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$F$</td>
+</tr>
+<tr>
+<td>$F$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$T$</td>
+<td>$F$</td>
+</tr>
+<tr>
+<td>$F$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$F$</td>
+<td>$T$</td>
+<td>$T$</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>  定义联结词的优先次序为：$\neg,\land,\lor,\rightarrow, \leftrightarrow$</p>
+</blockquote>
+<h3 id="等价公式"><a href="#等价公式" class="headerlink" title="等价公式"></a>等价公式</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>两个命题公式 $A,B$ 真值表完全相同，则称二者 <strong>等价</strong>，记为 $A \iff B$</p>
+<h4 id="常用的等价公式"><a href="#常用的等价公式" class="headerlink" title="常用的等价公式"></a>常用的等价公式</h4><p>$$<br>\begin{align}<br>&amp;德摩根律：\<br>\neg (P \land Q) &amp;\iff (\neg P) \lor (\neg Q) \<br>\neg (P \lor Q) &amp;\iff (\neg P) \land (\neg Q) \ \<br>&amp;分配律：\<br>P \lor (Q \land R) &amp;\iff (P \lor Q) \land (P \lor R) \<br>P \land (Q \lor R) &amp;\iff (P \land Q) \lor (P \land R) \<br>\ \<br>&amp;同一律： \<br>P \land T &amp;\iff P \<br>P \lor F &amp;\iff P \ \<br>&amp;吸收律：\<br>P \lor (P \land Q) &amp;\iff P \<br>P \land (P \lor Q) &amp;\iff P \ \<br>&amp;零律：\<br>P \lor T &amp;\iff T \<br>P \land F &amp;\iff F \ \<br>&amp;否定律: \<br>P \lor (\neg P) &amp;\iff T \<br>P \land (\neg P) &amp;\iff F \ \<br>&amp;幂等律: \<br>P \land P &amp;\iff P \<br>P \lor P &amp;\iff P \ \<br>&amp; 杂类: \<br>P \land Q &amp;\iff \neg P \rightarrow Q \<br>P \rightarrow Q &amp;\iff \neg Q \rightarrow \neg P<br>\end{align}<br>$$</p>
+<h3 id="重言式和蕴含式"><a href="#重言式和蕴含式" class="headerlink" title="重言式和蕴含式"></a>重言式和蕴含式</h3><h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><ul>
+<li>重言式：无论对分量作怎样的真值指派，真值均为 $T$ 的命题公式</li>
+<li>矛盾式（永假式）：……真值均为 $F$ 的命题公式</li>
+<li>蕴含式：当且仅当 $P \rightarrow Q$ 为重言式时，称 <strong>$P$ 蕴含 $Q$</strong>，记作 $P \implies Q$<ul>
+<li>对于 $P \rightarrow Q$ ，<br>$Q \rightarrow P$  称为其 <strong>逆换式</strong>，<br>$\neg P \rightarrow \neg Q$ 称为其 <strong>反换式</strong>，<br>$\neg Q \rightarrow \neg P$ 称为其 <strong>逆反式</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h4><p>命题公式 $A, B$ <strong>等价的充要条件</strong>：<br>$A \leftrightarrow B$ 为重言式<br>或<br>$P \implies Q$ 且 $Q \implies P$</p>
+<h4 id="证明蕴含式"><a href="#证明蕴含式" class="headerlink" title="证明蕴含式"></a>证明蕴含式</h4><p>对于 $P \implies Q$ ，满足以下其一：</p>
+<ol>
+<li>假定 $P$ 真值为 $T$ ，若由此能推出 $Q$ 的真值为 $T$</li>
+<li>假定 $Q$ 真值为 $F$，若由此能推出 $P$ 的真值为 $F$</li>
+</ol>
+<p>则 $P \implies Q$ 成立</p>
+<h4 id="蕴含的性质"><a href="#蕴含的性质" class="headerlink" title="蕴含的性质"></a>蕴含的性质</h4><ul>
+<li>对于 $P \implies Q$ ，若 P 为重言式，则 Q 必为重言式</li>
+<li>蕴含关系式可传递的</li>
+<li>若 $P \implies Q$ 且 $P \implies R$ 则 $P \implies (Q \land R)$</li>
+<li>若 $P \implies Q$ 且 $R \implies Q$  则 $(P \lor R) \implies Q$</li>
+</ul>
+<h3 id="最小联结词组"><a href="#最小联结词组" class="headerlink" title="最小联结词组"></a>最小联结词组</h3><p>${\neg,\lor}$ 或 ${\neg,\land}$ 或 ${\uparrow}$ 或 ${\downarrow}$</p>
+<h3 id="对偶与范式"><a href="#对偶与范式" class="headerlink" title="对偶与范式"></a>对偶与范式</h3><h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><strong>对偶式：</strong><br>对于命题公式 $A$ ，<br>将其中所有的 $\land$ 与 $\lor$ 互换，$\uparrow$ 与 $\downarrow$ 互换，$T$ 与 $F$ 互换，<br>得到新的命题公式 $A^<em>$<br>则称 $A^</em>$ 与 $A$ 互为对偶式</li>
+<li><strong>合取范式：</strong><br>一个命题公式具有形式：$A_1 \land A_2 \land \dots \land A_n$ 时称其为 <strong>合取范式</strong></li>
+<li><strong>析取范式</strong>：<br>一个命题公式具有形式：$A_1 \lor A_2 \lor \dots \lor A_n$ 时称其为 <strong>析取范式</strong></li>
+<li><strong>小项：</strong><br> $n$ 个命题变元的合取式，<br>每个变元与其否定不能同时出现，且必须出现且仅出现一次</li>
+<li><strong>大项：</strong><br>$n$ 个命题变元的析取式，<br>每个变元与其否定不能同时出现，且必须出现且仅出现一次</li>
+<li><strong>主析取范式：</strong><br>仅由小项析取所组成的公式</li>
+<li><strong>主合取范式：</strong><br>仅有大项合取所组成的公式</li>
+<li><strong>编码：</strong><br>对于一个命题变元 $P$ ，$P, \neg P$ 分别记为 $0, 1$<br>则对于每个小项&#x2F;大项可以用二进制编码表示<br>如 $P \land \neg Q \land R$ 可以表示为 $m_{010}$</li>
+<li><strong>编码表示主析取&#x2F;合取范式：</strong><br>主析取范式可以表示为 $\sum_{i_1, i_2, \dots, i_m}$<br>主合取范式可以表示为 $\prod_{j_1, j_2, \dots, j_n}$<br>其中的 $i_k$ 为第 $k$ 个小项的二进制编码的十进制数<br>其中的 $j_k$ 为第 $k$ 个大项的二进制编码的十进制数</li>
+</ul>
+<h4 id="求合取-析取范式步骤"><a href="#求合取-析取范式步骤" class="headerlink" title="求合取&#x2F;析取范式步骤"></a>求合取&#x2F;析取范式步骤</h4><ol>
+<li>将公式中的联结词化为 $\neg,\land,\lor$</li>
+<li>利用 <strong>德摩根律</strong> 将 $\neg$ 移到各个命题变元之前</li>
+<li>利用 <strong>分配律、结合律</strong> 将公式归约为合取&#x2F;析取范式</li>
+</ol>
+<h4 id="求主合取-主析取范式步骤"><a href="#求主合取-主析取范式步骤" class="headerlink" title="求主合取&#x2F;主析取范式步骤"></a>求主合取&#x2F;主析取范式步骤</h4><ol>
+<li>化归为合取&#x2F;析取范式</li>
+<li>除去合取&#x2F;析取范式中所有为永真&#x2F;假的合取&#x2F;析取项</li>
+<li>合并相同的合取&#x2F;析取项和所有相同的变元</li>
+<li>对合取&#x2F;析取项补入没有出现的命题变元，然后用分配律展开公式</li>
+</ol>
+<h4 id="定理-1"><a href="#定理-1" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>$\neg A(P_1, P_2, \dots, P_n) \iff A^*(\neg P_1,\neg  P_2, \dots, \neg P_n)$</li>
+<li>若 $A \iff B$ 则 $A^* \iff B^*$</li>
+<li>任意两个不同的小项的合取式永假</li>
+<li>全体小项的析取式永真</li>
+<li>任意两个不同的大项的析取式永真</li>
+<li>全体大项的合取式永假</li>
+</ul>
+<h3 id="推理理论"><a href="#推理理论" class="headerlink" title="推理理论"></a>推理理论</h3><h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><strong>前提、有效结论：</strong><br>对于命题公式 $H_1,H_2, \dots, H_n, C$ ，<br>当且仅当 $H_1 \land H_2 \land \dots \land H_n \implies C$，<br>称 $C$ 是 <strong>一组前提</strong> $H_1,H_2, \dots, H_n$ 的 <strong>有效结论</strong></li>
+<li><strong>$P$ 规则：</strong><br>前提在推导过程中的任何时候都可以引入使用</li>
+<li><strong>$T$ 规则：</strong><br>在推导中，如果有一个或多个公式蕴含着公式 $S$ ，则 $S$ 可以引入推导中</li>
+</ul>
+<h4 id="真值表法"><a href="#真值表法" class="headerlink" title="真值表法"></a>真值表法</h4><ol>
+<li>列出 $H_1,H_2, \dots, H_n, C$ 的所有对应真值</li>
+<li>找出 $H_1,H_2, \dots, H_n$ 全为 $T$ 的行，若这几行对应的 $C$ 也有真值 $T$ 则推理成立</li>
+</ol>
+<p>或者</p>
+<ol start="2">
+<li>找出 $C$ 为 $F$ 的行，<br>若这几行对应的 $H_1,H_2, \dots, H_n$ 至少有一个真值为 $F$ 则推理成立</li>
+</ol>
+<h4 id="直接证法"><a href="#直接证法" class="headerlink" title="直接证法"></a>直接证法</h4><p>**例题：**证明 $(P \lor Q) \land (P \rightarrow R) \land (Q \rightarrow S) \implies S \lor R$</p>
+<p><strong>解：</strong><br>$$<br>\begin{align}<br>&amp; (1)~P \lor Q &amp;<br>&amp; P &amp;<br>&amp;（P规则，引入前提） &amp; \</p>
+<p>&amp; (2)~\neg P \rightarrow Q &amp;<br>&amp; T(1)E &amp;<br>&amp;（T规则，由(1)等价得到(2)） &amp; \</p>
+<p>&amp; (3)~Q \rightarrow S &amp;<br>&amp; P &amp;<br>&amp;（P规则，引入前提） &amp; \</p>
+<p>&amp; (4)~\neg P \rightarrow S &amp;<br>&amp; T(2),(3)I &amp;<br>&amp;（T规则，由(2),(3)蕴含得到(4)） &amp; \</p>
+<p>&amp; (5)~\neg S \rightarrow R &amp;<br>&amp; T(4)E &amp;<br>&amp;（T规则，由(4)等价得到(5)） &amp; \</p>
+<p>&amp; (6)~P \rightarrow R &amp;<br>&amp; P &amp;<br>&amp;（P规则，引入前提） &amp; \</p>
+<p>&amp; (7)~\neg S \rightarrow R &amp;<br>&amp; T(5),(6)I &amp;<br>&amp;（T规则，由(5),(6)蕴含得到(7)） &amp; \</p>
+<p>&amp; (8)~S\rightarrow R &amp;<br>&amp; T(7)E &amp;<br>&amp;（T规则，由(7)等价得到(8)，证毕） &amp; \</p>
+<p>\end{align}<br>$$<br><del>注：括号内仅为注释，实际书写中无括号内的内容</del></p>
+<h4 id="间接证法"><a href="#间接证法" class="headerlink" title="间接证法"></a>间接证法</h4><h5 id="归谬法"><a href="#归谬法" class="headerlink" title="归谬法"></a>归谬法</h5><p>对于要证明 $H_1 \land H_2 \land \dots \land H_n \implies C$ 的情况， </p>
+<p>只需要证明 $H_1 \land H_2 \land \dots \land H_n \land \neg C \iff F$，</p>
+<p>其中 $\neg C$ 称为 <strong>附加条件</strong></p>
+<p>**例题：**证明：$A \rightarrow B, \neg(B \lor C)$ 可逻辑推出 $\neg A$ </p>
+<p><strong>解：</strong><br>$$<br>\begin{align}<br>&amp; (1)~A \rightarrow B &amp;<br>&amp; P &amp; \</p>
+<p>&amp; (2)~A &amp;<br>&amp; P(附加前提) &amp; \</p>
+<p>&amp; (3)~\neg (B \lor C) &amp;<br>&amp; P &amp; \</p>
+<p>&amp; (4)~\neg B \land \neg C &amp;<br>&amp; T(3)E &amp; \</p>
+<p>&amp; (5)~B &amp;<br>&amp; T(1),(2)I &amp; \</p>
+<p>&amp; (6)~\neg B &amp;<br>&amp; T(4)I &amp; \</p>
+<p>&amp; (7)~B \land \neg B(矛盾) &amp;<br>&amp; T(5),(6)I \</p>
+<p>\end{align}<br>$$</p>
+<h5 id="CP-规则"><a href="#CP-规则" class="headerlink" title="$CP$ 规则"></a>$CP$ 规则</h5><p>对于要证明 $H_1 \land H_2 \land \dots \land H_n \implies R \rightarrow C$ 的情况，</p>
+<p>只需要证明 $H_1 \land H_2 \land \dots \land H_n \land R \iff C$，</p>
+<p>其中 $R$ 称为 <strong>附加条件</strong></p>
+<p>**例题：**证明：$A \rightarrow (B \rightarrow C), \neg D \lor A, B$ 重言蕴含 $D \rightarrow C$</p>
+<p><strong>解：</strong><br>$$<br>\begin{align}<br>&amp; (1)~D &amp;<br>&amp; P(附加前提) &amp; \</p>
+<p>&amp; (2)~\neg D \lor A &amp;<br>&amp; P &amp; \</p>
+<p>&amp; (3)~A &amp;<br>&amp; T(1),(2)I &amp; \</p>
+<p>&amp; (4)~A \rightarrow (B \rightarrow C) &amp;<br>&amp; P &amp; \</p>
+<p>&amp; (5)~B \rightarrow C &amp;<br>&amp; T(3),(4)I &amp; \</p>
+<p>&amp; (6)~B &amp;<br>&amp; P &amp; \</p>
+<p>&amp; (7)~C &amp;<br>&amp; T(5),(6)I \</p>
+<p>&amp; (8)~D \rightarrow C &amp;<br>&amp; CP \</p>
+<p>\end{align}<br>$$</p>
+<h2 id="谓词逻辑"><a href="#谓词逻辑" class="headerlink" title="谓词逻辑"></a>谓词逻辑</h2><h3 id="谓词"><a href="#谓词" class="headerlink" title="谓词"></a>谓词</h3><p>将 $A(a_1, a_2, \dots, a_n)$ 中的 $A$ 称为 <strong>$n$ 元谓词</strong></p>
+<p>例如 $A$ 表示“是大学生”，$a$ 表示“张三”，</p>
+<p>则 $A(a)$ 表示“张三是大学生”，其中 $A$ 为 <strong>一元谓词</strong></p>
+<h3 id="命题函数"><a href="#命题函数" class="headerlink" title="命题函数"></a>命题函数</h3><p>由一个谓词和一些客体变元组成的表达式，称为 <strong>简单命题函数</strong></p>
+<p>例如 $L(x, y, z)$</p>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h3><p>用于划定论域的标记称作量词，</p>
+<p>$\forall x, \exists x$ 分别表示 “所有的 $x$”、“存在一些 $x$”</p>
+<p>例如：</p>
+<ol>
+<li>设 $M(x):x是人，H(x):x要呼吸$<br>则 $(\forall x)M(x)\rightarrow H(x)$ 表示 “所有人都是要呼吸的”</li>
+<li>设 $P(x):x是质数$<br>则 $(\exists x)(P(x))$ 表示 “存在一个数是质数”</li>
+<li>设 $M(x):x是人，R(x):x是聪明的$<br>则 $(\exists x)M(x)\land(R(x))$ 表示 “一些人是聪明的”</li>
+</ol>
+<h3 id="谓词公式与翻译"><a href="#谓词公式与翻译" class="headerlink" title="谓词公式与翻译"></a>谓词公式与翻译</h3><p>**例题：**数学分析中的极限定义为：仍给一个小正数 $\epsilon$ ，则存在一个正数 $\delta$ ，使得当 $0 &lt; |x - a| &lt; \delta$ 时，有 $|f(x) - b| &lt; \delta$，此时称 $\lim\limits_{x\to a}f(x)  &#x3D; b$</p>
+<p><strong>解：</strong></p>
+<p>设 $P(x, y):x<del>大于</del>y,~~~~Q(x,y):x<del>小于</del>y$ </p>
+<p>则 $\lim\limits_{x\to a}f(x)  &#x3D; b$ 可以表示为：<br>$$<br>(\forall \epsilon)(\exists \delta)(((P(\epsilon,0) \rightarrow P(\delta,0)) \land Q(|x - a|, \delta))<br>\rightarrow<br>(Q(|f(x)-b|,\delta))<br>$$</p>
+<h3 id="变元的约束"><a href="#变元的约束" class="headerlink" title="变元的约束"></a>变元的约束</h3><h4 id="约束变元的换名"><a href="#约束变元的换名" class="headerlink" title="约束变元的换名"></a>约束变元的换名</h4><p>通过对谓词公式换名，使得每个变元在公式中仅以一种约束形式出现</p>
+<p>**例题：**对 $(\forall x)(P(x) \rightarrow R(x, y)) \land Q(x,y)$ 换名</p>
+<p>**解：**可换名为 $(\forall z)(P(z) \rightarrow R(z, y)) \land Q(x,y)$</p>
+<h4 id="自由变元的代入"><a href="#自由变元的代入" class="headerlink" title="自由变元的代入"></a>自由变元的代入</h4><p>**例题：**对 $(\forall x)(P(y) \land R(x, y))$ 代入</p>
+<p>**解：**代入后公式为 $(\forall x)(P(z) \land R(x, z))$</p>
+<p>若论域的元素是有限的，如论域元素为 $a_1, a_2, \dots, a_n$，则<br>$$<br>(\forall x)A(x) &#x3D; A(a_1) \land A(a_2) \land \dots \land A(a_n) \<br>(\exists x)A(x) &#x3D; A(a_1) \lor A(a_2) \lor \dots \lor A(a_n)<br>$$</p>
+<h3 id="谓词演算的等价式和蕴含式"><a href="#谓词演算的等价式和蕴含式" class="headerlink" title="谓词演算的等价式和蕴含式"></a>谓词演算的等价式和蕴含式</h3><h4 id="量词与联结词-neg-的关系"><a href="#量词与联结词-neg-的关系" class="headerlink" title="量词与联结词 $\neg$ 的关系"></a>量词与联结词 $\neg$ 的关系</h4><p>$$<br>\neg (\forall x)A(x) \iff (\exists x) \neg A(x) \<br>\neg (\exists x)A(x) \iff (\forall x) \neg A(x)<br>$$</p>
+<h4 id="有关量词的等价式"><a href="#有关量词的等价式" class="headerlink" title="有关量词的等价式"></a>有关量词的等价式</h4><p>$$<br>\begin{align}</p>
+<p>(\forall x)A(x) \rightarrow B &amp;\iff (\exists x)(A(x) \rightarrow B) \<br>(\exists x)A(x) \rightarrow B &amp;\iff (\forall x)(A(x) \rightarrow B) \ \</p>
+<p>B \rightarrow (\forall x)A(x) &amp;\iff (\forall x)(B \rightarrow A(x)) \<br>B \rightarrow (\exists x)A(x) &amp;\iff (\exists x)(B \rightarrow A(x)) \ \</p>
+<p>(\forall x)(A(x) \land B(x)) &amp;\iff (\forall x)A(x) \land (\forall x)B(x) \<br>(\exists x)(A(x) \lor B(x)) &amp;\iff (\exists x)A(x) \lor (\exists x)B(x) \ \</p>
+<p>(\forall x)(A \lor B(x)) &amp;\iff A \lor (\forall x)B(x) \<br>(\exists x)(A \land B(x)) &amp;\iff A \land (\exists x)B(x)) \ \</p>
+<p>(\exists)(A(x) \rightarrow B(x)) &amp;\iff (\exists)A(x) \rightarrow (\forall x)B(x) \</p>
+<p>\end{align}<br>$$</p>
+<h4 id="有关量词的蕴含式"><a href="#有关量词的蕴含式" class="headerlink" title="有关量词的蕴含式"></a>有关量词的蕴含式</h4><p>$$<br>\begin{align}<br>(\forall x)A(x) \lor (\forall x)B(x) &amp;\implies (\forall x)(A(x) \lor B(x)) \<br>(\exists x)(A(x) \land B(x)) &amp;\implies (\exists x)A(x) \land (\exists x)B(x) \ \</p>
+<p>(\forall)(A(x) \rightarrow B(x)) &amp;\implies (\forall x)A(x) \rightarrow (\forall x)B(x) \<br>(\forall)(A(x) \leftrightarrow B(x)) &amp;\implies (\forall x)A(x) \leftrightarrow (\forall x)B(x) \ \</p>
+<p>(\exists x)A(x) \rightarrow (\forall x)B(x) &amp;\iff (\forall x)(A(x) \rightarrow B(x))<br>\end{align}<br>$$</p>
+<h4 id="多元谓词的等价-蕴含式"><a href="#多元谓词的等价-蕴含式" class="headerlink" title="多元谓词的等价&#x2F;蕴含式"></a>多元谓词的等价&#x2F;蕴含式</h4><p>$$<br>\begin{align}<br>(\forall x)(\forall y)A(x,y) &amp;\iff (\forall y)(\forall x)A(x,y) \<br>(\exists x)(\exists y)A(x,y) &amp;\iff (\exists y)(\exists x)A(x,y) \ \</p>
+<p>(\forall x)(\forall y)A(x,y) &amp;\implies (\exists x)(\forall y)A(x,y) \<br>(\forall x)(\forall y)A(x,y) &amp;\implies (\forall x)(\exists y)A(x,y) \<br>(\forall x)(\forall y)A(x,y) &amp;\implies (\exists y)(\forall x)A(x,y) \<br>(\forall x)(\forall y)A(x,y) &amp;\implies (\forall y)(\exists x)A(x,y) \ \</p>
+<p>(\exists y)(\forall x)A(x,y) &amp;\implies (\forall x)(\exists y)A(x,y) \<br>(\exists y)(\forall x)A(x,y) &amp;\implies (\forall x)(\exists y)A(x,y) \ \</p>
+<p>(\forall x)(\exists y)A(x,y) &amp;\implies (\exists x)(\exists y)A(x,y) \<br>(\forall y)(\exists x)A(x,y) &amp;\implies (\exists y)(\exists x)A(x,y)<br>\end{align}<br>$$</p>
+<h3 id="前束范式"><a href="#前束范式" class="headerlink" title="前束范式"></a>前束范式</h3><h4 id="定义-4"><a href="#定义-4" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><strong>前束范式：</strong>$(\square v_1)(\square v_2)\dots(\square v_n)A$</li>
+<li><strong>前束合取范式：</strong><br>$(\square v_1)(\square v_2)\dots(\square v_n)[(A_{11}\lor A_{12} \lor \dots\lor A_{1l_1})\land(A_{21}\lor A_{22} \lor \dots\lor A_{2l_2})\land\dots\land(A_{m1}\lor A_{m2} \lor \dots\lor A_{ml_m})]$</li>
+<li><strong>前束析取范式：</strong><br>$(\square v_1)(\square v_2)\dots(\square v_n)[(A_{11}\land A_{12} \land \dots\land A_{1l_1})\lor(A_{21}\land A_{22} \land \dots\land A_{2l_2})\lor\dots\lor(A_{m1}\land A_{m2} \land \dots\land A_{ml_m})]$</li>
+</ul>
+<p>**例题：**将 $D:(\forall x)[(\forall y)P(x) \lor (\forall z)q(z, y) \rightarrow \neg (\forall y)R(x, y)]$ 化为前束合取范式</p>
+<p><strong>解：</strong><br>$$<br>\begin{align}</p>
+<p>&amp;1.~消去多余量词 \<br>&amp;~~~~D \iff (\forall x)[P(x) \lor (\forall z)q(z, y) \rightarrow \neg (\forall y)R(x, y)] \</p>
+<p>&amp;2.~换名 \<br>&amp;~~~~D \iff (\forall x)[P(x) \lor (\forall z)q(z, y) \rightarrow \neg (\forall w)R(x, w)] \</p>
+<p>&amp;3.~消去条件联结词 \<br>&amp;~~~~D \iff (\forall x)[\neg(P(x) \lor (\forall z)q(z, y)) \lor \neg (\forall w)R(x, w)] \</p>
+<p>&amp;4.<del>将</del>\neg~放入括号内 \<br>&amp;~~~~D \iff (\forall x)[(\neg P(x) \land (\exists z)\neg q(z, y)) \lor (\exists w)\neg R(x, w)] \</p>
+<p>&amp;5.~将量词化到左侧 \<br>&amp;~~~~D \iff (\forall x)(\exists z)(\exists w)[(\neg P(x) \land \neg q(z, y)) \lor \neg R(x, w)] \</p>
+<p>&amp;6.~化简得到结果 \<br>&amp;~~~~D \iff (\forall x)(\exists z)(\exists w)[(\neg P(x) \lor \neg R(x, w)) \land (\neg q(z, y) \lor \neg R(x, w))] \</p>
+<p>\end{align}<br>$$</p>
+<h3 id="谓词演算的推理理论"><a href="#谓词演算的推理理论" class="headerlink" title="谓词演算的推理理论"></a>谓词演算的推理理论</h3><p>$$<br>全称指定规则(US)：\<br>\frac{(\forall x )P(x)}{\therefore P(c)} \</p>
+<p>全称推广规则(UG)：\<br>\frac{P(x)}{\therefore (\forall x)P(x)} \</p>
+<p>存在指定规则(ES)：\<br>\frac{(\exists x)P(x)}{\therefore P(c)} \</p>
+<p>存在推广规则(EG)：\<br>\frac{P(c)}{\therefore (\exists x)P(x)}<br>$$</p>
+<p>**例题：**证明 $(\forall x)(H(x) \rightarrow M(x)) \land H(s) \iff M(s)$</p>
+<p><strong>解：</strong><br>$$<br>\begin{align}</p>
+<p>&amp;(1)~(\forall x)(H(x) \rightarrow M(x))  &amp;<br>&amp; P &amp; \</p>
+<p>&amp;(2)~H(s) \rightarrow M(s)  &amp;<br>&amp; US(1) &amp; \</p>
+<p>&amp;(3)~H(s)  &amp;<br>&amp; P &amp; \</p>
+<p>&amp;(4)~M(s)  &amp;<br>&amp; T(2),(3)I &amp; \</p>
+<p>\end{align}<br>$$</p>
+<h1 id="集合论"><a href="#集合论" class="headerlink" title="集合论"></a>集合论</h1><h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><h3 id="集合的概念及表示"><a href="#集合的概念及表示" class="headerlink" title="集合的概念及表示"></a>集合的概念及表示</h3><h4 id="定义-5"><a href="#定义-5" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>子集（包含）：</strong><br>若有 $(\forall x)(x \in A \rightarrow x \in B)$ 则称 <strong>$A$ 为 $B$ 的子集</strong> 或 <strong>$A$ 包含在 $B$ 内</strong>，<br>记作 $A \subseteq B$</p>
+<ul>
+<li>包含关系具有自反性、传递性</li>
+</ul>
+</li>
+<li><p><strong>真子集：</strong><br>若有 $(\forall x)(x \in A \rightarrow x \in B) \land (\exists x)(x \in B \land x \not\in A)$ 则称 <strong>$A$ 是 $B$ 的真子集</strong>，<br>记作 $A \subset B$</p>
+</li>
+<li><p><strong>空集：</strong><br>不包含任何元素的集合，记作 $\varnothing$</p>
+<ul>
+<li>$\varnothing \ne {\varnothing}, \varnothing \in {\varnothing}$</li>
+</ul>
+</li>
+<li><p><strong>全集：</strong><br>在一定范围内，若所有集合均为某一个集合的子集，<br>则该集合称为 <strong>全集</strong>，记作 $E$ </p>
+</li>
+<li><p><strong>幂集：</strong><br>给定集合 $A$ ，由 $A$ 的所有子集为元素组成的集合，<br>称为集合 $A$ 的 <strong>幂集</strong>，记作 $\mathscr{P}(A)$</p>
+</li>
+<li><p><strong>编码表示幂集：</strong><br>$$<br>例如:设<del>S &#x3D; {a, b, c},</del> 则 \<br>\mathscr{P}(S) &#x3D; {S_i|i \in J}, \<br>J &#x3D; {i|i是二进制数且 000 \le i \le 111}，\<br>其中~S_{000}&#x3D;\varnothing<br>$$</p>
+</li>
+</ul>
+<h4 id="定理-2"><a href="#定理-2" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>集合 $A,B$ 相等的充要条件为：二者互为子集</li>
+<li>对于任意一个集合 $A$ ，$\varnothing \subseteq A$ </li>
+<li>给定一个有 $n$ 个元素的集合 $A$ ，则 $\mathscr{P}(A)$ 有 $2^n$ 个元素</li>
+</ul>
+<h3 id="集合的运算"><a href="#集合的运算" class="headerlink" title="集合的运算"></a>集合的运算</h3><h4 id="定义-6"><a href="#定义-6" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>交集 $\cap$：</strong><br>$$<br>S &#x3D; A \cap B &#x3D; {x|(x \in A) \land (x \in B)}<br>$$<br>$S$ 称为 $A$ 和 $B$ 的 <strong>交集</strong></p>
+</li>
+<li><p><strong>并集 $\cup$：</strong><br>$$<br>S &#x3D; A \cup B &#x3D; {x|(x \in A) \lor (x \in B)}<br>$$<br>$S$ 称为 $A$ 和 $B$ 的 <strong>并集</strong></p>
+</li>
+<li><p><strong>补集 $-$：</strong><br>$$<br>S &#x3D; A - B &#x3D; {x|x\in A \land x \not\in B} &#x3D; A \cap \sim B &#x3D; A - (A \cap B)<br>$$<br>$S$ 称为 <strong>$B$ 对于 $A$ 的补集</strong></p>
+<ul>
+<li>$E-A$ 称为 $A$ 的 <strong>绝对补</strong>，记作 $\sim{A}$</li>
+</ul>
+</li>
+<li><p><strong>对称差 $\oplus$：</strong><br>$$<br>\begin{align}<br>S &#x3D; A \oplus B &amp;&#x3D; {x|x \in A \bar\lor x \in B} \<br>&amp;&#x3D; (A - B) \cup (B - A) \<br>&amp;&#x3D; (A \cap \sim B) \cup (B \cap \sim A) \<br>&amp;&#x3D; (A \cup B) - (A \cap B)<br>\end{align}<br>$$<br>$S$ 称为 $A$ 和 $B$ 的 <strong>对称差</strong></p>
+</li>
+</ul>
+<h4 id="定理-3"><a href="#定理-3" class="headerlink" title="定理"></a>定理</h4><ul>
+<li><p>公式<br>$$<br>A \cap (B \cup C) &#x3D; (A \cap B) \cup (A \cap C) \<br>A \cup (B \cap C) &#x3D; (A \cup B) \cap (A \cup C) \ \</p>
+<p>A \cup (A \cap B) &#x3D; A \<br>A \cap (A \cup B) &#x3D; A \ \</p>
+<p>\sim(A\cup B) &#x3D; \sim A \cap \sim B \<br>\sim(A\cap B) &#x3D; \sim A \cup \sim B \ \</p>
+<p>A \cap (B - C) &#x3D; (A \cap B) - (A \cap C) \ \<br>$$</p>
+</li>
+<li><p>$$<br>A \subseteq B \implies<br>\begin{align}<br>&amp;1.<del>A \cap B &#x3D; A \<br>&amp;2.</del>A \cup B &#x3D; B \<br>&amp;3.<del>\sim B \subseteq \sim A \<br>&amp;4.</del>(B - A) \cup A &#x3D; B<br>\end{align} \ \<br>$$</p>
+</li>
+</ul>
+<h3 id="集合的划分与覆盖"><a href="#集合的划分与覆盖" class="headerlink" title="集合的划分与覆盖"></a>集合的划分与覆盖</h3><h4 id="定义-7"><a href="#定义-7" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><strong>覆盖：</strong><br>给定一个集合 $S &#x3D; {S_1, S_2, \dots, S_m}$ 使得 $\bigcup\limits_{i&#x3D;1}^{m}S_i &#x3D; A$ 则称 $S$ 为 $A$ 的 <strong>覆盖</strong></li>
+<li><strong>划分：</strong><br>若 $S$ 是 $A$ 的覆盖的同时，有 $S_i \cap S_j &#x3D; \varnothing(i\ne j)$ 则称 $S$ 为 $A$ 的 <strong>划分</strong></li>
+<li><strong>交叉划分：</strong><br>对于一个集合的两种划分 ${A_1, A_2, \dots, A_r},{B_1, B_2, \dots, B_s}$ ，<br>所有 $C_k &#x3D; A_i \cap B_j \ne \varnothing$ 组成的集合，称为是原来两种划分的 <strong>交叉划分</strong></li>
+<li><strong>加细：</strong><br>给定集合 $X$ 的任意两个划分 ${A_1, A_2, \dots, A_r},{B_1, B_2, \dots, B_s}$ ，<br>若对于每一个 $A_j$ 都有 $B_k$ 使得 $A_j \subseteq B_k$ ，则称<br>${A_1, A_2, \dots, A_r}$ 为 ${B_1, B_2, \dots, B_s}$ 的 <strong>加细</strong></li>
+</ul>
+<h4 id="定理-4"><a href="#定理-4" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>对于同一个集合的两种划分，其交叉划分 <strong>仍是</strong> 原集合的一种划分</li>
+<li>两种划分的交叉划分，都是原来两种划分的加细</li>
+</ul>
+<h2 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h2><h3 id="序偶"><a href="#序偶" class="headerlink" title="序偶"></a>序偶</h3><h4 id="定义-8"><a href="#定义-8" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>序偶：</strong><br>序偶用于表示事物之间的关系，记作 $\langle a_1,a_2,\dots,a_n \rangle$，称为 $n$ 元组</p>
+</li>
+<li><p><strong>笛卡尔乘积&#x2F;直积：</strong><br>$$<br>A \times B &#x3D; {\langle x, y \rangle | (x \in A) \land (y \in B)}<br>$$<br>这使得两个元素集合构造出一个序偶集合</p>
+<ul>
+<li>由于序偶内的元素顺序不可变，所以 $A \times B \ne B \times A$</li>
+<li>由于 $\langle a, \langle b, c \rangle \rangle$ 不是三元组，<br>所以 $(A \times B)  \times C \ne A \times (B \times C)$ ，且前者得到的才是三元组</li>
+</ul>
+</li>
+<li><p>记 $\overbrace{A \times A \times \dots \times A}^n &#x3D; A^n$</p>
+</li>
+</ul>
+<h4 id="定理-5"><a href="#定理-5" class="headerlink" title="定理"></a>定理</h4><ul>
+<li><p>对于任意三个集合 $A, B, C$ ，有<br>$$<br>A \times (B \cup C) &#x3D; (A \times B) \cup (A \times C) \<br>A \times (B \cap C) &#x3D; (A \times B) \cap (A \times C) \<br>(B \cup C) \times A &#x3D; (B \times A) \cup (C \times A) \<br>(B \cap C) \times A &#x3D; (B \times A) \cap (C \times A) \<br>$$</p>
+</li>
+<li><p>若 $C \ne \varnothing$ 则<br>$$<br>A \subseteq B \iff A \times C \subseteq B \times C \iff C \times A \subseteq C \times B<br>$$</p>
+</li>
+<li><p>设 $A, B, C, D$ 为四个非空集合，则<br>$$<br>A \subseteq C \land B \subseteq D \iff A \times B \subseteq C \times D<br>$$</p>
+</li>
+</ul>
+<h3 id="关系及其表示"><a href="#关系及其表示" class="headerlink" title="关系及其表示"></a>关系及其表示</h3><h4 id="定义-9"><a href="#定义-9" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>关系：</strong><br>将一个由序偶组成的集合称为一个 <strong>关系</strong>，记作 $R$ ，<br>$R$ 中的任一序偶 $\langle a, b \rangle$ 可以记作 $\langle a,b \rangle \in R$ 或 $xRy$<br>不在 $R$ 中的任一序偶可以记作 $\langle a,b \rangle \not\in R$ 或 $x \not R y$</p>
+</li>
+<li><p><strong>前域、值域、域：</strong><br>$dom<del>R$ 称为 $R$ 的前域，$ran</del>R$ 称为 $R$ 的值域，<br>二者一起称作 $R$ 的域，记作 $FLD<del>R$<br>$$<br>\mathrm{dom}</del>R &#x3D; {x|(\exists y)(\langle x,y \rangle \in R)} \<br>\mathrm{ran}<del>R &#x3D; {y|(\exists x)(\langle x,y \rangle \in R)} \<br>\mathrm{FLD}</del>R &#x3D; \mathrm{dom}<del>R \cup \mathrm{ran}</del>R<br>$$</p>
+</li>
+<li><p><strong>直积与关系：</strong><br>对于任一两个集合 $X, Y$ ，二者的直积 $X \times Y$ 的子集 $R$ 称为 <strong>$X$ 到 $Y$ 的关系</strong><br>对于其子集 $X \times Y, \varnothing$ ，分别称为 $X$ 到 $Y$ 的 <strong>全域关系</strong> 和 <strong>空关系</strong></p>
+</li>
+<li><p><strong>恒等关系：</strong><br>$$<br>I_X &#x3D; {\langle x, x \rangle| x \in X}<br>$$<br>$I_X$ 称为 $X$ 上的 <strong>恒等关系</strong></p>
+</li>
+<li><p><strong>关系矩阵：</strong><br>对于矩阵 $M_R &#x3D; [r_{ij}]<em>{m\times n}$ 其中<br>$$<br>r</em>{i,j} &#x3D;<br>\begin{cases}<br>1, \langle x_i, y_j \rangle \in R \<br>0, \langle x_i, y_j \rangle \not\in R<br>\end{cases}</p>
+<pre><code class="language-,~i">$$
+这样的矩阵称为 $R$ 的 **关系矩阵**
+</code></pre>
+</li>
+</ul>
+<h4 id="定理-6"><a href="#定理-6" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>对于 $X$ 到 $Y$ 的两个关系 $Z, S$ ，二者的交、并、补、差 <strong>仍是</strong> $X$ 到 $Y$ 的关系</li>
+</ul>
+<h3 id="关系的性质"><a href="#关系的性质" class="headerlink" title="关系的性质"></a>关系的性质</h3><h4 id="定义-10"><a href="#定义-10" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>自反</strong><br>$$<br>(\forall x)(x \in X \implies xRx)<br>$$</p>
+</li>
+<li><p><strong>对称</strong><br>$$<br>(\forall x)(\forall y)(x \in X \land y \in X \land x Ry \implies yRx)<br>$$</p>
+</li>
+<li><p><strong>传递</strong><br>$$<br>(\forall x)(\forall y)(\forall z)(x \in X \land y \in X \land z \in X \land xRy \land yRz \implies xRz)<br>$$</p>
+</li>
+<li><p><strong>反自反、反对称</strong><br>反自反要求集合内 <strong>所有元素</strong> 不自反，反对称要求集合内 <strong>所有元素</strong> 不对称</p>
+<ul>
+<li>因此存在某种关系，即不自反，也不反自反<br>也存在某种关系，既不对称也不反对称</li>
+</ul>
+</li>
+</ul>
+<h4 id="从关系矩阵看性质"><a href="#从关系矩阵看性质" class="headerlink" title="从关系矩阵看性质"></a>从关系矩阵看性质</h4><ol>
+<li>自反 $\iff$ 对角线上所有元素均为 $1$ </li>
+<li>对称 $\iff$ 关系矩阵是对称的</li>
+<li>反自反 $\iff$ 对角线元素全为 $0$ </li>
+<li>反对称 $\iff$ 以主对角线对称的元素不同时为 $1$</li>
+</ol>
+<h3 id="复合关系和逆关系"><a href="#复合关系和逆关系" class="headerlink" title="复合关系和逆关系"></a>复合关系和逆关系</h3><h4 id="定义-11"><a href="#定义-11" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>合成运算：</strong><br>设 $R$ 为 $X$ 到 $Y$ 的关系，$S$ 为 $Y$ 到 $Z$ 的关系，则 $R \circ S$ 称为 $R,S$ 的复合关系<br>表示为<br>$$<br>R \circ S &#x3D; {\langle x, z \rangle|x \in X \land z \in Z \land (\exists y)(y \in Y \land \langle x, y\rangle \in R \land \langle y,z \rangle \in S}<br>$$<br>这称为关系的 <strong>合成运算</strong></p>
+</li>
+<li><p>记 $\overbrace{R \circ R \circ \dots \circ R}^{n} &#x3D; R^n$</p>
+</li>
+<li><p><strong>逆关系：</strong><br>$$<br>R^c &#x3D; {\langle y, x \rangle | \langle x, y \rangle \in R}<br>$$</p>
+</li>
+</ul>
+<h4 id="利用矩阵运算求合成运算"><a href="#利用矩阵运算求合成运算" class="headerlink" title="利用矩阵运算求合成运算"></a>利用矩阵运算求合成运算</h4><p>$$<br>M_{R\circ S} &#x3D; M_R \circ M_S &#x3D; [w_{ik}] \<br>w_{ik} &#x3D; \bigvee_{j&#x3D;1}^{n}(u_{ij} \land v_{jk}) \<br>$$</p>
+<h4 id="有关逆关系的公式"><a href="#有关逆关系的公式" class="headerlink" title="有关逆关系的公式"></a>有关逆关系的公式</h4><ul>
+<li><p>设 $R, R_1, R_2$ 都是 $A$ 到 $B$ 的二元关系<br>$$<br>\begin{align}<br>&amp;(R_1 \cup R_2)^c &#x3D; R_1^c \cup R_2^c \<br>&amp;(R_1 \cap R_2)^c &#x3D; R_1^c \cap R_2^c \<br>&amp;(A \times B)^c &#x3D; B \times A \<br>&amp;(\bar{R})^c &#x3D; \bar{R^c}, \bar R &#x3D; A \times B - R \<br>&amp;(R_1 - R_2)^c &#x3D; R_1^c - R_2^c<br>\end{align}<br>$$</p>
+</li>
+<li><p>对于任一两个关系 $T, S$ ，$(T\circ S)^c &#x3D; S^c \circ T^c$</p>
+</li>
+</ul>
+<h4 id="对称定理"><a href="#对称定理" class="headerlink" title="对称定理"></a>对称定理</h4><ul>
+<li>$R$ 是对称的，当且仅当 $R &#x3D; R^c$</li>
+<li>$R$ 是反对称的，当且仅当 $R \cap R^c \subseteq I_X$</li>
+</ul>
+<h3 id="关系的闭包运算"><a href="#关系的闭包运算" class="headerlink" title="关系的闭包运算"></a>关系的闭包运算</h3><h4 id="定义-12"><a href="#定义-12" class="headerlink" title="定义"></a>定义</h4><p>设 $R$ 是 $X$ 上的二元关系，如果有另一个关系 $R’$ 满足：</p>
+<ol>
+<li>$R’$ 是自反的&#x2F;对称的&#x2F;可传递的</li>
+<li>$R \subseteq R’$</li>
+<li>对于任何自反的&#x2F;对称的&#x2F;可传递的关系 $R’’$ ，<br>如果有 $R \subseteq R’’$ 就有 $R’ \subseteq R’’$</li>
+</ol>
+<p>则称 $R’$ 为 $R$ 的自反&#x2F;对称&#x2F;传递 <strong>闭包</strong>，记作<br>$$<br>r(R)&#x2F;s(R)&#x2F;t(R)~~~~(\mathrm{reflexive,symmetrical,transitive})<br>$$</p>
+<h4 id="定理-7"><a href="#定理-7" class="headerlink" title="定理"></a>定理</h4><ul>
+<li><p>$R$ 是自反的，当且仅当 $r(R) &#x3D; R$</p>
+<p>$R$ 是对称的，当且仅当 $s(R) &#x3D; R$</p>
+<p>$R$ 是传递的，当且仅当 $t(R) &#x3D; R$</p>
+</li>
+<li><p><strong>自反闭包的求解：</strong><br>$$<br>r(R) &#x3D; R \cup I_X<br>$$</p>
+</li>
+<li><p><strong>对称闭包的求解：</strong><br>$$<br>s(R) &#x3D; R \cup R^c<br>$$</p>
+</li>
+<li><p><strong>传递闭包的求解：</strong><br>$$<br>t(R) &#x3D; \bigcup_{i&#x3D;1}^{k}R^k,~~~~k \le n（n为元素个数）<br>$$</p>
+</li>
+<li><p><strong>闭包之间的关系：</strong><br>$$<br>rs(R) &#x3D; sr(R) \<br>rt(R) &#x3D; tr(R) \<br>st(R) \subseteq ts(R)<br>$$</p>
+</li>
+</ul>
+<h4 id="Floyd-算法求解传递闭包"><a href="#Floyd-算法求解传递闭包" class="headerlink" title="$Floyd$ 算法求解传递闭包"></a>$Floyd$ 算法求解传递闭包</h4><p>对于 $R$ 的关系矩阵 $M$ 依照以下步骤进行修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k <span class="keyword">from</span> <span class="number">1</span> to n:</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">from</span> <span class="number">1</span> to n:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">from</span> <span class="number">1</span> to n:</span><br><span class="line">            <span class="keyword">if</span> (M[i][j] == <span class="number">0</span>)</span><br><span class="line">            	M[i][j] = M[i][k] * M[k][j]</span><br></pre></td></tr></table></figure>
+
+<h3 id="等价关系与等价类"><a href="#等价关系与等价类" class="headerlink" title="等价关系与等价类"></a>等价关系与等价类</h3><h4 id="定义-13"><a href="#定义-13" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>等价关系：</strong><br>一个关系若同时是自反的、对称的、传递的，则称该关系为 <strong>等价关系</strong></p>
+</li>
+<li><p><strong>等价类：</strong><br>设 $R$ 是集合 $A$ 上的等价关系，对与 $\forall a \in A$ ，<br>集合 $[a]_R &#x3D; {x|x\in A, aRx}$ 称为元素 $a$ 形成的 $R$ <strong>等价类</strong></p>
+</li>
+<li><p><strong>商集：</strong><br>对于集合 $A$ 上的等价关系 $R$ ，<br>其等价类集合 ${[a]_R|a\in A}$ 称作 $A$ 关于 $R$ 的商集，记作 $A&#x2F;R$</p>
+</li>
+</ul>
+<h4 id="定理-8"><a href="#定理-8" class="headerlink" title="定理"></a>定理</h4><ul>
+<li><p>对于集合 $A$ 上的等价关系 $R$ ，$a, b\in A$，则<br>$$<br>aRb \iff [a]_R &#x3D; [b]_R<br>$$</p>
+</li>
+<li><p>集合 $A$ 上的一个等价关系可以确定 $A$ 的一个划分，<br>该划分就是 $A&#x2F;R$ </p>
+</li>
+<li><p>集合 $A$ 的一个划分能确定 $A$ 上的一个等价关系</p>
+</li>
+<li><p>对于集合上的两个等价关系 $R_1, R_2$ ，<br>$$<br>A&#x2F;R_1 &#x3D; A&#x2F;R_2 \iff R_1 &#x3D; R_2<br>$$</p>
+</li>
+</ul>
+<h4 id="求划分确定的等价关系"><a href="#求划分确定的等价关系" class="headerlink" title="求划分确定的等价关系"></a>求划分确定的等价关系</h4><p>**例题：**设集合 $A &#x3D; {a, b, c, d, e}$ ，划分 $S &#x3D; {\langle a, b \rangle,\langle c \rangle,\langle d, e\rangle}$ ，<br>            求划分 $S$ 所确定的 $A$ 上的一个等价关系 $R$<br><strong>解：</strong><br>$$<br>\begin{align}<br>&amp;R_1 &#x3D; \langle a, b \rangle \times \langle a, b \rangle \<br>&amp;R_2 &#x3D; \langle c \rangle \times \langle c \rangle \<br>&amp;R_3 &#x3D; \langle d, e \rangle \times \langle d, e \rangle \ \<br>\therefore~<br>&amp;R &#x3D; R_1 \cup R_2 \cup R_3 &#x3D; {\langle a, a\rangle\ ,\langle b,b\rangle\ ,\langle c,c\rangle\ ,\langle d,d\rangle\ ,\langle e,e\rangle\  ,\ &amp;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\langle a,b\rangle\ ,\langle b,a\rangle\ ,\langle d,e\rangle\ ,\langle e,d\rangle}<br>\end{align}<br>$$</p>
+<h3 id="相容关系与相容类"><a href="#相容关系与相容类" class="headerlink" title="相容关系与相容类"></a>相容关系与相容类</h3><h4 id="定义-14"><a href="#定义-14" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><strong>相容关系：</strong><br>一个关系若同时是自反的、对称的，则称该关系为 <strong>相容关系</strong><ul>
+<li>对于相容关系的关系图，不画自回路，使用单线来代替回弧线</li>
+</ul>
+</li>
+<li><strong>相容类：</strong><br>对于集合 $A$ 上的相容关系 $r$ ，若 $C \subseteq A$ ，<br>如果 $C$ 中的任意两个元素 $a_1, a_2$ 有 $a_1ra_2$ ，称 $C$ 是由相容关系 $r$ 产生的 <strong>相容类</strong></li>
+<li><strong>最大相容类：</strong><br>若一个相容类，不能真包含在其他相容类，则称其为 <strong>最大相容类</strong>，记作 $C_r$</li>
+<li><strong>完全覆盖：</strong><br>对于一个集合 $A$ 的所有最大相容类，<br>这些最大相容类组成的集合，构成了 $A$ 的一个覆盖，<br>称为 <strong>完全覆盖</strong>，记作 $C_r(A)$</li>
+</ul>
+<h4 id="定理-9"><a href="#定理-9" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>相容关系图中，<strong>最大完全多边形的顶点集合</strong> 就是最大相容类，<br>此外，<strong>孤立节点</strong> 和 <strong>不是完全多边形的边的两个节点</strong> 也是最大相容类<br>（详见下面例题）<br><img src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624203720.png"><br><img src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624203747.png"><br>其中 ${a_1,a_2,a_4,a_6},{a_3,a_4,a_6}$ 构成最大多边形，<br>${a_4,a_5}$ 为非最大多边形边的两个节点，${a_7}$ 为孤立节点</li>
+<li>给定集合 $A$ 的覆盖 ${A_1, A_2, \dots, A_n}$ ，<br>由它确定的关系 $R &#x3D; A_1 \times A_1 \cup A_2 \times A_2 \cup \dots A_n \times A_n$ 是相容关系</li>
+<li>相容关系 $r$ 与完全覆盖 $C_r(A)$ 一一对应</li>
+</ul>
+<h3 id="序关系"><a href="#序关系" class="headerlink" title="序关系"></a>序关系</h3><h4 id="定义-15"><a href="#定义-15" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p><strong>偏序：</strong><br>对于集合 $A$ 上的一个关系 $R$ ，同时满足自反性、反对称性、传递性，<br>则称 $R$ 为 $A$ 上的一个偏序关系，将这个关系记作 $\preceq$ ，序偶 $\langle A,\preceq \rangle$ 称作偏序集</p>
+</li>
+<li><p><strong>盖住：</strong><br>在偏序集合 $\langle A,\preceq \rangle$ 中，如果 $x, y \in A, x \preceq y, x \ne y$<br>且没有其他元素 $z$ 满足 $x \preceq z, z \preceq y$ ，则称 $y$ 盖住 $x$ ，记<br>$$<br>\mathrm{COV}<del>A &#x3D; {\langle x, y \rangle | x, y \in A; y</del>盖住~x}<br>$$<br><img src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624210422.png"></p>
+<ul>
+<li><p>盖住关系是 <strong>唯一的</strong>，所以可以用盖住的性质画出偏序集合图，称为 <strong>哈斯图</strong>，</p>
+<p>作图规则如下：<img src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624210335.png"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>链、反链：</strong><br>设 $\langle A,\preceq \rangle$ 是一个偏序结合，在 $A$ 的一个子集中，<br>如果每两个元素都是有关系的，则称这个子集为 <strong>链</strong>，<br>如果每两个元素都是无关的，则称这个子集为 <strong>反链</strong></p>
+<ul>
+<li>规定，若 $A$ 的子集只有一个元素，则这个子集既是链也是反链</li>
+</ul>
+</li>
+<li><p><strong>全序&#x2F;线序集合：</strong><br>在偏序集 $\langle A,\preceq \rangle$ 中，如果 $A$ 是一个链，则称 $\langle A,\preceq \rangle$ 为 <strong>全序集合</strong> 或 <strong>线序集合</strong> ，在这种情况下，称二元关系 $\preceq$ 为 <strong>全序关系</strong> 或 <strong>线序关系</strong></p>
+<ul>
+<li>即 $\forall x, y \in A$ 都有 $x \preceq y$ 或者 $y \preceq x$ 成立，不存在两个无关的元素</li>
+</ul>
+</li>
+<li><p><strong>极大元、极小元：</strong><br>设 $\langle A,\preceq \rangle$ 是一个偏序集，且 $B$ 是 $A$ 的子集，对于 $B$ 中的一个元素 $b$  ，<br>如果 $B$ 中没有任何元素 $x$ 满足 $b \ne x$ 且 $b \preceq x$ 则称 $b$ 为 $B$ 的 <strong>极大元</strong>，<br>如果 $B$ 中没有任何元素 $x$ 满足 $b \ne x$ 且 $x \preceq b$ 则称 $b$ 为 $B$ 的 <strong>极小元</strong></p>
+<ul>
+<li>极大元和极小元 <strong>不是唯一的</strong><br><img src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/20240624211702.png"></li>
+</ul>
+</li>
+<li><p><strong>最大元、最小元：</strong><br>设 $\langle A,\preceq \rangle$ 是一个偏序集，且 $B$ 是 $A$ 的子集，对于 $B$ 中的一个元素 $b$  ，<br>如果 $B$ 中每一个元素 $x$ 满足 $x \preceq b$ 则称 $b$ 为 $B$ 的 <strong>最大元</strong>，<br>如果 $B$ 中每一个元素 $x$ 满足 $b \preceq x$ 则称 $b$ 为 $B$ 的 <strong>最小元</strong></p>
+<ul>
+<li>如果存在最大&#x2F;最小元，则一定是 <strong>唯一的</strong></li>
+</ul>
+</li>
+<li><p><strong>上界、下界</strong><br>设 $\langle A,\preceq \rangle$ 是一个偏序集，且 $B$ 是 $A$ 的子集，对于一个元素 $a \in B$<br>若 $B$ 的任意元素 $x$ ，满足 $x \preceq a$ ，则称 $a$ 为 $B$ 的 <strong>上界</strong><br>若 $B$ 的任意元素 $x$ ，满足 $a \preceq x$ ，则称 $a$ 为 $B$ 的 <strong>下界</strong></p>
+<ul>
+<li>上界和下界 <strong>不是唯一的</strong></li>
+</ul>
+</li>
+<li><p><strong>最小上界&#x2F;上确界、最大下界&#x2F;下确界：</strong><br>设 $\langle A,\preceq \rangle$ 是一个偏序集，且 $B$ 是 $A$ 的子集，对于 $B$ 的任一上界 $a$<br>若 $B$ 的所有上界 $y$ ，满足 $a \preceq y$ ，<br>则称 $a$ 为 $B$ 的 <strong>最小上界（上确界）</strong>，记为 $\mathrm{LUB}<del>B$<br>若 $B$ 的所有上界 $y$ ，满足 $y \preceq a$ ，<br>则称 $a$ 为 $B$ 的 <strong>最大下界（下确界）</strong>，记为 $\mathrm{GLB}</del>B$</p>
+</li>
+<li><p><strong>良序集合：</strong><br>任一偏序集合，若它的每个非空子集存在最小元素，<br>则称这种偏序集为 <strong>良序集合</strong></p>
+</li>
+</ul>
+<h4 id="定理-10"><a href="#定理-10" class="headerlink" title="定理"></a>定理</h4><ul>
+<li>每一个良序集合一定是全序集合，每一个 <strong>有限</strong> 的全序集合一定是良序集合</li>
+</ul>
+<h1 id="图论"><a href="#图论" class="headerlink" title="图论"></a>图论</h1><h2 id="路与回路"><a href="#路与回路" class="headerlink" title="路与回路"></a>路与回路</h2><h3 id="定义-16"><a href="#定义-16" class="headerlink" title="定义"></a>定义</h3><h4 id="路、回路"><a href="#路、回路" class="headerlink" title="路、回路"></a>路、回路</h4><ul>
+<li>路：连接各个节点</li>
+<li>回路：头尾节点相同的路</li>
+<li>通路：不存在重复节点的路</li>
+<li>圈：除头尾节点外不存在重复节点的回路</li>
+<li>迹：不存在重复边的路</li>
+</ul>
+<h4 id="连通性"><a href="#连通性" class="headerlink" title="连通性"></a>连通性</h4><ul>
+<li>连通：两节点之间存在路</li>
+<li>连通分支：将一个图划分为若干子图，两个节点只有属于同一个集合时连通，连通分支数记为 $W (G)$</li>
+<li>点割集：如果将集合中所有点及其相连的边从图中移除，会导致图变得不连通（即图的连通分支数增加）</li>
+<li>割点：单独构成点割集的点</li>
+<li>点连通度：在保持图连通的前提下，至少需要移除多少个顶点（及其相连的边）才能使图不连通，记为 $k (G)$</li>
+<li>边割集：如果移除该边集中的所有边后，图会变得不连通的边集</li>
+<li>割边：单独构成边割集的边</li>
+<li>边连通度：在保持图连通的前提下，至少需要移除多少条边才能使图不连通，记为 $\lambda (G)$</li>
+</ul>
+<h4 id="最短路"><a href="#最短路" class="headerlink" title="最短路"></a>最短路</h4><ul>
+<li>两节点之间的最短路记为两节点的距离（或短程线），用 $d (u, v)$ 表示</li>
+<li>$D&#x3D;\max d (u, v)$ 称为图的直径</li>
+</ul>
+<h4 id="强弱连通（在有向图中）"><a href="#强弱连通（在有向图中）" class="headerlink" title="强弱连通（在有向图中）"></a>强弱连通（在有向图中）</h4><p>单侧连通：图中存在一对节点仅单侧可达（不要求图为连通图）<br>强连通：图中任意两节点相互可达<br>弱连通：单侧连通的有向图转为无向图后是连通的<br>强&#x2F;弱&#x2F;单侧分图：具有强&#x2F;弱&#x2F;单侧性质的最大子图</p>
+<h3 id="定理-11"><a href="#定理-11" class="headerlink" title="定理"></a>定理</h3><ul>
+<li>两节点间必然存在一条不多于 $n-1$ 条边的路</li>
+<li>两节点间必然存在一条小于 $n$ 条边的通路</li>
+<li>连通图只有一个连通分支</li>
+<li>$k (K_p) &#x3D; p-1$（完全图的点连通度为 $节点数-1$）</li>
+<li>$k (G) \leq \lambda (G) \leq \delta (G)$（点连通度≤边连通度≤最小度数）</li>
+<li>两节点间每一条路都经过的节点为割点</li>
+<li>强连通 $\iff$ 图中存在一个回路，该回路至少包含每个节点一次</li>
+<li>有向图中的每个节点只位于一个强分图中</li>
+<li>对于邻接矩阵 $A (G)$，$(A (G))^k$ 中，$a_{ij}$ 表示从 $v_i$ 到 $v_j$ 的长度为 $k$ 的（回）路的数量</li>
+<li>对于有 $n$ 个节点的连通图， $rank~M (G) &#x3D; r-1$</li>
+<li>对于有 $n$ 个节点，$w$ 个最大连通子图的连通图，$M (G)$ 是完全关联矩阵，$rank~M (G) &#x3D; n-w$</li>
+</ul>
+<h2 id="欧拉图与哈密顿图"><a href="#欧拉图与哈密顿图" class="headerlink" title="欧拉图与哈密顿图"></a>欧拉图与哈密顿图</h2><h3 id="定义-17"><a href="#定义-17" class="headerlink" title="定义"></a>定义</h3><h4 id="欧拉图"><a href="#欧拉图" class="headerlink" title="欧拉图"></a>欧拉图</h4><ul>
+<li>欧拉路径：一条经过所有边且不重复的路</li>
+<li>欧拉回路：一条经过所有边且不重复的回路<ul>
+<li>有向图中为单向欧拉路径（回路）</li>
+</ul>
+</li>
+</ul>
+<h4 id="哈密顿图"><a href="#哈密顿图" class="headerlink" title="哈密顿图"></a>哈密顿图</h4><ul>
+<li>哈密顿路径：经过所有节点恰好一次的路径</li>
+<li>哈密顿回路：经过所有节点恰好一次的回路</li>
+</ul>
+<h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">G, G<span class="string">&#x27; = &lt;V, E&gt;</span></span><br><span class="line"><span class="string">节点总数 n</span></span><br><span class="line"><span class="string">while G&#x27;</span>中存在非邻接节点 <span class="keyword">and</span> 两节点度数之和大于等于 n:</span><br><span class="line">	连接这两个节点</span><br></pre></td></tr></table></figure>
+
+<p>$C (G) &#x3D; G’$ 称为 $G$ 的闭包</p>
+<h3 id="定理-12"><a href="#定理-12" class="headerlink" title="定理"></a>定理</h3><h4 id="欧拉图-1"><a href="#欧拉图-1" class="headerlink" title="欧拉图"></a>欧拉图</h4><ul>
+<li>对于无向图，当且仅当其连通且奇数度节点有 0 或 2 个时，有欧拉路径</li>
+<li>对于无向图，当且仅当所有节点全为偶数度节点时，有欧拉回路</li>
+<li>对于有向图，当且仅当其连通且{有两个节点，一个入度比出度大 1 另一个入度比出度小 1}，其余节点入度等于出度时，有欧拉路径</li>
+<li>对于有向图，当且仅当其连通且所有节点入度等于出度时，有欧拉回路</li>
+</ul>
+<h4 id="哈密顿图-1"><a href="#哈密顿图-1" class="headerlink" title="哈密顿图"></a>哈密顿图</h4><ul>
+<li>若一个图有哈密顿回路，则对任意一个节点子集 $S$，<br>  $G-S$ 的连通分支数 $W (G-S)\leq|S|$</li>
+<li>对于一个图，若其为简单图且每一对节点度数之和大于等于 $n-1~\rightarrow$ 该图有哈密顿路径（这不是充要条件）</li>
+<li>对于一个图，若其为简单图且每一对节点度数之和大于等于 $n~\rightarrow$ 该图有哈密顿回路（这不是充要条件）</li>
+<li>一个简单图的闭包是哈密顿图 $\iff$  该简单图也为哈密顿图</li>
+</ul>
+<h2 id="平面图"><a href="#平面图" class="headerlink" title="平面图"></a>平面图</h2><h3 id="定义-18"><a href="#定义-18" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>平面图：边之间没有交点的图（可以通过改画图像得到）</li>
+<li>面：边所包围的区域</li>
+<li>边界：构成面的边所形成的回路</li>
+<li>面的次数：面的边界长度</li>
+<li>在 $k$ 度节点内同构：对两个图通过多次添加或删除度数为 $k$ 的节点，后使得两图同构</li>
+</ul>
+<h3 id="定理-13"><a href="#定理-13" class="headerlink" title="定理"></a>定理</h3><ul>
+<li>对于有限平面图，面的次数和等于边数的两倍</li>
+<li>欧拉公式：$V-E+R&#x3D;2$</li>
+<li>判断非平面图的充分条件：对于一个连通的简单平面图，若 $V\geq 3 \longrightarrow E \leq 3V-6$ </li>
+<li>判断平面图的充要条件：一个图是平面图 $\iff$ 该图不包含与 $K_{3,3}, K_5$ 在 $2$ 度节点内同构的子图</li>
+</ul>
+<h2 id="对偶图与着色"><a href="#对偶图与着色" class="headerlink" title="对偶图与着色"></a>对偶图与着色</h2><h3 id="定义-19"><a href="#定义-19" class="headerlink" title="定义"></a>定义</h3><h4 id="对偶"><a href="#对偶" class="headerlink" title="对偶"></a>对偶</h4><ul>
+<li>对偶图：$G$ 和 $G^{<del>*}$ 互为对偶图，对于 $G$ 中的每一个面（包括外面），$G^{</del>*}$ 中均有一个对应的节点在其内部，反之亦然</li>
+<li>自对偶图：$G$ 与其对偶图 $G^{~*}$ 同构</li>
+</ul>
+<h4 id="着色"><a href="#着色" class="headerlink" title="着色"></a>着色</h4><ul>
+<li>最少着色数：$x (G)$</li>
+<li>$Welch Powell$ 着色法：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> sorted_node (按度数降序排序后的节点):</span><br><span class="line">	<span class="keyword">if</span> node 未着色：</span><br><span class="line">		对 node 及其的所有不邻接节点着相同颜色</span><br><span class="line">		换一种颜色</span><br><span class="line">	<span class="keyword">if</span> 所有节点已着色:</span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="定理-14"><a href="#定理-14" class="headerlink" title="定理"></a>定理</h3><ul>
+<li>$x (K_n) &#x3D; n$</li>
+<li>对于一个至少有三个节点的连通平面图，必存在度数小于 5 的节点</li>
+<li>任意平面图，最多为 5-色 (?)</li>
+</ul>
+<h2 id="树与生成树"><a href="#树与生成树" class="headerlink" title="树与生成树"></a>树与生成树</h2><h3 id="定义-20"><a href="#定义-20" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>树：无向图<ul>
+<li>无回路的连通图</li>
+<li>每个节点之间仅有一条路</li>
+<li>$E&#x3D;V-1$</li>
+<li>$\lambda (G)&#x3D;1$</li>
+</ul>
+</li>
+<li>生成树：一个图的子图是树，该树称为生成树</li>
+<li>最小生成树：一个图的所有生成树中，边权和最小的那棵树</li>
+</ul>
+<h3 id="定理-15"><a href="#定理-15" class="headerlink" title="定理"></a>定理</h3><ul>
+<li><p>连通图至少有一颗生成树</p>
+</li>
+<li><p>图中的一条回路&#x2F;边割集和该图的任何一颗生成树的补至少有一条公共边</p>
+</li>
+<li><p>$Kruskal$ 算法得到最小生成树：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">V = &#123;&#125;, E = &#123;&#125;</span><br><span class="line">G = &lt;V, E&gt;</span><br><span class="line"><span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> edge <span class="keyword">in</span> sorted_edges（按边权升序排列的边）:</span><br><span class="line">    <span class="keyword">if</span> 加入该边不会出现环:</span><br><span class="line">        将该边加入图中</span><br><span class="line">    <span class="keyword">if</span> G 是生成树（边数等于 n-<span class="number">1</span>）:</span><br><span class="line">    	<span class="keyword">break</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="根树及其应用"><a href="#根树及其应用" class="headerlink" title="根树及其应用"></a>根树及其应用</h2><h3 id="定义-21"><a href="#定义-21" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>有向树：不考虑边的方向时是一颗树的有向图</li>
+<li>根树：恰有一个节点入度为 0，其余节点入度为 1 的有向树，入度为 0 的为根，出度为 0 的为叶，出度不为 0 的为分支点或内点</li>
+<li>（完全）$m$ 叉树：每一个节点的出度均（恰好等于）小于等于 $m$ 的根树</li>
+<li>内部&#x2F;外部通路长度：根到分支节点&#x2F;叶节点的通路的长度</li>
+<li>带权二叉树：有 $t$ 个叶节点，每个叶节点带有权值 $w_1, w_1, …, w_t$</li>
+<li>最优带权二叉树（哈夫曼树）：<ul>
+<li>对于带权为 $w_i$ 的叶节点，其通路长度为 $L (w_i)$</li>
+<li>将 $w (T) &#x3D; \sum_{i&#x3D;1}^{t}w_iL (w_i)$ 称为该带权二叉树 $T$ 的权</li>
+<li>最优树为 $w (T)$ 最小的那棵树</li>
+</ul>
+</li>
+<li>前缀码：一个 $01$ 序列集合，没有一个序列是其他序列的前缀<ul>
+<li>前缀码和二叉树一一对应</li>
+</ul>
+</li>
+</ul>
+<h3 id="定理-16"><a href="#定理-16" class="headerlink" title="定理"></a>定理</h3><ul>
+<li>对于完全 $m$ 叉树，树叶数为 $t$，分枝点数为 $i$，则有 $i (m-1)&#x3D;t-1$</li>
+<li>对于有 $n$ 个分枝点的完全二叉树，内部通路长度总和为 $I$，外部通路长度总和为 $E$，有 $E&#x3D;I+2n$</li>
+<li>对于带权 $w_1 \leq w_2 \leq<del>…</del>\leq w_t$ 的最优树 $T$：<ul>
+<li>带权 $w_1, w_2$ 的叶节点 $v_{w_1}, v_{w_2}$ 互为兄弟节点</li>
+<li>$v_{w_1}, v_{w_2}$ 的父节点的通路长度最长</li>
+<li>若将 $v_{w_1}, v_{w_2}$ 的父节点改为带权 $w_1+w_2$ 的叶节点，得到的新树 $T~’$ 也是最优树</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/12/15/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/" data-id="cm6drc5rb0001e4qofcon92r3" data-title="离散数学" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/01/08/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86%EF%BC%88%E4%BA%8C%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          大学物理（二）
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%A9%E7%90%86/" rel="tag">物理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a> <a href="/tags/%E7%89%A9%E7%90%86/" style="font-size: 10px;">物理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/01/">January 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/12/">December 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/01/08/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86%EF%BC%88%E4%BA%8C%EF%BC%89/">大学物理（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2024/12/15/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
