@@ -1,0 +1,496 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>大学物理（二） | V1hZ's Blog</title><noscript>开启JavaScript才能访问本站！</noscript><link rel="icon" href="/img/pwa/favicon.png"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="https://v1hz.blog/post/96db0bd9.html"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><!-- Open Graph--><meta name="description" content="大物二的学习笔记，包含质点力学、光学、电磁、热力学、量子物理基础 质点力学质点运动的描述四个物理量位矢$$\mathbf{r} &amp;#x3D; x\mathbf{i} + y\mathbf{j} + z\mathbf{k}$$ 位移$$\Delta \mathbf{r} &amp;#x3D; \mathb"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="V1hZ's Blog"><meta name="theme-color" content="var(--rin-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--rin-main)"><link rel="bookmark" href="/img/pwa/favicon.png"><link rel="apple-touch-icon" href="/img/pwa/favicon.png" sizes="180x180"><script>console.log(
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>let mdate = "7-7,9-18,12-13";
+mdate = (mdate.split(","));
+let ndate = new Date();
+for (let i of mdate) {
+    if (i === (ndate.getMonth()+1) + "-" + (ndate.getDate())) {
+        document.documentElement.classList.add('memorial');
+    }
+}
+</script><link rel="stylesheet" href="/css/font.css"><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: 'false',
+    lazyload: {
+        enable: true,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":114514,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"已成功复制选定内容！","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请注意遵循 GPL 协议。","totalk":"请在空行下面直接输入评论"},
+    aside: {
+        sayhello: {
+            morning: "早上好，是新的一天！",
+            noon: "你吃午饭了吗？要吃好哦。",
+            afternoon: "下午好哦，记得喝下午茶～",
+            night: "晚饭吃了吗，今天怎么样?",
+            goodnight: "你怎么还不睡觉？",
+        },
+        sayhello2: ["你在按什么？","你还按！","不可以按这里！"],
+        sayhello3: {
+            prefix: '你好，',
+            back: '欢迎回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: false,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/">测试<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6/">数学<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">2025/01</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">2024/12</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>社交</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友人帐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li><li><a class="site-page child" href="/gallery/"><i class="solitude  fas fa-image"></i><span>相册页</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/">测试<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6/">数学<sup>1</sup></a></div></div><span class="sidebar-menu-item-title">网站信息</span><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="item-icon solitude fa-solid fa-file-word"></i><div class="item-name">本站字数 :</div></div><div class="item-count">13.3k</div></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div></div><a id="site-name" href="/" title="返回主页"><span class="title">V1hZ</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">大学物理（二）</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>社交</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友人帐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li><li><a class="site-page child" href="/gallery/"><i class="solitude  fas fa-image"></i><span>相册页</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机文章" href="javascript:void(0);"><i class="solitude fa-solid fa-dice-d6"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/img/default.avif" alt="大学物理（二）"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%89%A9%E7%90%86/"><span class="tags-name tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>物理</span></a></div></div></div></div><h1 class="post-title">大学物理（二）</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2025-01-08 12:40:42"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2025-01-08T04:40:42.000Z">2025-01-08T04:40:42.000Z</time></span><span class="post-meta-date" title="最后更新于 2025-01-27 22:02:48"><i class="post-meta-icon solitude fa-solid fa-arrows-rotate"></i><time datetime="2025-01-27T14:02:48.889Z">2025-01-27T14:02:48.889Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fa-solid fa-file-word" title="文章字数"></i><span class="word-count">4k</span><span class="post-meta-separator"></span></span><span class="post-meta-position" title="作者IP归属地为China"><i class="post-meta-icon solitude fas fa-location-dot"></i><span>China</span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><p>大物二的学习笔记，包含质点力学、光学、电磁、热力学、量子物理基础</p>
+<span id="more"></span>
+
+<h1 id="质点力学"><a href="#质点力学" class="headerlink" title="质点力学"></a>质点力学</h1><h2 id="质点运动的描述"><a href="#质点运动的描述" class="headerlink" title="质点运动的描述"></a>质点运动的描述</h2><h3 id="四个物理量"><a href="#四个物理量" class="headerlink" title="四个物理量"></a>四个物理量</h3><h4 id="位矢"><a href="#位矢" class="headerlink" title="位矢"></a>位矢</h4><p>$$<br>\mathbf{r} &#x3D; x\mathbf{i} + y\mathbf{j} + z\mathbf{k}<br>$$</p>
+<h4 id="位移"><a href="#位移" class="headerlink" title="位移"></a>位移</h4><p>$$<br>\Delta \mathbf{r} &#x3D; \mathbf{r}_2 - \mathbf{r}_1<br>$$</p>
+<p>一般情况下，$|\Delta\mathbf{r}| \ne \Delta r,~\Delta s \ge |\Delta r|$</p>
+<img src= "" data-lazy-src="https://raw.githubusercontent.com/nenood/pic_for_blogs/main/img/2.jpg" style="zoom:33%;" />
+
+<h4 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h4><p>平均速度、瞬时速度、瞬时速率：</p>
+<p>$$<br>\bar{\mathbf{v}} &#x3D; \frac{\Delta\mathbf{r}}{\Delta t}, \quad<br>\mathbf{v} &#x3D; \frac{d\mathbf{r}}{dt}, \quad<br>v &#x3D; |\mathbf{v}| &#x3D; \frac{ds}{dt}<br>$$</p>
+<h4 id="加速度"><a href="#加速度" class="headerlink" title="加速度"></a>加速度</h4><p>$$<br>\bar{\mathbf{a}} &#x3D; \frac{\Delta\mathbf{v}}{\Delta t}, \quad<br>\mathbf{a} &#x3D; \frac{d\mathbf{v}}{dt} &#x3D; \frac{d^2\mathbf{r}}{dt^2}<br>$$</p>
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><ol>
+<li>已知 $\mathbf{r} &#x3D; \mathbf{r}(t)$，求质点的位置、位移、速度、加速度：<strong>求导</strong></li>
+<li>已知 $\mathbf{a} &#x3D; \mathbf{a}(t)$ 和初始条件 $r_0, v_0$，求其速度和运动方程：<strong>积分</strong></li>
+</ol>
+<h3 id="曲线运动"><a href="#曲线运动" class="headerlink" title="曲线运动"></a>曲线运动</h3><p>角坐标 $\theta$，角位移 $\Delta\theta &#x3D; \theta_2 - \theta_1$</p>
+<h4 id="角速度"><a href="#角速度" class="headerlink" title="角速度"></a>角速度</h4><p>$$<br>\omega &#x3D; \frac{\Delta\theta}{dt}<br>$$</p>
+<h4 id="角加速度"><a href="#角加速度" class="headerlink" title="角加速度"></a>角加速度</h4><p>$$<br>\alpha &#x3D; \frac{d\omega}{dt} &#x3D; \frac{d^2\theta}{dt^2}<br>$$</p>
+<h4 id="线量和角量的关系"><a href="#线量和角量的关系" class="headerlink" title="线量和角量的关系"></a>线量和角量的关系</h4><p>$$<br>v &#x3D; R\omega, \quad<br>a_t &#x3D; R\alpha, \quad<br>a_n &#x3D; \frac{v^2}{R} &#x3D; R\omega^2, \quad<br>\Delta s &#x3D; R \cdot \Delta\theta<br>$$</p>
+<h2 id="牛顿定律"><a href="#牛顿定律" class="headerlink" title="牛顿定律"></a>牛顿定律</h2><h3 id="第一定律"><a href="#第一定律" class="headerlink" title="第一定律"></a>第一定律</h3><p>任何质点都保持静止或匀速直线运动状态，直至其他物体对它施加力的作用迫使它改变这种状态为止。</p>
+<h3 id="第二定律"><a href="#第二定律" class="headerlink" title="第二定律"></a>第二定律</h3><p>$$<br>\mathbf{F} &#x3D; \frac{d(m\mathbf{v})}{dt} &#x3D; m\mathbf{a}<br>$$</p>
+<h3 id="第三定律"><a href="#第三定律" class="headerlink" title="第三定律"></a>第三定律</h3><p>$$<br>\mathbf{F}<em>{12} &#x3D; -\mathbf{F}</em>{21}<br>$$</p>
+<h3 id="常见的力"><a href="#常见的力" class="headerlink" title="常见的力"></a>常见的力</h3><ul>
+<li>万有引力：$F &#x3D; G\frac{m_1m_2}{r^2}$</li>
+<li>弹力：$F &#x3D; -kx$</li>
+<li>摩擦力：$F_f &#x3D; \mu f_N$</li>
+</ul>
+<h2 id="动量和冲量"><a href="#动量和冲量" class="headerlink" title="动量和冲量"></a>动量和冲量</h2><p>$$<br>\mathbf{I} &#x3D; \int_{t_1}^{t_2}\mathbf{F}dt &#x3D; m\mathbf{v}_2 - m\mathbf{v}_1<br>$$</p>
+<ul>
+<li>动量守恒定律</li>
+</ul>
+<h3 id="质点系的动量定理"><a href="#质点系的动量定理" class="headerlink" title="质点系的动量定理"></a>质点系的动量定理</h3><p>作用在系统上合外力的冲量<strong>等于</strong>这段时间内质点系动量的增量：</p>
+<p>$$<br>\mathbf{I} &#x3D; \int_{t_1}^{t_2}\mathbf{F}_{\text{ex}}dt &#x3D; \mathbf{p} - \mathbf{p}_0<br>$$</p>
+<h2 id="功和能"><a href="#功和能" class="headerlink" title="功和能"></a>功和能</h2><p>$$<br>dW &#x3D; \mathbf{F}d\mathbf{r}, \quad<br>E_k &#x3D; \frac{1}{2}mv^2<br>$$</p>
+<h3 id="质点的动能定理"><a href="#质点的动能定理" class="headerlink" title="质点的动能定理"></a>质点的动能定理</h3><p>$$<br>W &#x3D; E_{k_2} - E_{k_1}<br>$$</p>
+<h3 id="质点系的动能定理"><a href="#质点系的动能定理" class="headerlink" title="质点系的动能定理"></a>质点系的动能定理</h3><p>$$<br>W_{\text{ex}} + W_{\text{in}} &#x3D; E_{k_2} - E_{k_1}<br>$$</p>
+<h2 id="角动量"><a href="#角动量" class="headerlink" title="角动量"></a>角动量</h2><h3 id="质点的角动量"><a href="#质点的角动量" class="headerlink" title="质点的角动量"></a>质点的角动量</h3><h4 id="力矩"><a href="#力矩" class="headerlink" title="力矩"></a>力矩</h4><p>$$<br>\mathbf{M} &#x3D; \mathbf{r} \times \mathbf{F}<br>$$</p>
+<h4 id="质点的角动量-1"><a href="#质点的角动量-1" class="headerlink" title="质点的角动量"></a>质点的角动量</h4><p>$$<br>\mathbf{L} &#x3D; \mathbf{r} \times \mathbf{p}<br>$$</p>
+<h4 id="质点的角动量定理"><a href="#质点的角动量定理" class="headerlink" title="质点的角动量定理"></a>质点的角动量定理</h4><p>$$<br>\int_{t_1}^{t_2}\mathbf{M}dt &#x3D; \mathbf{L}_2 - \mathbf{L}_1<br>$$</p>
+<p>这说明，质点所受的<strong>冲量矩等于</strong>质点角动量的<strong>增量</strong>。</p>
+<h4 id="质点的角动量守恒定律"><a href="#质点的角动量守恒定律" class="headerlink" title="质点的角动量守恒定律"></a>质点的角动量守恒定律</h4><p>如果质点所受的外力矩为零，则质点的角动量保持不变。</p>
+<h3 id="刚体定轴转动的角动量"><a href="#刚体定轴转动的角动量" class="headerlink" title="刚体定轴转动的角动量"></a>刚体定轴转动的角动量</h3><h4 id="刚体定轴转动的角动量-1"><a href="#刚体定轴转动的角动量-1" class="headerlink" title="刚体定轴转动的角动量"></a>刚体定轴转动的角动量</h4><p>$$<br>J &#x3D; \int r^2dm, \quad<br>L &#x3D; J\omega<br>$$</p>
+<h4 id="刚体定轴转动的角动量定理"><a href="#刚体定轴转动的角动量定理" class="headerlink" title="刚体定轴转动的角动量定理"></a>刚体定轴转动的角动量定理</h4><p>$$<br>M &#x3D; \frac{dL}{dt}<br>$$</p>
+<p>这说明刚体定轴转动时，力矩等于角动量的变化率。</p>
+<h4 id="刚体定轴转动的角动量守恒定律"><a href="#刚体定轴转动的角动量守恒定律" class="headerlink" title="刚体定轴转动的角动量守恒定律"></a>刚体定轴转动的角动量守恒定律</h4><p>$$<br>L &#x3D; J\omega &#x3D; C<br>$$</p>
+<p>这说明，若物体受到的合外力矩为零，则角动量保持不变。</p>
+<h1 id="光学"><a href="#光学" class="headerlink" title="光学"></a>光学</h1><h2 id="干涉"><a href="#干涉" class="headerlink" title="干涉"></a>干涉</h2><h3 id="光源"><a href="#光源" class="headerlink" title="光源"></a>光源</h3><ul>
+<li>普通光源的发光是原子&#x2F;分子的自发辐射，前后两次辐射彼此独立。</li>
+<li><strong>同一时刻</strong> 各个分子&#x2F;原子发出的光、<strong>同一分子&#x2F;原子</strong> 在不同时刻发出的光振动方向、频率、相位 <strong>各不相同</strong>。</li>
+</ul>
+<h3 id="相干光"><a href="#相干光" class="headerlink" title="相干光"></a>相干光</h3><h4 id="相干条件"><a href="#相干条件" class="headerlink" title="相干条件"></a>相干条件</h4><ul>
+<li>频率相同</li>
+<li>振动方向相同</li>
+<li>在相遇点上相位保持恒定</li>
+</ul>
+<h4 id="获得相干光"><a href="#获得相干光" class="headerlink" title="获得相干光"></a>获得相干光</h4><ul>
+<li>分波阵面法：双缝干涉</li>
+<li>分振幅法：薄膜干涉</li>
+</ul>
+<h3 id="半波损失"><a href="#半波损失" class="headerlink" title="半波损失"></a>半波损失</h3><p>当光从折射率较小的介质（<strong>光疏介质</strong>）射向折射率较大的介质（<strong>光密介质</strong>）时，在掠射（入射角 $\approx 0$ 或 $\pi&#x2F;2$）的情况下，反射光的相位较之入射光的相位突变了 $\pi$，导致反射光加了半个波长的波程差。</p>
+<p>这种情况称为 <strong>半波损失</strong>。</p>
+<h3 id="干涉现象"><a href="#干涉现象" class="headerlink" title="干涉现象"></a>干涉现象</h3><h4 id="光程、光程差、相位差"><a href="#光程、光程差、相位差" class="headerlink" title="光程、光程差、相位差"></a>光程、光程差、相位差</h4><p>光程差 $\Delta$ 与相位差 $\Delta \varphi$ 的关系：<br>$$<br>\Delta \varphi &#x3D; \frac{2\pi}{\lambda}\Delta<br>$$</p>
+<h4 id="明暗条纹"><a href="#明暗条纹" class="headerlink" title="明暗条纹"></a>明暗条纹</h4><p>$$<br>\Delta &#x3D;<br>\begin{cases}<br>\pm k\lambda, &amp; k &#x3D; 0, 1, 2, \dots \quad \text{明纹中心}, \<br>\pm (2k+1)\frac{\lambda}{2}, &amp; k &#x3D; 0, 1, 2, \dots \quad \text{暗纹中心}.<br>\end{cases}<br>$$</p>
+<h4 id="双缝干涉"><a href="#双缝干涉" class="headerlink" title="双缝干涉"></a>双缝干涉</h4><p>$$<br>\Delta &#x3D; \frac{d}{D}x<br>$$</p>
+<p>其中 $d$ 为双缝之间的距离，$D$ 为双缝与光屏的距离，$x$ 为相遇位置与光屏中心的距离。</p>
+<h4 id="薄膜干涉"><a href="#薄膜干涉" class="headerlink" title="薄膜干涉"></a>薄膜干涉</h4><p>$$<br>\Delta &#x3D; 2nd~(+\frac{\lambda}{2})<br>$$</p>
+<p>其中 $n$ 为薄膜的折射率，$d$ 为薄膜厚度，是否要加上 $\frac{\lambda}{2}$ 取决于是否存在半波损失。</p>
+<ul>
+<li><strong>劈尖：</strong><br>$$<br>\Delta d &#x3D; \frac{\lambda}{2n}, \quad \Delta b &#x3D; \frac{\lambda}{2n \sin \theta} \approx \frac{\lambda}{2n \theta}<br>$$</li>
+</ul>
+<h3 id="增反膜、增透膜"><a href="#增反膜、增透膜" class="headerlink" title="增反膜、增透膜"></a>增反膜、增透膜</h3><ul>
+<li><strong>增反膜：</strong> 反射光干涉加强</li>
+<li><strong>增透膜：</strong> 反射光干涉减弱</li>
+</ul>
+<h2 id="衍射"><a href="#衍射" class="headerlink" title="衍射"></a>衍射</h2><h3 id="夫琅禾费单缝衍射"><a href="#夫琅禾费单缝衍射" class="headerlink" title="夫琅禾费单缝衍射"></a>夫琅禾费单缝衍射</h3><ul>
+<li><p><strong>明暗条纹：</strong><br>$$<br>b\sin \theta &#x3D;<br>\begin{cases}<br>\pm k\lambda, &amp; \text{暗纹中心}, \<br>\pm (2k+1)\frac{\lambda}{2}, &amp; \text{明纹中心},<br>\end{cases}<br>\quad k &#x3D; 1, 2, \dots<br>$$<br>$$<br>-\lambda &lt; b\sin \theta &lt; \lambda<br>$$<br>其中 $b$ 为单缝的宽度，$\theta$ 为衍射角。</p>
+</li>
+<li><p><strong>中央明纹宽度</strong>（$-1, +1$ 级次暗纹中心间距）：<br>$$<br>\Delta x_0 &#x3D; \frac{2\lambda f}{b}<br>$$</p>
+</li>
+<li><p><strong>其他明纹宽度：</strong><br>$$<br>\Delta x &#x3D; \frac{\lambda f}{b}<br>$$</p>
+</li>
+<li><p><strong>屏上某点到屏中心距离：</strong><br>$$<br>x &#x3D; f\tan \theta \approx f\sin \theta<br>$$</p>
+</li>
+</ul>
+<h3 id="光栅衍射"><a href="#光栅衍射" class="headerlink" title="光栅衍射"></a>光栅衍射</h3><p>光栅衍射是 <strong>单缝衍射和多缝干涉的总效果</strong>，特点是明纹 <strong>细而亮</strong>，相邻明纹间有很宽的暗区。</p>
+<h4 id="光栅方程"><a href="#光栅方程" class="headerlink" title="光栅方程"></a>光栅方程</h4><p>$$<br>(b + b’)\sin \theta &#x3D; \pm k\lambda, \quad k &#x3D; 0, 1, 2, \dots<br>$$</p>
+<p>其中 $b$ 为缝宽度，$b’$ 为缝间距，$\theta$ 为衍射角。</p>
+<h4 id="缺级条件"><a href="#缺级条件" class="headerlink" title="缺级条件"></a>缺级条件</h4><p>衍射光之间发生干涉，部分明纹会因为干涉减弱而缺级：<br>$$<br>k &#x3D; \frac{b+b’}{b}k’, \quad k’ &#x3D; 1, 2, \dots<br>$$<br>其中 $k$ 为缺失条纹的级数。</p>
+<h2 id="偏振"><a href="#偏振" class="headerlink" title="偏振"></a>偏振</h2><h3 id="偏振光"><a href="#偏振光" class="headerlink" title="偏振光"></a>偏振光</h3><ul>
+<li><strong>自然光：</strong> 每个方向均具有光矢量的光。</li>
+<li><strong>部分偏振光：</strong> 多个方向具有光矢量的偏振光。</li>
+<li><strong>完全偏振光：</strong> 仅有一个方向存在光矢量的偏振光。</li>
+</ul>
+<p>自然光一般来自阳光、灯光等，偏振光一般有反射光（部分偏振）、激光（高度线偏振）、液晶显示屏光、经过偏振片的光等。</p>
+<h3 id="马吕斯定律"><a href="#马吕斯定律" class="headerlink" title="马吕斯定律"></a>马吕斯定律</h3><p>$$<br>I &#x3D; I_0\cos^2\theta<br>$$</p>
+<p>其中 $I_0$ 为初始光强。</p>
+<ul>
+<li>当光源为自然光时：<br>$$<br>I &#x3D; \frac{1}{2}I_0<br>$$</li>
+</ul>
+<h3 id="布儒斯特定律"><a href="#布儒斯特定律" class="headerlink" title="布儒斯特定律"></a>布儒斯特定律</h3><p>当<br>$$<br>\tan i_B &#x3D; \frac{n_2}{n_1}<br>$$<br>时，反射光为完全偏振光，且偏振化方向与入射面垂直。</p>
+<p>$i_B$ 称为布儒斯特角。</p>
+<h1 id="电与磁"><a href="#电与磁" class="headerlink" title="电与磁"></a>电与磁</h1><h2 id="静电场"><a href="#静电场" class="headerlink" title="静电场"></a>静电场</h2><h3 id="库仑定律"><a href="#库仑定律" class="headerlink" title="库仑定律"></a>库仑定律</h3><p>$$<br>\mathbf{F} &#x3D; \frac{1}{4\pi \epsilon_0} \cdot \frac{q_1q_2}{r^2}\mathbf{e_r}<br>$$</p>
+<p>其中 $\mathbf{F}$ 表示库仑力向量，$\mathbf{e_r}$ 为方向向量。</p>
+<h3 id="电场强度"><a href="#电场强度" class="headerlink" title="电场强度"></a>电场强度</h3><p>$$<br>\mathbf{E} &#x3D; \frac{\mathbf{F}}{q_0}<br>$$</p>
+<p>其中 $q_0$ 为试探电荷的带电量。</p>
+<h3 id="电场强度通量与高斯定理"><a href="#电场强度通量与高斯定理" class="headerlink" title="电场强度通量与高斯定理"></a>电场强度通量与高斯定理</h3><h4 id="电场强度通量"><a href="#电场强度通量" class="headerlink" title="电场强度通量"></a>电场强度通量</h4><p>$$<br>\Phi_e &#x3D; \int_S \mathbf{E} \cdot dS<br>$$</p>
+<ul>
+<li>对于两块互相平行的“无限大”的均匀带电平板，<ul>
+<li>两板上自由电荷面密度分别为 $+\sigma_0, -\sigma_0$；</li>
+<li>当两板间为真空时：<br>$$<br>E_0 &#x3D; \frac{\sigma_0}{\epsilon_0}<br>$$</li>
+</ul>
+</li>
+</ul>
+<h4 id="高斯定理"><a href="#高斯定理" class="headerlink" title="高斯定理"></a>高斯定理</h4><p>$$<br>\oint \epsilon_0 \mathbf{E} \cdot dS &#x3D; \sum_i q_i^{(in)}<br>$$</p>
+<ul>
+<li><strong>高斯定理说明</strong>：<ul>
+<li>通过高斯面的电场强度通量乘以真空电容率，<strong>等于</strong>高斯面内所有电荷之和。</li>
+<li>高斯面要求为<strong>封闭曲面</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="电势"><a href="#电势" class="headerlink" title="电势"></a>电势</h3><h4 id="定义式"><a href="#定义式" class="headerlink" title="定义式"></a>定义式</h4><p>$$<br>V_A &#x3D; \int_A^{\text{零势能点}} \mathbf{E} , dl<br>$$</p>
+<h4 id="点电荷的电势"><a href="#点电荷的电势" class="headerlink" title="点电荷的电势"></a>点电荷的电势</h4><p>$$<br>V &#x3D; \frac{q}{4\pi \epsilon_0 r},~~~~V_\infty &#x3D; 0<br>$$</p>
+<h4 id="电势能"><a href="#电势能" class="headerlink" title="电势能"></a>电势能</h4><p>$$<br>W &#x3D; q \int_A^B \mathbf{E} , dl &#x3D; -(E_{p_2} - E_{p_1})<br>$$</p>
+<h4 id="环路定理"><a href="#环路定理" class="headerlink" title="环路定理"></a>环路定理</h4><p>$$<br>\oint_l \mathbf{E} , dl &#x3D; 0<br>$$</p>
+<ul>
+<li><strong>说明</strong>：静电场是保守力场。</li>
+</ul>
+<h3 id="静电平衡"><a href="#静电平衡" class="headerlink" title="静电平衡"></a>静电平衡</h3><ul>
+<li>导体内部场强处处为零；</li>
+<li>导体是一个等势体；</li>
+<li>导体表面的场强与表面垂直。</li>
+</ul>
+<p><strong>注意</strong>：导体内部场强为零，但电荷不一定为零。</p>
+<h3 id="电介质"><a href="#电介质" class="headerlink" title="电介质"></a>电介质</h3><p>$$<br>E &#x3D; E_0 - E’ &#x3D; \frac{1}{\epsilon_r} E_0<br>$$</p>
+<ul>
+<li>其中 $\epsilon_r~(\epsilon_r &gt; 1)$ 为 <strong>相对电容率</strong>；</li>
+<li>$\epsilon_0 \epsilon_r$ 为电介质的电容率。</li>
+</ul>
+<p>对于极化电荷面密度：<br>$$<br>E_0 &#x3D; \frac{\sigma_0}{\epsilon_0},~E’ &#x3D; \frac{\sigma’}{\epsilon_0} \<br>\therefore \sigma’ &#x3D; \left(1 - \frac{1}{\epsilon_r}\right)\sigma_0<br>$$</p>
+<h4 id="存在电介质时的高斯定理"><a href="#存在电介质时的高斯定理" class="headerlink" title="存在电介质时的高斯定理"></a>存在电介质时的高斯定理</h4><p>$$<br>\mathbf{D} &#x3D; \epsilon \mathbf{E} &#x3D; \epsilon_0 \epsilon_r \mathbf{E}, \quad<br>\oint_S \mathbf{D} \cdot dS &#x3D; \sum_i q_i^{(in)}<br>$$</p>
+<h2 id="恒定磁场"><a href="#恒定磁场" class="headerlink" title="恒定磁场"></a>恒定磁场</h2><h3 id="磁感应强度"><a href="#磁感应强度" class="headerlink" title="磁感应强度"></a>磁感应强度</h3><p>$$<br>B &#x3D; \frac{F_\perp}{qv}<br>$$</p>
+<ul>
+<li>$q$ 表示试探电荷的带电量；</li>
+<li>$F_\perp$ 表示试探电荷垂直磁场方向运动时受到的力。</li>
+</ul>
+<h3 id="磁通量"><a href="#磁通量" class="headerlink" title="磁通量"></a>磁通量</h3><p>$$<br>\Phi &#x3D; \int_S B S \cos\theta<br>$$</p>
+<ul>
+<li>$\theta$ 为磁感应强度与平面法线的夹角。</li>
+</ul>
+<h4 id="磁场中的高斯定理"><a href="#磁场中的高斯定理" class="headerlink" title="磁场中的高斯定理"></a>磁场中的高斯定理</h4><p>$$<br>\oint_S \mathbf{B} , dS &#x3D; 0<br>$$</p>
+<ul>
+<li><strong>说明</strong>：磁场是无源场，磁感线是无头无尾的闭合曲线。</li>
+</ul>
+<h3 id="毕奥-萨伐尔定律"><a href="#毕奥-萨伐尔定律" class="headerlink" title="毕奥-萨伐尔定律"></a>毕奥-萨伐尔定律</h3><p>对于电流元 $Id\mathbf{l}$ 在任一点 $P$ 所激发的磁感应强度 $dB$：</p>
+<p>$$<br>dB &#x3D; \frac{\mu_0}{4\pi} \frac{I d\mathbf{l} \times \mathbf{e_r}}{r^2}<br>$$</p>
+<ul>
+<li>$\mu_0$ 为真空磁导率；</li>
+<li>$\mathbf{r}$ 为矢量，方向为电流元位置指向点 $P$ 位置。</li>
+</ul>
+<p>$dB$ 的方向由右手定则确定。</p>
+<h4 id="常用公式"><a href="#常用公式" class="headerlink" title="常用公式"></a>常用公式</h4><ul>
+<li><p><strong>有限长直导线电流</strong>：<br>$$<br>B &#x3D; \frac{\mu_0 I}{4\pi a} (\cos\theta_1 - \cos\theta_2)<br>$$</p>
+</li>
+<li><p><strong>无限长直导线电流</strong>：<br>$$<br>B &#x3D; \frac{\mu_0 I}{2\pi a}<br>$$</p>
+</li>
+<li><p><strong>半无限长直导线电流</strong>：<br>$$<br>B &#x3D; \frac{\mu_0 I}{4\pi a}<br>$$</p>
+<ul>
+<li>直导线延长线上的磁感应强度为 $0$。</li>
+</ul>
+</li>
+<li><p><strong>圆形电流</strong>：</p>
+<ul>
+<li>轴线上 $P$ 点：<br>$$<br>B &#x3D; \frac{\mu_0 I R^2}{2(R^2 + x^2)^{3&#x2F;2}}<br>$$</li>
+<li>圆心处：<br>$$<br>B &#x3D; \frac{\mu_0 I}{2R}<br>$$</li>
+<li>一段圆弧电流在圆心处的磁感应强度：<br>$$<br>B &#x3D; \frac{\mu_0 I}{2R} \cdot \frac{\theta}{2\pi}<br>$$</li>
+</ul>
+</li>
+</ul>
+<h3 id="安培环路定理"><a href="#安培环路定理" class="headerlink" title="安培环路定理"></a>安培环路定理</h3><p>$$<br>\frac{1}{\mu_0} \oint_L \mathbf{B} \cdot d\mathbf{l} &#x3D; \sum_i I_i<br>$$</p>
+<ul>
+<li><strong>说明</strong>：磁感应强度的环量除以真空磁导率等于其包围的电流总和。</li>
+</ul>
+<h3 id="磁介质"><a href="#磁介质" class="headerlink" title="磁介质"></a>磁介质</h3><h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li>顺磁质：$\mu_r \ge 1$；</li>
+<li>抗磁质：$\mu_r \le 1$；</li>
+<li>铁磁质：$\mu_r \gg 1$。</li>
+</ul>
+<h4 id="磁介质中的安培环路定理"><a href="#磁介质中的安培环路定理" class="headerlink" title="磁介质中的安培环路定理"></a>磁介质中的安培环路定理</h4><p>$$<br>\oint_L \mathbf{H} \cdot d\mathbf{l} &#x3D; \sum_i I_i, \quad<br>\mathbf{B} &#x3D; \mu_0 \mu_r \mathbf{H} &#x3D; \mu \mathbf{H}<br>$$</p>
+<ul>
+<li>$\mu_r$ 为 <strong>相对磁导率</strong>；</li>
+<li>$\mu$ 为磁介质的磁导率；</li>
+<li>$\mathbf{H}$ 为 <strong>磁场强度</strong>。</li>
+</ul>
+<h2 id="电磁场"><a href="#电磁场" class="headerlink" title="电磁场"></a>电磁场</h2><h3 id="电动势"><a href="#电动势" class="headerlink" title="电动势"></a>电动势</h3><p>$$<br>\mathscr{E} &#x3D; \int \mathbf{E_k} \cdot d\mathbf{l}<br>$$</p>
+<ul>
+<li>$\mathbf{E_k}$ 为非静电场强。</li>
+</ul>
+<h3 id="楞次定律"><a href="#楞次定律" class="headerlink" title="楞次定律"></a>楞次定律</h3><p>$$<br>\mathscr{E} &#x3D; -\frac{N d\Phi}{dt}<br>$$</p>
+<ul>
+<li>负号表示方向；</li>
+<li>$N$ 为匝数。</li>
+</ul>
+<h1 id="热力学"><a href="#热力学" class="headerlink" title="热力学"></a>热力学</h1><h2 id="气体动理论"><a href="#气体动理论" class="headerlink" title="气体动理论"></a>气体动理论</h2><h3 id="理想气体状态方程"><a href="#理想气体状态方程" class="headerlink" title="理想气体状态方程"></a>理想气体状态方程</h3><p>$$<br>\begin{align}<br>pV &amp;&#x3D; \frac{m}{M}RT, \<br>p &amp;&#x3D; nkT, \quad k &#x3D; \frac{N}{V}<br>\end{align}<br>$$</p>
+<h3 id="理想气体压强"><a href="#理想气体压强" class="headerlink" title="理想气体压强"></a>理想气体压强</h3><p>$$<br>\begin{align}<br>p &amp;&#x3D; \frac{1}{3}nm_0\bar{v^2} &#x3D; \frac{2}{3}n\bar{\epsilon_k}, \<br>\bar{\epsilon_k} &amp;&#x3D; \frac{1}{2}m_0v^2 &#x3D; \frac{3}{2}kT<br>\end{align}<br>$$</p>
+<p>$n$ 为分子数量，$m_0$ 为单个分子质量，$\bar{\epsilon_k}$ 为分子平均平动动能。</p>
+<h3 id="能量均分定理理想气体内能"><a href="#能量均分定理理想气体内能" class="headerlink" title="能量均分定理理想气体内能"></a>能量均分定理理想气体内能</h3><h4 id="自由度"><a href="#自由度" class="headerlink" title="自由度"></a>自由度</h4><p>单原子分子自由度为 $3$，双原子分子为 $5$，多原子分子为 $6$。</p>
+<p>$$<br>\begin{align}<br>\text{对于自由度为 } i \text{ 的分子：} \<br>\bar{\epsilon} &amp;&#x3D; \frac{i}{2}kT, \<br>\text{理想气体的内能：} \quad E &amp;&#x3D; \frac{m}{M}\cdot\frac{i}{2}RT<br>\end{align}<br>$$</p>
+<p><strong>注意：</strong> 能量均分定理是对大量分子的 <strong>统计平均结果</strong>，即在 <strong>某一瞬时</strong>，每个自由度上的能量和总能量可能与能量均分定理所确定的平均值 <strong>有很大的差别</strong>。</p>
+<h3 id="气体分子热运动的速率分布"><a href="#气体分子热运动的速率分布" class="headerlink" title="气体分子热运动的速率分布"></a>气体分子热运动的速率分布</h3><p>$$<br>\begin{align}<br>\text{速率分布函数的定义：} \quad f(v) &amp;&#x3D; \frac{dN}{Ndv}, \<br>\int_0^\infty f(v)dv &amp;&#x3D; 1, \<br>\text{速率在 } v_1 \sim v_2 \text{ 区间内的分子平均速率：} \quad \bar{v} &amp;&#x3D; \frac{\int_{v_1}^{v_2}vf(v)dv}{\int_{v_1}^{v_2}f(v)dv}, \<br>\text{最大概然速率：} \quad v_p &amp;&#x3D; \sqrt{\frac{2RT}{M}}, \<br>\text{平均速率：} \quad \bar{v} &amp;&#x3D; \sqrt{\frac{8RT}{\pi M}}, \<br>\text{方均根速率：} \quad \sqrt{\bar{v^2}} &amp;&#x3D; \sqrt{\frac{3RT}{M}}<br>\end{align}<br>$$</p>
+<h2 id="热力学基础"><a href="#热力学基础" class="headerlink" title="热力学基础"></a>热力学基础</h2><h3 id="摩尔热容"><a href="#摩尔热容" class="headerlink" title="摩尔热容"></a>摩尔热容</h3><p>$$<br>\begin{align}<br>C_{V,m} &amp;&#x3D; \frac{i}{2}R, \<br>C_{p,m} &amp;&#x3D; \frac{i+2}{2}R, \<br>\gamma &amp;&#x3D; \frac{C_{p,m}}{C_{V,m}} &#x3D; \frac{i+2}{i}<br>\end{align}<br>$$</p>
+<h3 id="热力学第一定律"><a href="#热力学第一定律" class="headerlink" title="热力学第一定律"></a>热力学第一定律</h3><p>$$<br>\begin{align}<br>Q &amp;&#x3D; \Delta E + W, \<br>\Delta E &amp;&#x3D; \frac{m}{M}\frac{i}{2}R\Delta T, \<br>Q &amp;&#x3D; \frac{m}{M}C_m\Delta T<br>\end{align}<br>$$</p>
+<ul>
+<li>等压升温吸热比等体多，因为等压升温时体积膨胀，对外做功，需要额外的热量。</li>
+</ul>
+<h4 id="等体过程"><a href="#等体过程" class="headerlink" title="等体过程"></a>等体过程</h4><p>$$<br>Q &#x3D; \Delta E &#x3D; \frac{m}{M}\frac{i}{2}R\Delta T<br>$$</p>
+<h4 id="等温过程"><a href="#等温过程" class="headerlink" title="等温过程"></a>等温过程</h4><p>$$<br>Q &#x3D; \Delta E + W &#x3D; W &#x3D; \int p,dv &#x3D; \frac{m}{M}RT\ln\frac{v_2}{v_1} &#x3D; \frac{m}{M}RT\ln\frac{p_1}{p_2}<br>$$</p>
+<h4 id="绝热过程"><a href="#绝热过程" class="headerlink" title="绝热过程"></a>绝热过程</h4><p>$$<br>\begin{align}<br>pV^\gamma &amp;&#x3D; C, \quad \gamma &#x3D; \frac{i+2}{i}, \<br>Q &amp;&#x3D; 0, \<br>W &amp;&#x3D; \frac{i}{2}(p_1V_1 - p_2V_2)<br>\end{align}<br>$$</p>
+<h3 id="卡诺循环热机效率"><a href="#卡诺循环热机效率" class="headerlink" title="卡诺循环热机效率"></a>卡诺循环热机效率</h3><p>$$<br>\begin{align}<br>\eta &amp;&#x3D; \frac{W}{Q_1} &#x3D; \frac{Q_1 - Q_2}{Q_1} &#x3D; 1 - \frac{Q_2}{Q_1}, \<br>\eta_{\text{卡}} &amp;&#x3D; 1 - \frac{T_2}{T_1}<br>\end{align}<br>$$</p>
+<p>$Q_1$ 是从高温热源吸收的能量，$Q_2$ 是向低温热源放出的能量。</p>
+<p>$T_1$ 是高温热源的温度，$T_2$ 是低温热源的温度。</p>
+<h1 id="量子物理基础"><a href="#量子物理基础" class="headerlink" title="量子物理基础"></a>量子物理基础</h1><h2 id="黑体辐射与普朗克能量子假设"><a href="#黑体辐射与普朗克能量子假设" class="headerlink" title="黑体辐射与普朗克能量子假设"></a>黑体辐射与普朗克能量子假设</h2><h3 id="黑体与黑体辐射"><a href="#黑体与黑体辐射" class="headerlink" title="黑体与黑体辐射"></a>黑体与黑体辐射</h3><ul>
+<li>单色辐出度：$M_\lambda(T)$</li>
+<li>辐出度：<br>$$<br>\begin{align}<br>&amp;\text{斯特藩-玻尔兹曼定律：}<del>M(T) &#x3D; \int_0^\infty M_\lambda(T)d\lambda &#x3D; \sigma T^4, \<br>&amp;\text{维恩位移定律：}</del>\lambda_mT &#x3D; b<br>\end{align}<br>$$</li>
+</ul>
+<h3 id="经典公式及其困难"><a href="#经典公式及其困难" class="headerlink" title="经典公式及其困难"></a>经典公式及其困难</h3><ul>
+<li>维恩公式：长波部分相差较大  </li>
+<li>瑞利-金斯公式：短波部分荒谬，“紫外灾难”</li>
+</ul>
+<h3 id="普朗克能量子假设"><a href="#普朗克能量子假设" class="headerlink" title="普朗克能量子假设"></a>普朗克能量子假设</h3><p>$$<br>\epsilon &#x3D; h\nu \<br>M_\lambda(T) &#x3D; \frac{2\pi hc^2}{\lambda^5} \cdot \frac{1}{e^{hc&#x2F;\lambda kT}-1}<br>$$</p>
+<h2 id="光电效应与光子理论"><a href="#光电效应与光子理论" class="headerlink" title="光电效应与光子理论"></a>光电效应与光子理论</h2><h3 id="光电效应"><a href="#光电效应" class="headerlink" title="光电效应"></a>光电效应</h3><ol>
+<li><p><strong>饱和电流</strong>  </p>
+<ul>
+<li>加速电压增加，光电流逐渐达到饱和值  </li>
+<li>入射光强度越大，饱和电流越大<br>$\iff$ 单位时间内逸出的光电子数目与入射光强度成正比</li>
+</ul>
+</li>
+<li><p><strong>最大初动能与遏止电压</strong><br>$$<br>\frac{1}{2}mv_m^2 &#x3D; eU_0 \<br>v_m<del>\text{为最大初速度，}</del>U_0~\text{为遏止电压}<br>$$</p>
+</li>
+<li><p><strong>截止频率（红限）</strong>  </p>
+<ul>
+<li>入射光频率低于 $\nu_0$ 时，无论入射光强度如何，均无光电子逸出  </li>
+<li>不同金属 $\nu_0$ 不同</li>
+</ul>
+</li>
+<li><p><strong>弛豫时间</strong>  </p>
+<ul>
+<li>光照开始到光电子逸出，弛豫时间不超过 $10^{-9}~\text{s}$</li>
+</ul>
+</li>
+</ol>
+<h3 id="波动理论的困难"><a href="#波动理论的困难" class="headerlink" title="波动理论的困难"></a>波动理论的困难</h3><ul>
+<li>初动能与光强无关  </li>
+<li>截止频率现象  </li>
+<li>逸出能量无需积累</li>
+</ul>
+<h3 id="光子理论"><a href="#光子理论" class="headerlink" title="光子理论"></a>光子理论</h3><p>$$<br>h\nu &#x3D; \frac{1}{2}mv^2 + W \<br>W &#x3D; h\nu_0 \<br>eU_0 &#x3D; h\nu - h\nu_0<br>$$</p>
+<h3 id="光的波粒二象性"><a href="#光的波粒二象性" class="headerlink" title="光的波粒二象性"></a>光的波粒二象性</h3><p>$$<br>E &#x3D; mc^2 &#x3D; h\nu \<br>p &#x3D; mc &#x3D; \frac{h\nu}{c} &#x3D; \frac{h}{\lambda}<br>$$</p>
+<h2 id="康普顿效应"><a href="#康普顿效应" class="headerlink" title="康普顿效应"></a>康普顿效应</h2><h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p>散射 $X$ 射线中除与入射波长相同的射线外，还有波长大于原波长的射线。</p>
+<h3 id="光子理论的解释"><a href="#光子理论的解释" class="headerlink" title="光子理论的解释"></a>光子理论的解释</h3><p>$$<br>\Delta \lambda &#x3D; 2\lambda_c \sin^2\frac{\theta}{2}, \<br>\lambda_c &#x3D; \frac{h}{mc} &#x3D; 0.0024~\text{nm}<br>$$</p>
+<ul>
+<li>当光子与束缚较弱的电子碰撞，能量传递使光子波长变长。</li>
+<li>光子与紧束缚电子或整个原子碰撞时，波长基本不变。</li>
+</ul>
+<h2 id="德布罗意波"><a href="#德布罗意波" class="headerlink" title="德布罗意波"></a>德布罗意波</h2><p>$$<br>\lambda &#x3D; \frac{h}{p} &#x3D; \frac{h}{mv}<br>$$</p>
+<blockquote>
+<p>一切微观粒子都具有波粒二象性。</p>
+</blockquote>
+<h2 id="玻尔氢原子理论"><a href="#玻尔氢原子理论" class="headerlink" title="玻尔氢原子理论"></a>玻尔氢原子理论</h2><h3 id="里德伯公式"><a href="#里德伯公式" class="headerlink" title="里德伯公式"></a>里德伯公式</h3><p>$$<br>\frac{1}{\lambda} &#x3D; R\left(\frac{1}{k^2} - \frac{1}{n^2}\right), \<br>k &#x3D; 1, 2, 3, \dots, \quad n &#x3D; k+1, k+2, \dots<br>$$</p>
+<ul>
+<li>$R$ 为里德伯常量。  </li>
+<li>由此可得氢原子光谱的线系。</li>
+</ul>
+<h3 id="玻尔氢原子理论-1"><a href="#玻尔氢原子理论-1" class="headerlink" title="玻尔氢原子理论"></a>玻尔氢原子理论</h3><h4 id="假设"><a href="#假设" class="headerlink" title="假设"></a>假设</h4><ol>
+<li><p><strong>定态假设</strong>：<br>原子在某些能量状态下电子绕核做圆周运动而不辐射电磁波。</p>
+</li>
+<li><p><strong>量子化条件</strong>：详见“角动量量子化”。</p>
+</li>
+<li><p><strong>频率条件</strong>：详见“跃迁条件”。</p>
+</li>
+</ol>
+<h4 id="跃迁条件"><a href="#跃迁条件" class="headerlink" title="跃迁条件"></a>跃迁条件</h4><p>$$<br>h\nu &#x3D; E_n - E_m<br>$$</p>
+<h4 id="角动量量子化"><a href="#角动量量子化" class="headerlink" title="角动量量子化"></a>角动量量子化</h4><p>$$<br>L &#x3D; \frac{nh}{2\pi} &#x3D; n\hbar, \quad n~\text{称为主量子数}<br>$$</p>
+<h4 id="能级公式与轨道半径公式"><a href="#能级公式与轨道半径公式" class="headerlink" title="能级公式与轨道半径公式"></a>能级公式与轨道半径公式</h4><p>$$<br>\begin{align}<br>&amp;\text{能级：} \quad E_n &#x3D; \frac{E_1}{n^2}, \quad n &#x3D; 1, 2, 3, \dots \<br>&amp;\text{轨道半径：} \quad r_n &#x3D; n^2r_1, \quad n &#x3D; 1, 2, 3, \dots \<br>&amp;\text{基态能量：} \quad E_1 &#x3D; -13.6<del>\text{eV} \<br>&amp;\text{玻尔半径：} \quad r_1 &#x3D; 0.053</del>\text{nm}<br>\end{align}<br>$$</p>
+<h2 id="不确定性关系"><a href="#不确定性关系" class="headerlink" title="不确定性关系"></a>不确定性关系</h2><p>$$<br>\Delta x \Delta p &#x3D; \Delta x \cdot m \Delta v \geq \frac{\hbar}{2}<br>$$</p>
+<ul>
+<li>例如电子通过狭缝时，无法确定其从缝中哪一点通过。</li>
+</ul>
+<hr>
+<h3 id="一些常量"><a href="#一些常量" class="headerlink" title="一些常量"></a>一些常量</h3><ul>
+<li>$h &#x3D; 6.63\times 10^{-34}~\text{J}\cdot\text{s}$  </li>
+<li>$m_e &#x3D; 9.11 \times 10^{-31}~\text{kg}$  </li>
+<li>$e &#x3D; 1.6\times 10^{-19}~\text{C}$  </li>
+<li>$E_1 &#x3D; -13.6~\text{eV}$  </li>
+<li>$a_0 &#x3D; 5.29 \times 10^{-11}~\text{m}$</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><a class="post-copyright__author_img" href="/about/"><img class="post-copyright__author_img_front" src= "" data-lazy-src="/img/avatar.png"></a><div class="post-copyright__author_name">V1hZ's Blog</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">V1hZ's Blog</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%89%A9%E7%90%86/"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>物理<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/784dd132.html"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Test</div></div></a></div><div class="next-post pull-right"><a href="/post/3fb56f9d.html"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">离散数学</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="author-info__top-group"><div class="author-info__sayhi" id="author-info__sayhi" onclick="sco.changeSayHelloText()">sayhello.morning</div></div></div><div class="avatar-img-group"><img class="avatar-img" alt="头像" src= "" data-lazy-src="/img/avatar.png"></div><div class="author-info__description_group"><div class="author-info__description">Beyond the stars,</div><div class="author-info__description2">Splitting the seas.</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><div class="author-info__name">V1hZ</div><div class="author-info__desc"></div></a><div class="card-info-social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/WXY-V1hZ" title="Github"><i class="solitude  fab fa-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fa-solid fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E5%8A%9B%E5%AD%A6"><span class="toc-text">质点力学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E8%BF%90%E5%8A%A8%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="toc-text">质点运动的描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E4%B8%AA%E7%89%A9%E7%90%86%E9%87%8F"><span class="toc-text">四个物理量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%8D%E7%9F%A2"><span class="toc-text">位矢</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%8D%E7%A7%BB"><span class="toc-text">位移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9F%E5%BA%A6"><span class="toc-text">速度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E9%80%9F%E5%BA%A6"><span class="toc-text">加速度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-text">常见问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B2%E7%BA%BF%E8%BF%90%E5%8A%A8"><span class="toc-text">曲线运动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%92%E9%80%9F%E5%BA%A6"><span class="toc-text">角速度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%92%E5%8A%A0%E9%80%9F%E5%BA%A6"><span class="toc-text">角加速度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E9%87%8F%E5%92%8C%E8%A7%92%E9%87%8F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">线量和角量的关系</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%9B%E9%A1%BF%E5%AE%9A%E5%BE%8B"><span class="toc-text">牛顿定律</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%AE%9A%E5%BE%8B"><span class="toc-text">第一定律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%AE%9A%E5%BE%8B"><span class="toc-text">第二定律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%AE%9A%E5%BE%8B"><span class="toc-text">第三定律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%9B"><span class="toc-text">常见的力</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E9%87%8F%E5%92%8C%E5%86%B2%E9%87%8F"><span class="toc-text">动量和冲量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%B3%BB%E7%9A%84%E5%8A%A8%E9%87%8F%E5%AE%9A%E7%90%86"><span class="toc-text">质点系的动量定理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E5%92%8C%E8%83%BD"><span class="toc-text">功和能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%9A%84%E5%8A%A8%E8%83%BD%E5%AE%9A%E7%90%86"><span class="toc-text">质点的动能定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%B3%BB%E7%9A%84%E5%8A%A8%E8%83%BD%E5%AE%9A%E7%90%86"><span class="toc-text">质点系的动能定理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%92%E5%8A%A8%E9%87%8F"><span class="toc-text">角动量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F"><span class="toc-text">质点的角动量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%9B%E7%9F%A9"><span class="toc-text">力矩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F-1"><span class="toc-text">质点的角动量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F%E5%AE%9A%E7%90%86"><span class="toc-text">质点的角动量定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%A8%E7%82%B9%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F%E5%AE%88%E6%81%92%E5%AE%9A%E5%BE%8B"><span class="toc-text">质点的角动量守恒定律</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9A%E4%BD%93%E5%AE%9A%E8%BD%B4%E8%BD%AC%E5%8A%A8%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F"><span class="toc-text">刚体定轴转动的角动量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9A%E4%BD%93%E5%AE%9A%E8%BD%B4%E8%BD%AC%E5%8A%A8%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F-1"><span class="toc-text">刚体定轴转动的角动量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9A%E4%BD%93%E5%AE%9A%E8%BD%B4%E8%BD%AC%E5%8A%A8%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F%E5%AE%9A%E7%90%86"><span class="toc-text">刚体定轴转动的角动量定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9A%E4%BD%93%E5%AE%9A%E8%BD%B4%E8%BD%AC%E5%8A%A8%E7%9A%84%E8%A7%92%E5%8A%A8%E9%87%8F%E5%AE%88%E6%81%92%E5%AE%9A%E5%BE%8B"><span class="toc-text">刚体定轴转动的角动量守恒定律</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%89%E5%AD%A6"><span class="toc-text">光学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B2%E6%B6%89"><span class="toc-text">干涉</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E6%BA%90"><span class="toc-text">光源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%B9%B2%E5%85%89"><span class="toc-text">相干光</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%B9%B2%E6%9D%A1%E4%BB%B6"><span class="toc-text">相干条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%BE%97%E7%9B%B8%E5%B9%B2%E5%85%89"><span class="toc-text">获得相干光</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E6%B3%A2%E6%8D%9F%E5%A4%B1"><span class="toc-text">半波损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B2%E6%B6%89%E7%8E%B0%E8%B1%A1"><span class="toc-text">干涉现象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%89%E7%A8%8B%E3%80%81%E5%85%89%E7%A8%8B%E5%B7%AE%E3%80%81%E7%9B%B8%E4%BD%8D%E5%B7%AE"><span class="toc-text">光程、光程差、相位差</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%98%8E%E6%9A%97%E6%9D%A1%E7%BA%B9"><span class="toc-text">明暗条纹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E7%BC%9D%E5%B9%B2%E6%B6%89"><span class="toc-text">双缝干涉</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%96%84%E8%86%9C%E5%B9%B2%E6%B6%89"><span class="toc-text">薄膜干涉</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E5%8F%8D%E8%86%9C%E3%80%81%E5%A2%9E%E9%80%8F%E8%86%9C"><span class="toc-text">增反膜、增透膜</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%8D%E5%B0%84"><span class="toc-text">衍射</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%AB%E7%90%85%E7%A6%BE%E8%B4%B9%E5%8D%95%E7%BC%9D%E8%A1%8D%E5%B0%84"><span class="toc-text">夫琅禾费单缝衍射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E8%A1%8D%E5%B0%84"><span class="toc-text">光栅衍射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E6%96%B9%E7%A8%8B"><span class="toc-text">光栅方程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%BA%A7%E6%9D%A1%E4%BB%B6"><span class="toc-text">缺级条件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%8F%E6%8C%AF"><span class="toc-text">偏振</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%8F%E6%8C%AF%E5%85%89"><span class="toc-text">偏振光</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%AC%E5%90%95%E6%96%AF%E5%AE%9A%E5%BE%8B"><span class="toc-text">马吕斯定律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E5%84%92%E6%96%AF%E7%89%B9%E5%AE%9A%E5%BE%8B"><span class="toc-text">布儒斯特定律</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%B5%E4%B8%8E%E7%A3%81"><span class="toc-text">电与磁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E7%94%B5%E5%9C%BA"><span class="toc-text">静电场</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E4%BB%91%E5%AE%9A%E5%BE%8B"><span class="toc-text">库仑定律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%9C%BA%E5%BC%BA%E5%BA%A6"><span class="toc-text">电场强度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%9C%BA%E5%BC%BA%E5%BA%A6%E9%80%9A%E9%87%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%AE%9A%E7%90%86"><span class="toc-text">电场强度通量与高斯定理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E5%9C%BA%E5%BC%BA%E5%BA%A6%E9%80%9A%E9%87%8F"><span class="toc-text">电场强度通量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E6%96%AF%E5%AE%9A%E7%90%86"><span class="toc-text">高斯定理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%8A%BF"><span class="toc-text">电势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%BC%8F"><span class="toc-text">定义式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%82%B9%E7%94%B5%E8%8D%B7%E7%9A%84%E7%94%B5%E5%8A%BF"><span class="toc-text">点电荷的电势</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E5%8A%BF%E8%83%BD"><span class="toc-text">电势能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E8%B7%AF%E5%AE%9A%E7%90%86"><span class="toc-text">环路定理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E7%94%B5%E5%B9%B3%E8%A1%A1"><span class="toc-text">静电平衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E4%BB%8B%E8%B4%A8"><span class="toc-text">电介质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%9C%A8%E7%94%B5%E4%BB%8B%E8%B4%A8%E6%97%B6%E7%9A%84%E9%AB%98%E6%96%AF%E5%AE%9A%E7%90%86"><span class="toc-text">存在电介质时的高斯定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%81%92%E5%AE%9A%E7%A3%81%E5%9C%BA"><span class="toc-text">恒定磁场</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E6%84%9F%E5%BA%94%E5%BC%BA%E5%BA%A6"><span class="toc-text">磁感应强度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E9%80%9A%E9%87%8F"><span class="toc-text">磁通量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A3%81%E5%9C%BA%E4%B8%AD%E7%9A%84%E9%AB%98%E6%96%AF%E5%AE%9A%E7%90%86"><span class="toc-text">磁场中的高斯定理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%95%E5%A5%A5-%E8%90%A8%E4%BC%90%E5%B0%94%E5%AE%9A%E5%BE%8B"><span class="toc-text">毕奥-萨伐尔定律</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%85%AC%E5%BC%8F"><span class="toc-text">常用公式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%9F%B9%E7%8E%AF%E8%B7%AF%E5%AE%9A%E7%90%86"><span class="toc-text">安培环路定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E4%BB%8B%E8%B4%A8"><span class="toc-text">磁介质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-text">分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A3%81%E4%BB%8B%E8%B4%A8%E4%B8%AD%E7%9A%84%E5%AE%89%E5%9F%B9%E7%8E%AF%E8%B7%AF%E5%AE%9A%E7%90%86"><span class="toc-text">磁介质中的安培环路定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E7%A3%81%E5%9C%BA"><span class="toc-text">电磁场</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E5%8A%A8%E5%8A%BF"><span class="toc-text">电动势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A5%9E%E6%AC%A1%E5%AE%9A%E5%BE%8B"><span class="toc-text">楞次定律</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%83%AD%E5%8A%9B%E5%AD%A6"><span class="toc-text">热力学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%94%E4%BD%93%E5%8A%A8%E7%90%86%E8%AE%BA"><span class="toc-text">气体动理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E6%83%B3%E6%B0%94%E4%BD%93%E7%8A%B6%E6%80%81%E6%96%B9%E7%A8%8B"><span class="toc-text">理想气体状态方程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E6%83%B3%E6%B0%94%E4%BD%93%E5%8E%8B%E5%BC%BA"><span class="toc-text">理想气体压强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%BD%E9%87%8F%E5%9D%87%E5%88%86%E5%AE%9A%E7%90%86%E7%90%86%E6%83%B3%E6%B0%94%E4%BD%93%E5%86%85%E8%83%BD"><span class="toc-text">能量均分定理理想气体内能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E7%94%B1%E5%BA%A6"><span class="toc-text">自由度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%94%E4%BD%93%E5%88%86%E5%AD%90%E7%83%AD%E8%BF%90%E5%8A%A8%E7%9A%84%E9%80%9F%E7%8E%87%E5%88%86%E5%B8%83"><span class="toc-text">气体分子热运动的速率分布</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%83%AD%E5%8A%9B%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="toc-text">热力学基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%91%A9%E5%B0%94%E7%83%AD%E5%AE%B9"><span class="toc-text">摩尔热容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E5%8A%9B%E5%AD%A6%E7%AC%AC%E4%B8%80%E5%AE%9A%E5%BE%8B"><span class="toc-text">热力学第一定律</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%89%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="toc-text">等体过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%89%E6%B8%A9%E8%BF%87%E7%A8%8B"><span class="toc-text">等温过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9D%E7%83%AD%E8%BF%87%E7%A8%8B"><span class="toc-text">绝热过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%A1%E8%AF%BA%E5%BE%AA%E7%8E%AF%E7%83%AD%E6%9C%BA%E6%95%88%E7%8E%87"><span class="toc-text">卡诺循环热机效率</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8F%E5%AD%90%E7%89%A9%E7%90%86%E5%9F%BA%E7%A1%80"><span class="toc-text">量子物理基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E4%BD%93%E8%BE%90%E5%B0%84%E4%B8%8E%E6%99%AE%E6%9C%97%E5%85%8B%E8%83%BD%E9%87%8F%E5%AD%90%E5%81%87%E8%AE%BE"><span class="toc-text">黑体辐射与普朗克能量子假设</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%91%E4%BD%93%E4%B8%8E%E9%BB%91%E4%BD%93%E8%BE%90%E5%B0%84"><span class="toc-text">黑体与黑体辐射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%8F%E5%85%B8%E5%85%AC%E5%BC%8F%E5%8F%8A%E5%85%B6%E5%9B%B0%E9%9A%BE"><span class="toc-text">经典公式及其困难</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E6%9C%97%E5%85%8B%E8%83%BD%E9%87%8F%E5%AD%90%E5%81%87%E8%AE%BE"><span class="toc-text">普朗克能量子假设</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%89%E7%94%B5%E6%95%88%E5%BA%94%E4%B8%8E%E5%85%89%E5%AD%90%E7%90%86%E8%AE%BA"><span class="toc-text">光电效应与光子理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E7%94%B5%E6%95%88%E5%BA%94"><span class="toc-text">光电效应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A2%E5%8A%A8%E7%90%86%E8%AE%BA%E7%9A%84%E5%9B%B0%E9%9A%BE"><span class="toc-text">波动理论的困难</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%AD%90%E7%90%86%E8%AE%BA"><span class="toc-text">光子理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E7%9A%84%E6%B3%A2%E7%B2%92%E4%BA%8C%E8%B1%A1%E6%80%A7"><span class="toc-text">光的波粒二象性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%B7%E6%99%AE%E9%A1%BF%E6%95%88%E5%BA%94"><span class="toc-text">康普顿效应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%B0%E8%B1%A1"><span class="toc-text">现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%AD%90%E7%90%86%E8%AE%BA%E7%9A%84%E8%A7%A3%E9%87%8A"><span class="toc-text">光子理论的解释</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%B7%E5%B8%83%E7%BD%97%E6%84%8F%E6%B3%A2"><span class="toc-text">德布罗意波</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%BB%E5%B0%94%E6%B0%A2%E5%8E%9F%E5%AD%90%E7%90%86%E8%AE%BA"><span class="toc-text">玻尔氢原子理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8C%E5%BE%B7%E4%BC%AF%E5%85%AC%E5%BC%8F"><span class="toc-text">里德伯公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%BB%E5%B0%94%E6%B0%A2%E5%8E%9F%E5%AD%90%E7%90%86%E8%AE%BA-1"><span class="toc-text">玻尔氢原子理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%87%E8%AE%BE"><span class="toc-text">假设</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%83%E8%BF%81%E6%9D%A1%E4%BB%B6"><span class="toc-text">跃迁条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%92%E5%8A%A8%E9%87%8F%E9%87%8F%E5%AD%90%E5%8C%96"><span class="toc-text">角动量量子化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%BD%E7%BA%A7%E5%85%AC%E5%BC%8F%E4%B8%8E%E8%BD%A8%E9%81%93%E5%8D%8A%E5%BE%84%E5%85%AC%E5%BC%8F"><span class="toc-text">能级公式与轨道半径公式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%85%B3%E7%B3%BB"><span class="toc-text">不确定性关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%B8%B8%E9%87%8F"><span class="toc-text">一些常量</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fa-solid fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/post/784dd132.html" title="Test"><div class="content"><span class="title" href="/post/784dd132.html" title="Test">Test</span><span class="article-recent_post_categories" href="/post/784dd132.html">测试</span></div></a><a class="aside-list-item" href="/post/96db0bd9.html" title="大学物理（二）"><div class="content"><span class="title" href="/post/96db0bd9.html" title="大学物理（二）">大学物理（二）</span><span class="article-recent_post_categories" href="/post/96db0bd9.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/3fb56f9d.html" title="离散数学"><div class="content"><span class="title" href="/post/3fb56f9d.html" title="离散数学">离散数学</span><span class="article-recent_post_categories" href="/post/3fb56f9d.html">学习笔记</span></div></a></div></div></div></div></main><footer id="footer"><div id="st-footer-bar"><div class="footer-logo"><span>V1hZ</span></div><div class="footer-bar-description"></div><a class="footer-bar-link" href="/about/">Learn more</a></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src= "" data-lazy-src="/img/pwa/favicon.png">V1hZ</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" alt="Powered by Hexo">Powered by Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka" alt="Theme Eureka">Theme Eureka</a><a class="footer-bar-link cc" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><i class="solitude fa-solid fa-copyright"></i><i class="solitude fa-brands fa-creative-commons-by"></i><i class="solitude fa-brands fa-creative-commons-nc"></i><i class="solitude fa-brands fa-creative-commons-nd"></i></a></div></div></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js"><script>(() => {
+  document.querySelectorAll('.article-container span.katex-display').forEach(item => {
+    utils.wrap(item, 'div', {class: 'katex-wrap'})
+  })
+})();
+</script></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/19.1.3/lazyload.iife.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><script defer pjax src="/js/countdown.js"></script><div class="js-pjax"></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--></body></html>
+        <script>
+            const posts = ["post/784dd132.html","post/96db0bd9.html","post/3fb56f9d.html"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>

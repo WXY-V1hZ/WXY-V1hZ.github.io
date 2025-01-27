@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>图库 | V1hZ's Blog</title><noscript>开启JavaScript才能访问本站！</noscript><link rel="icon" href="/img/pwa/favicon.png"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="https://v1hz.blog/gallery/"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><!-- Open Graph--><meta name="description" content="一些我收藏的图片。"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="V1hZ's Blog"><meta name="theme-color" content="var(--rin-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--rin-main)"><link rel="bookmark" href="/img/pwa/favicon.png"><link rel="apple-touch-icon" href="/img/pwa/favicon.png" sizes="180x180"><script>console.log(
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>let mdate = "7-7,9-18,12-13";
+mdate = (mdate.split(","));
+let ndate = new Date();
+for (let i of mdate) {
+    if (i === (ndate.getMonth()+1) + "-" + (ndate.getDate())) {
+        document.documentElement.classList.add('memorial');
+    }
+}
+</script><link rel="stylesheet" href="/css/font.css"><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: 'false',
+    lazyload: {
+        enable: true,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":114514,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"已成功复制选定内容！","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请注意遵循 GPL 协议。","totalk":"请在空行下面直接输入评论"},
+    aside: {
+        sayhello: {
+            morning: "早上好，是新的一天！",
+            noon: "你吃午饭了吗？要吃好哦。",
+            afternoon: "下午好哦，记得喝下午茶～",
+            night: "晚饭吃了吗，今天怎么样?",
+            goodnight: "你怎么还不睡觉？",
+        },
+        sayhello2: ["你在按什么？","你还按！","不可以按这里！"],
+        sayhello3: {
+            prefix: '你好，',
+            back: '欢迎回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: false,
+    is_page: true,
+    is_home: false,
+    page: '',
+    toc: false,
+    comment: false,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/">测试<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6/">数学<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">2025/01</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">2024/12</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>社交</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友人帐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li><li><a class="site-page child" href="/gallery/"><i class="solitude  fas fa-image"></i><span>相册页</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/%E6%B5%8B%E8%AF%95/">测试<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6/">数学<sup>1</sup></a></div></div><span class="sidebar-menu-item-title">网站信息</span><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="item-icon solitude fa-solid fa-file-word"></i><div class="item-name">本站字数 :</div></div><div class="item-count">13.3k</div></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div></div><a id="site-name" href="/" title="返回主页"><span class="title">V1hZ</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">图库</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>归档</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>社交</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/links/"><i class="solitude  fas fa-user-group"></i><span>友人帐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li><li><a class="site-page child" href="/gallery/"><i class="solitude  fas fa-image"></i><span>相册页</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机文章" href="javascript:void(0);"><i class="solitude fa-solid fa-dice-d6"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="article-container"><div class="gallery-group-main">
+<figure class="gallery-group">
+  <img class="gallery-group-img no-lightbox" src= "" data-lazy-src='https://s3.qjqq.cn/47/678f80ebba3a8.png!color' alt="Group Image Gallery">
+  <figcaption>
+  <div class="gallery-group-name">壁纸</div>
+  <p>收藏的一些壁纸</p>
+  <a href='/gallery/wallpaper'></a>
+  </figcaption>
+  </figure>
+  
+<figure class="gallery-group">
+  <img class="gallery-group-img no-lightbox" src= "" data-lazy-src='https://s3.qjqq.cn/47/678f89d30c3b3.jpeg!color' alt="Group Image Gallery">
+  <figcaption>
+  <div class="gallery-group-name">风景</div>
+  <p>曾经拍下的风景</p>
+  <a href='/gallery/scenic'></a>
+  </figcaption>
+  </figure>
+  
+<figure class="gallery-group">
+  <img class="gallery-group-img no-lightbox" src= "" data-lazy-src='https://s3.qjqq.cn/47/678f89d30c3b3.jpeg!color' alt="Group Image Gallery">
+  <figcaption>
+  <div class="gallery-group-name">二次元</div>
+  <p>一些二次元图片</p>
+  <a href='/gallery/anime'></a>
+  </figcaption>
+  </figure>
+  
+<figure class="gallery-group">
+  <img class="gallery-group-img no-lightbox" src= "" data-lazy-src='https://s3.qjqq.cn/47/678f89d30c3b3.jpeg!color' alt="Group Image Gallery">
+  <figcaption>
+  <div class="gallery-group-name">梗图</div>
+  <p>冲浪时看到的梗图</p>
+  <a href='/gallery/anime'></a>
+  </figcaption>
+  </figure>
+  
+</div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src= "" data-lazy-src="/img/pwa/favicon.png">V1hZ</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" alt="Powered by Hexo">Powered by Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka" alt="Theme Eureka">Theme Eureka</a><a class="footer-bar-link cc" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><i class="solitude fa-solid fa-copyright"></i><i class="solitude fa-brands fa-creative-commons-by"></i><i class="solitude fa-brands fa-creative-commons-nc"></i><i class="solitude fa-brands fa-creative-commons-nd"></i></a></div></div></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/copy-tex.min.js"><script>(() => {
+  document.querySelectorAll('.article-container span.katex-display').forEach(item => {
+    utils.wrap(item, 'div', {class: 'katex-wrap'})
+  })
+})();
+</script></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/19.1.3/lazyload.iife.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><script defer pjax src="/js/countdown.js"></script><div class="js-pjax"></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--></body></html>
+        <script>
+            const posts = ["post/784dd132.html","post/96db0bd9.html","post/3fb56f9d.html"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
