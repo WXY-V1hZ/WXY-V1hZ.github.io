@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "FutureRoundSC Regular";
+  src: url("../fonts/FutureRoundSC Regular.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "FiraCode Nerd Font Mono";
+  src: url("../fonts/FiraCodeNerdFontMono-Regular.woff2") format("woff2");
+  font-weight: 300;
+}
