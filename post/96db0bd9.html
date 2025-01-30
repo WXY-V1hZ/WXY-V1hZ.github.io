@@ -522,7 +522,7 @@ initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
         const ele = document.querySelectorAll('.twikoo-count')
         if (!ele) return
         twikoo.getCommentsCount({
-            envId: 'https://v1hz-1091-twikoo.hf.space',
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
             region: '',
             urls: [window.location.pathname],
             includeReply: false
@@ -535,7 +535,7 @@ initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
     const init = () => {
         twikoo.init(Object.assign({
             el: '#twikoo-wrap',
-            envId: 'https://v1hz-1091-twikoo.hf.space',
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
             region: '',
             path: window.location.pathname,
             onCommentLoaded: () => {
