@@ -1,0 +1,24 @@
+/* 不同级别标题的不同颜色  */
+h1 {
+    color: #c3a6ff;
+}
+
+h2 {
+    color: #e0b3ff;
+}
+
+h3 {
+    color: #ffb7c5;
+}
+
+h4 {
+    color: #9ad1ff;
+}
+
+h5 {
+    color: #7fc8ff;
+}
+
+h6 {
+    color: #c6e2ff;
+}
