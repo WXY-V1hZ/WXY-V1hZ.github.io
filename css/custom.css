@@ -1,0 +1,166 @@
+/* 使用自定义字体 */
+@font-face {
+  font-family: "FutureRoundSC Regular";
+  src: url("../fonts/FutureRoundSC_Regular-subset.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "FiraCode Nerd Font Mono";
+  src: url("../fonts/FiraCodeNerdFontMono-Regular.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "MiaoZi-GuoZhiTi";
+  src: url("../fonts/MiaoZi-GuoZhiTi.woff2") format("woff2");
+  font-weight: 300;
+}
+
+/* 修改引用块颜色 */
+blockquote {
+  background-color: var(--v1hz-quotebg);
+  color: var(--efu-secondtext);
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 鼠标悬浮时浮动并亮起 */
+blockquote:hover {
+  transform: translateY(-5px); /* 浮动效果 */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* 加强阴影 */
+  background-color: var(--efu-highlightbg); /* 亮起效果 */
+}
+
+/* 图片基础样式 */
+img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 悬浮时的上浮效果 */
+img:hover {
+  transform: scale(1.01); /* 放大 5% */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* 加强阴影效果 */
+}
+
+/* 行内代码样式 */
+code:not([class*='language-']) {
+  color: var(--efu-code-text) !important;
+  background: rgba(15, 159, 255, 0.13) !important;
+}
+
+/* 让段落间距更大 */
+.post-content p {
+  margin-bottom: 13px;  /* 你可以改成 16px、24px 试试 */
+}
+
+/* 让标题和正文之间距离更大 */
+.post-content h1, 
+.post-content h2, 
+.post-content h3 {
+    margin-top: 30px;
+    margin-bottom: 25px;
+}
+
+/* 加粗文本样式 */
+strong {
+  font-size: 1.07em; /* 比普通字体大一点 */
+  color: #007bff
+}
+
+/* Phycat式的标题样式 */
+[data-theme="dark"] {
+  --header-text-color: #ffffff;
+  --header-decorator-color: #8ba3f7;
+  --h2-background-color: #8ba3f77a;
+}
+
+[data-theme="light"] {
+  --header-text-color: #000000;
+  --header-decorator-color: #78b1b8;
+  --h2-background-color: #78b1b83b;
+}
+
+h1 {
+  font-size: 1.8rem !important;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 5px solid var(--header-decorator-color);
+}
+
+h2 {
+  font-size: 1.2rem !important;
+  width: fit-content;
+  padding: 12.5px 12.5px;
+  margin: 24px 0;
+  border-radius: 6px;
+  background: var(--h2-background-color); /* 渐变背景 */
+  position: relative;
+  overflow: hidden;
+}
+
+h3 {
+  width: fit-content;
+  margin: 20px 0;
+  text-align: left;
+  padding-left: 10px;
+  border-left: 5px solid var(--header-decorator-color);
+}
+
+h4 {
+  margin: 16px 0;
+  padding-left: 16px; /* 预留空间给小圆点 */
+  position: relative; /* 让伪元素相对 h4 定位 */
+}
+
+h4::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* 确保居中 */
+  width: 12px;
+  height: 12px;
+  background-color: var(--header-decorator-color);
+  border-radius: 50%;
+}
+
+h5 {
+  font-size: 0.9rem;
+  margin: 20px 0;
+  padding-left: 18px; /* 预留空间给小圆点 */
+  position: relative; /* 让伪元素相对 h5 定位 */
+}
+
+h5::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* 确保居中 */
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--header-decorator-color); /* 空心圆 */
+  background-color: transparent; /* 让它是空心的 */
+  border-radius: 50%;
+}
+
+h6 {
+  margin: 23px 0;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+h6::before {
+  content: "-";
+  color: var(--header-decorator-color);
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: inherit;
+}
+

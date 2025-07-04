@@ -1,0 +1,478 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>从零开始的 Hexo 博客搭建 | V1hZ's Blog</title><noscript>开启JavaScript才能访问本站！</noscript><link rel="icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="https://v1hz.blog/post/6b5e6b32.html"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="一个 Hexo 博客的搭建教程，顺便记录我一路折腾过去的东西 前置说明 操作系统：Windows 11 Hexo 版本：7.3.0 Node 版本：22.13.0 环境搭建 Scoop Scoop 是一个适用于 Windows 平台的命令行软件包管理器，类似于 Linux 的 apt 或 MacOS"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="V1hZ's Blog"><meta name="theme-color" content="var(--rin-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--rin-main)"><link rel="bookmark" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><link rel="apple-touch-icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg" sizes="180x180"><script>console.log(
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>let mdate = "7-7,9-18,12-13";
+mdate = (mdate.split(","));
+let ndate = new Date();
+for (let i of mdate) {
+    if (i === (ndate.getMonth()+1) + "-" + (ndate.getDate())) {
+        document.documentElement.classList.add('memorial');
+    }
+}
+</script><link rel="stylesheet" href="/css/custom.css"><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    else
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    typeof rm === 'object' && rm.mode(cachedMode === undefined || cachedMode === 'dark')
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: 'false',
+    lazyload: {
+        enable: true,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":114514,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: true,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"已成功复制选定内容！","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请注意遵循 GPL 协议。","totalk":"请在空行下面直接输入评论"},
+    aside: {
+        sayhello: {
+            morning: "早上好，是新的一天！",
+            noon: "你吃午饭了吗？要吃好哦。",
+            afternoon: "下午好哦，记得喝下午茶～",
+            night: "晚饭吃了吗，今天怎么样?",
+            goodnight: "你怎么还不睡觉？",
+        },
+        sayhello2: ["你在按什么？","你还按！","不可以按这里！"],
+        sayhello3: {
+            prefix: '你好，',
+            back: '欢迎回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: {"mode":{"dark":"深色模式","light":"浅色模式"},"img_error":"此图片无法复制与下载","translate":true,"ctrlOriginalMenu":"按住 Ctrl + 鼠标右键可打开原生右键菜单"},
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">互动</div><div class="author-content-item-title">最新评论<a class="recent-comment-more" href="/recentcomment/" title="最近评论"><i class="solitude fa-solid fa-circle-chevron-right"></i></a></div></div><div class="console_recentcomments"><script pjax>(async () => {
+    document.querySelector('.console-card .console_recentcomments').textContent = `正在加载...`
+    const emojiReg = /<img class="tk-owo-emotion" [^>]+>/g
+    let cache = utils.saveToLocal.get('twikoo-recent-comments-console')
+    if (cache) {
+        setHtml(document.querySelector('.console-card .console_recentcomments'), cache)
+        return
+    }
+    let ls = []
+
+    await fetch('https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo', {
+        method: "POST",
+        body: JSON.stringify({
+            "event": "GET_RECENT_COMMENTS",
+            "includeReply": true,
+            "pageSize": 6
+        }),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json()).then(async ({data}) => {
+        for (const i of data) {
+            if (i.avatar === undefined) i.avatar = '/avatar/d615d5793929e8c7d70eab5f00f7f5f1?d=mp'
+            let title = ''
+            if (i.url) {
+                await fetch(i.url).then(res => res.text()).then(html => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(html, 'text/html')
+                    title = doc.querySelector('title').innerText
+                }).catch(() => {
+                    title = i.url
+                })
+            }
+            if (title.indexOf('|') > 0) {
+                title = title.split('|')[0]
+            }
+            ls.push({
+                avatar: i.avatar,
+                nick: i.nick,
+                title: title,
+                content: i.comment,
+                url: i.url + '#' + i.id,
+                time: i.created
+            })
+        }
+        setHtml(document.querySelector('.console-card .console_recentcomments'), ls)
+        utils.saveToLocal.set('twikoo-recent-comments-console', ls, 0.5)
+    });
+
+    function setHtml(el, data) {
+        el.innerHTML = data.map(i => `
+            <div class="comment-card" title="${i.title}" onclick="pjax.loadUrl('${i.url}')">
+                <div class="comment-info">
+                    <img src="${i.avatar}" class="nolazyload" alt="${i.nick}">
+                    <div>
+                        <span class="comment-user">${i.nick}</span>
+                    </div>
+                    <time class="comment-time" datetime="${new Date(i.time)}"></time>
+                </div>
+                <div class="comment-content">${formatContent(i.content)}</div>
+                <div class="comment-title">
+                <i class="solitude fa-solid fa-comment"></i>
+                ${i.title}</div>
+            </div>
+        `).join('')
+        if (typeof sco !== 'undefined') sco.changeTimeFormat(document.querySelectorAll('.comment-time'))
+        else {
+            document.addEventListener('pjax:complete', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+            document.addEventListener('DOMContentLoaded', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+        }
+    }
+
+    function formatContent(content) {
+        content = content.replace(emojiReg, '表情')
+        content = content.replace(/<\/*br>|[\s\uFEFF\xA0]+/g, '');
+        content = content.replace(/<img.*?>/g, '[图片]');
+        content = content.replace(/<a.*?>.*?<\/a>/g, '[链接]');
+        content = content.replace(/<pre.*?>.*?<\/pre>/g, '[代码]');
+        content = content.replace(/<.*?>/g, '');
+        return content
+    }
+})()</script></div></div></div><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/02/"><span class="card-archive-list-date">2025/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">13</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">2025/01</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">2024/12</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">2024/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><span class="sidebar-menu-item-title">网站信息</span><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="item-icon solitude fa-solid fa-file-word"></i><div class="item-name">本站字数 :</div></div><div class="item-count">33.8k</div></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div></div><a id="site-name" href="/" title="返回主页"><span class="title">V1hZ</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">从零开始的 Hexo 博客搭建</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机文章" href="javascript:void(0);"><i class="solitude fa-solid fa-dice-d6"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/img/default.avif" alt="从零开始的 Hexo 博客搭建"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E5%8D%9A%E5%AE%A2/">博客</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/"><span class="tags-name tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>教程</span></a></div></div></div></div><h1 class="post-title">从零开始的 Hexo 博客搭建</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2025-02-13 01:30:30"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2025-02-13T01:30:30.000Z">2025-02-13T01:30:30.000Z</time></span><span class="post-meta-date" title="最后更新于 2025-07-04 16:15:48"><i class="post-meta-icon solitude fa-solid fa-arrows-rotate"></i><time datetime="2025-07-04T16:15:48.462Z">2025-07-04T16:15:48.462Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fa-solid fa-file-word" title="文章字数"></i><span class="word-count">1.8k</span><span class="post-meta-separator"></span></span><span class="post-meta-position" title="作者IP归属地为China"><i class="post-meta-icon solitude fas fa-location-dot"></i><span>China</span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><p>一个 Hexo 博客的搭建教程，顺便记录我一路折腾过去的东西</p>
+<h2 id="前置说明">前置说明</h2>
+<p>操作系统：Windows 11</p>
+<p>Hexo 版本：7.3.0</p>
+<p>Node 版本：22.13.0</p>
+<h2 id="环境搭建">环境搭建</h2>
+<h3 id="Scoop">Scoop</h3>
+<p><a target="_blank" rel="noopener" href="https://scoop.sh/">Scoop</a> 是一个适用于 Windows 平台的命令行软件包管理器，类似于 Linux 的 <code>apt</code> 或 MacOS 的 <code>brew</code></p>
+<p><strong>它能够帮我们很好的简化环境搭建的过程</strong></p>
+<p>所以在开始一切之前，可以看这篇文章下载 scoop</p>
+<blockquote>
+<p><a href="https://v1hz.blog/post/9382a5ca.html">如何用 scoop 简化你的软件安装以及环境搭建</a></p>
+</blockquote>
+<h3 id="Git">Git</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop install git</span><br></pre></td></tr></table></figure>
+<h3 id="Node-js">Node.js</h3>
+<p>先下载 nodejs 的环境管理器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop install nvm</span><br></pre></td></tr></table></figure>
+<p>然后使用 nvm 下载 nodejs 的 LTS 版本并启用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nvm install lts</span><br><span class="line">nvm list</span><br><span class="line">nvm use &lt;version&gt;</span><br></pre></td></tr></table></figure>
+<p>如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~</span><br><span class="line">❯ nvm list</span><br><span class="line"></span><br><span class="line">  * 22.13.0 (Currently using 64-bit executable)</span><br><span class="line"></span><br><span class="line">~</span><br><span class="line">❯ nvm use 22</span><br><span class="line">Now using node v22.13.0 (64-bit)</span><br><span class="line"></span><br><span class="line">~ took 2s</span><br><span class="line">❯ node -v</span><br><span class="line">v22.13.0</span><br></pre></td></tr></table></figure>
+<h3 id="Hexo">Hexo</h3>
+<p>安装 <code>hexo-cli</code> 并检查是否安装成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
+<p>在你想存放博客的目录下执行以下命令，这会在目录下创建一个名为 blog 的文件夹，你也可以自定义文件夹的名字</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p>然后在博客目录下运行 hexo 并访问 <code>http://localhost:4000/</code> 就可以看到一个最简单的博客页面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502130232164.png" alt=""></p>
+<h2 id="将博客部署到-Github-Pages-上">将博客部署到 Github Pages 上</h2>
+<blockquote>
+<p>GitHub Pages 是 GitHub 提供的免费静态网站托管服务</p>
+<p>可以直接从 GitHub 仓库部署 HTML、CSS 和 JavaScript 文件</p>
+<p>用于个人博客、项目文档或其他静态网站</p>
+</blockquote>
+<h3 id="将-Git-和自己的-Github-账号关联">将 Git 和自己的 Github 账号关联</h3>
+<p>xxxxxxxxxx3 1extends:2  head:3    - <link rel="stylesheet" href="/css/custom.css">yml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;Your Name&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;your.email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>使用 ssh 和 Github 通信，运行以下命令生成密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your.email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>查看并复制密钥内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
+<p>登录 Github，在个人主页找到 <code>SSH and GPG keys</code>，点击 <code>New SSH key</code>，</p>
+<p>随便写个名称然后将刚才复制的公钥内容粘贴到 <code>Key</code> 框内，最后点击 <code>Add SSH key</code></p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502130314161.png" alt=""></p>
+<p>运行以下命令检查是否配置正确</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>看到类似下面的信息就说明配置成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi yourusername! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+<p>之后你就可以通过 git 向仓库中提交文件了</p>
+<h3 id="创建博客仓库并与其关联">创建博客仓库并与其关联</h3>
+<h4 id="创建-GitHub-仓库">创建 GitHub 仓库</h4>
+<p>在 Github 上创建一个公开的仓库，仓库名字为 <code>&lt;your_github_name&gt;.github.io</code></p>
+<p>其中 <code>your_github_name</code> 填写自己的 Github 用户名</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502130258147.png" alt=""></p>
+<h4 id="获取-token">获取 token</h4>
+<p>在 <code>Settings</code> 中找到 <code>Developer Settings</code> 然后按照如图所示进行选择</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502131440136.png" alt=""></p>
+<p>然后 Note 栏随便填，Expiration 选择 never（也可以不选 never，但是后面 token 过期了要手动更新）</p>
+<p>Select scopes 中勾选 repo 和 workflow</p>
+<p>点击 Generate token，完成创建，复制生成的 token</p>
+<blockquote>
+<p>注意：生成的 token 只会在创建时显示一次，所以要复制保存好</p>
+</blockquote>
+<h4 id="配置-hexo">配置 hexo</h4>
+<p>进入自己的博客目录，运行以下命令安装部署插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>npm 下载软件包有两种方式，一种为全局安装 <code>npm install &lt;package&gt; -g</code>，一种为本地安装 <code>npm install &lt;package&gt;</code></p>
+<p>全局安装时，npm 会将软件包安装在全局目录下，在系统任何位置都能调用安装的软件</p>
+<p>本地安装时，npm 会将软件安装在当前目录下，只能在当前目录下调用安装的软件，</p>
+<p>本地安装时，若加上 <code>--save</code>，安装的软件包会记录在当前目录下的 <code>package.json</code> 中，运行 <code>npm install</code> 便可一键安装所有被记录的软件包</p>
+</blockquote>
+<p>编辑博客目录下的 <code>_config.yml</code> 文件，找到 <code>deploy</code> 项，修改为如下</p>
+<p>其中 <code>&lt;your_github_name&gt;</code> 替换为自己的 Github 用户名，<code>&lt;token&gt;</code> 替换为刚才复制的 token</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@github.com:&lt;your_github_name&gt;/&lt;your_github_name&gt;.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">token:</span> <span class="string">&lt;token&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后运行以下命令即可将博客部署到 Github Pages</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>等待一小会儿，打开浏览器，访问 <code>http://your_github_name.github.io</code> 就可以看到自己的博客页面了</p>
+<blockquote>
+<p>hexo 的常用命令有</p>
+<p><code>hexo s</code>：启动本地服务器，默认在 <code>http://localhost:4000/</code> 访问博客，可实时预览修改效果</p>
+<p><code>hexo g</code>：生成静态文件，将 Markdown 文章转换为 HTML 并存放在 <code>public/</code> 目录中</p>
+<p><code>hexo d</code>：部署博客，用于推送到 GitHub Pages</p>
+<p><code>hexo clean</code>：清理 <code>public/</code> 和 <code>.deploy_git/</code> 目录，避免旧文件影响新的生成结果</p>
+<p>一般要推送一次，通常会运行 <code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code></p>
+</blockquote>
+<h2 id="使用与基本配置">使用与基本配置</h2>
+<h3 id="配置博客页面">配置博客页面</h3>
+<p>先了解一下 Hexo 的博客目录结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">blog/  # 你的 Hexo 博客根目录</span><br><span class="line">├── .deploy_git/         # Hexo Git 部署时的缓存目录，存储远程仓库的 Git 相关数据</span><br><span class="line">├── .github/             # GitHub 相关的配置文件（如 CI/CD 工作流）</span><br><span class="line">├── node_modules/        # 依赖包目录，Hexo 及插件的所有依赖文件都存储在此</span><br><span class="line">├── public/              # 生成的静态网页文件，`hexo generate` 生成的内容存放于此</span><br><span class="line">├── scaffolds/           # 文章模板目录，创建新文章时会使用这些模板</span><br><span class="line">├── source/              # 源文件目录，存放你的博客文章和资源</span><br><span class="line">│   ├── _posts/          # 文章文件夹，存放 Markdown 格式的博文</span><br><span class="line">│   └── images/          # 博客图片资源</span><br><span class="line">├── themes/              # 主题目录，存放你的 Hexo 主题（如 Eureka 或 Solitude）</span><br><span class="line">│   ├── eureka/          # Eureka 主题目录</span><br><span class="line">│   └── solitude/        # Solitude 主题目录</span><br><span class="line">├── _config.eureka.yml   # Eureka 主题的配置文件</span><br><span class="line">├── _config.solitude.yml # Solitude 主题的配置文件</span><br><span class="line">├── _config.yml          # Hexo 的全局配置文件，控制博客的基本设置</span><br><span class="line">├── .gitignore           # Git 忽略文件，防止不必要的文件被提交</span><br><span class="line">├── db.json              # Hexo 的缓存数据库，加快生成速度</span><br><span class="line">├── package-lock.json    # 记录确切的 npm 依赖版本，保证环境一致</span><br><span class="line">├── package.json         # 项目依赖描述文件，定义了 Hexo 及插件</span><br></pre></td></tr></table></figure>
+<p>博客页面的基础配置就是 <code>blog/_config.yml</code> ，里面配置各种博客信息</p>
+<p>比如修改 <code>title</code> 为 <code>V1hZ's Blog</code>，顶部的标签页就会有相应的显示</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502131420161.png" alt=""></p>
+<h3 id="进行写作">进行写作</h3>
+<p>如果你还不知道什么是 markdown，请看这个文档</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://markdown.com.cn/intro.html">Markdown 教程</a></p>
+</blockquote>
+<h4 id="创建一篇新文章">创建一篇新文章</h4>
+<p>运行以下命令来创建一篇新文章，这会在 <code>blog/source/_post</code> 下创建一个 markdown 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">&quot;title&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在新建的 markdown 文件中完成写作后，运行 <code>hexo s</code> 就可以预览自己的新文章了</p>
+<h4 id="使用-Typora-进行写作">使用 Typora 进行写作</h4>
+<p>推荐使用 <a target="_blank" rel="noopener" href="https://typora.io/">Typora</a> 进行 markdown 的写作</p>
+<p>Typora 主题推荐 <a target="_blank" rel="noopener" href="https://github.com/caolib/typora-onelight-theme">Onelight</a> 和 <a target="_blank" rel="noopener" href="https://github.com/sumruler/typora-theme-phycat">Phycat</a></p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502131318963.png" alt="Onelight"></p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502131318078.png" alt="Phycat"></p>
+<p>Typora 还可以搭配 <a target="_blank" rel="noopener" href="https://molunerfinn.com/PicGo/">PicGo</a> 实现自动上传图片至图床，可以看这篇文章</p>
+<blockquote>
+<p><a href="https://v1hz.blog/post/a320eb10.html">搭建 PicGo 图床并在 Typora 中使用</a></p>
+</blockquote>
+<h2 id="主题配置">主题配置</h2>
+<h3 id="下载并安装主题">下载并安装主题</h3>
+<p>在 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo Themes</a> 中可以浏览已有的主题，进入主题的主页可以查看安装方法</p>
+<p>一般都是将主题的仓库 clone 进 <code>blog/themes</code> 里</p>
+<p>然后在 <code>blog/_config.yml</code> 中修改 <code>theme</code> 为 clone 下来的文件夹名</p>
+<h3 id="Solitude-主题配置">Solitude 主题配置</h3>
+<p>我使用的是主题的是博主 <a target="_blank" rel="noopener" href="https://r1n.top/"><strong>陵长镜</strong></a> 基于 <a target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude"><strong>Solitude</strong></a> 魔改的 <a target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka"><strong>Eureka</strong></a></p>
+<p>可以到这篇文章看我的修改记录</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://localhost:4000/post/c29c2b2c.html">主题的修改记录</a></p>
+</blockquote>
+<h2 id="其他配置">其他配置</h2>
+<h3 id="自定义域名">自定义域名</h3>
+<p>想要让自己的博客地址更容易被别人记住？为你的博客设置一个自定义域名，可以看这篇文章</p>
+<blockquote>
+<p><a href="https://v1hz.blog/post/d0f380b1.html">Github Pages 自定义域名（Hexo）</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><a class="post-copyright__author_img" href="/about/"><img class="post-copyright__author_img_front" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></a><div class="post-copyright__author_name">V1hZ's Blog</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">V1hZ's Blog</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>教程<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/c29c2b2c.html"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">主题的修改记录</div></div></a></div><div class="next-post pull-right"><a href="/post/9382a5ca.html"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">如何用 scoop 简化你的软件安装以及环境搭建</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fa-solid fa-comment"></i><span> 评论</span><span class="count"> (<span class="twikoo-count"><i class="solitude fa-solid fa-spinner fa-spin"></i></span>)</span></div></div><div class="comment-wrap"><div id="twikoo-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="author-info__top-group"><div class="author-info__sayhi" id="author-info__sayhi" onclick="sco.changeSayHelloText()">sayhello.morning</div></div></div><div class="avatar-img-group"><img class="avatar-img" alt="头像" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></div><div class="author-info__description_group"><div class="author-info__description">Beyond the stars,</div><div class="author-info__description2">Splitting the seas.</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><div class="author-info__name">V1hZ</div><div class="author-info__desc"></div></a><div class="card-info-social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/WXY-V1hZ" title="Github"><i class="solitude  fab fa-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fa-solid fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">前置说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Scoop"><span class="toc-text">Scoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git"><span class="toc-text">Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js"><span class="toc-text">Node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hexo"><span class="toc-text">Hexo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0-Github-Pages-%E4%B8%8A"><span class="toc-text">将博客部署到 Github Pages 上</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86-Git-%E5%92%8C%E8%87%AA%E5%B7%B1%E7%9A%84-Github-%E8%B4%A6%E5%8F%B7%E5%85%B3%E8%81%94"><span class="toc-text">将 Git 和自己的 Github 账号关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2%E4%BB%93%E5%BA%93%E5%B9%B6%E4%B8%8E%E5%85%B6%E5%85%B3%E8%81%94"><span class="toc-text">创建博客仓库并与其关联</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-GitHub-%E4%BB%93%E5%BA%93"><span class="toc-text">创建 GitHub 仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-token"><span class="toc-text">获取 token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-hexo"><span class="toc-text">配置 hexo</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-text">使用与基本配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2"><span class="toc-text">配置博客页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E5%86%99%E4%BD%9C"><span class="toc-text">进行写作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E7%AF%87%E6%96%B0%E6%96%87%E7%AB%A0"><span class="toc-text">创建一篇新文章</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Typora-%E8%BF%9B%E8%A1%8C%E5%86%99%E4%BD%9C"><span class="toc-text">使用 Typora 进行写作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE"><span class="toc-text">主题配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98"><span class="toc-text">下载并安装主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Solitude-%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE"><span class="toc-text">Solitude 主题配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%85%8D%E7%BD%AE"><span class="toc-text">其他配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="toc-text">自定义域名</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fa-solid fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/post/2dfac39c.html" title="JavaScript 快速入门"><div class="content"><span class="title" href="/post/2dfac39c.html" title="JavaScript 快速入门">JavaScript 快速入门</span><span class="article-recent_post_categories" href="/post/2dfac39c.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层"><div class="content"><span class="title" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层">计算机网络 CS144 - 第二单元 - 传输层</span><span class="article-recent_post_categories" href="/post/6f3aef06.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/c29c2b2c.html" title="主题的修改记录"><div class="content"><span class="title" href="/post/c29c2b2c.html" title="主题的修改记录">主题的修改记录</span><span class="article-recent_post_categories" href="/post/c29c2b2c.html">博客</span></div></a><a class="aside-list-item" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建"><div class="content"><span class="title" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建">从零开始的 Hexo 博客搭建</span><span class="article-recent_post_categories" href="/post/6b5e6b32.html">博客</span></div></a><a class="aside-list-item" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建"><div class="content"><span class="title" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建">如何用 scoop 简化你的软件安装以及环境搭建</span><span class="article-recent_post_categories" href="/post/9382a5ca.html">好物推荐</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg">V1hZ</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" alt="Powered by Hexo">Powered by Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka" alt="Theme Eureka">Theme Eureka</a><a class="footer-bar-link cc" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><i class="solitude fa-solid fa-copyright"></i><i class="solitude fa-brands fa-creative-commons-by"></i><i class="solitude fa-brands fa-creative-commons-nc"></i><i class="solitude fa-brands fa-creative-commons-nd"></i></a></div></div></div></footer></div><!-- right_menu--><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="solitude fa-solid fa-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="solitude fa-solid fa-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="solitude fa-solid fa-arrows-rotate"></i></div><div class="rightMenu-item" id="menu-top"><i class="solitude fa-solid fa-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="solitude fa-solid fa-clone"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="solitude fa-solid fa-clipboard"></i><span>粘贴文本</span></div><div class="rightMenu-item" id="menu-commenttext"><i class="solitude fa-solid fa-comment-medical"></i><span>引用到评论</span></div><div class="rightMenu-item" id="menu-newwindow"><i class="solitude fa-regular fa-window-maximize"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="solitude fa-solid fa-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="solitude fa-solid fa-clone"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="solitude fa-solid fa-cloud-arrow-down"></i><span>下载此图片</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-randomPost" onclick="toRandomPost()||rm.hideRightMenu()"><i class="solitude fas fa-shuffle"></i><span>随便看看</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/categories/')||rm.hideRightMenu()"><i class="solitude fas fa-clone"></i><span>博客分类</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/tags/')||rm.hideRightMenu()"><i class="solitude fas fa-tags"></i><span>文章标签</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-darkmode" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span class="menu-darkmode-text">浅色模式</span></div><div class="rightMenu-item" id="menu-translate"><i class="solitude fa-solid fa-language"></i><span>轉為繁體</span></div></div></div><div id="rightmenu-mask"></div><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/8.8.7/index.umd.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/19.1.3/lazyload.iife.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script>var meting_api = 'https://meting.boke.fun/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><script src="/js/right_menu.js?v=2.1.10"></script><script defer pjax src="/js/countdown.js"></script><div class="js-pjax"><script>(() => {
+    const getCount = () => {
+        const ele = document.querySelectorAll('.twikoo-count')
+        if (!ele) return
+        twikoo.getCommentsCount({
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            urls: [window.location.pathname],
+            includeReply: false
+        }).then(res => {
+            ele.forEach(item => item.textContent = res[0].count)
+        }).catch(err => {
+            console.error(err)
+        })
+    }
+    const init = () => {
+        twikoo.init(Object.assign({
+            el: '#twikoo-wrap',
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            path: window.location.pathname,
+            onCommentLoaded: () => {
+                GLOBAL_CONFIG.lightbox && utils.lightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+            }
+        }, null))
+
+         && getCount()
+        sco.owoBig({
+            body: '.OwO-body',
+            item: '.OwO-items li'
+        })
+
+        false && barrageTwikoo()
+    }
+
+    const loadTwikoo = () => {
+        if (typeof twikoo === 'object') setTimeout(init,0)
+        else utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.41/twikoo.all.min.js').then(init)
+    }
+
+    if ('Twikoo' === 'Twikoo' || false) {
+        if (false) utils.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+        else loadTwikoo()
+    } else {
+        window.loadTwoComment = loadTwikoo
+    }
+})()
+</script><script>mermaid.run();</script></div></div><script>const links = [{"name":null,"link":null}]
+const randomText = '点击前往按钮进入随机一个友链，不能保证跳转网站的可用性。本次随机到的是：⌈ ${name} ⌋'
+function travelling() {
+    const link = links[utils.randomNum(links.length)];
+    Snackbar.show({
+        text: randomText.replace(/\$\{name}/,link.name),
+        duration: 8000,
+        pos: 'top-center',
+        actionText: '前往',
+        onActionClick: function(element) {
+            element.style.opacity = 0;
+            window.open(link.link, '_blank');
+        }
+    });
+}
+</script><script>function randomLinksList() {
+    const linkcard = document.getElementById('friend-links-in-footer');
+    if (linkcard == null) return;
+
+    let data = '';
+    let linksCopy = [...links];
+    let count = Math.min(3, linksCopy.length);
+
+    for (let i = 0; i < count; i++) {
+        let index = utils.randomNum(linksCopy.length);
+        const {link, name} = linksCopy[index];
+        data += `<a class="footer-item" href="${link}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`;
+        linksCopy.splice(index, 1);
+    }
+
+    linkcard.innerHTML = data + '<a class="footer-item" href="/links/">更多</a>';
+}</script><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--></body></html>
+        <script>
+            const posts = ["post/2dfac39c.html","post/6f3aef06.html","post/c29c2b2c.html","post/6b5e6b32.html","post/9382a5ca.html","post/26778e02.html","post/d0f380b1.html","post/a320eb10.html","post/d73767c3.html","post/ce0d96ff.html","post/ffbc6743.html","post/eca2d255.html","post/e0be4916.html","post/5f3613b5.html","post/ed648fbb.html","post/96db0bd9.html","post/3fb56f9d.html","post/95b07011.html","post/e909e61e.html","post/718dd583.html","post/22d666a2.html"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>

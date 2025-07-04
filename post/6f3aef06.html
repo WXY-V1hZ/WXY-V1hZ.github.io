@@ -1,0 +1,707 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>计算机网络 CS144 - 第二单元 - 传输层 | V1hZ's Blog</title><noscript>开启JavaScript才能访问本站！</noscript><link rel="icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="https://v1hz.blog/post/6f3aef06.html"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="TCP 服务模型（TCP Service Model） 工作流程 应用层想要传输数据，于是调用 TCP 层并传递想要传输的数据 TCP 将拿到的数据放入 TCP 段中，然后将 TCP 段传递给 IP 层（网络层） IP 层将拿到的数据封装为一个 IP 数据报并添加 IP 地址，然后将 IP 数据"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="V1hZ's Blog"><meta name="theme-color" content="var(--rin-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--rin-main)"><link rel="bookmark" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><link rel="apple-touch-icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg" sizes="180x180"><script>console.log(
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>let mdate = "7-7,9-18,12-13";
+mdate = (mdate.split(","));
+let ndate = new Date();
+for (let i of mdate) {
+    if (i === (ndate.getMonth()+1) + "-" + (ndate.getDate())) {
+        document.documentElement.classList.add('memorial');
+    }
+}
+</script><link rel="stylesheet" href="/css/custom.css"><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    else
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    typeof rm === 'object' && rm.mode(cachedMode === undefined || cachedMode === 'dark')
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: 'false',
+    lazyload: {
+        enable: true,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":114514,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: true,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"已成功复制选定内容！","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请注意遵循 GPL 协议。","totalk":"请在空行下面直接输入评论"},
+    aside: {
+        sayhello: {
+            morning: "早上好，是新的一天！",
+            noon: "你吃午饭了吗？要吃好哦。",
+            afternoon: "下午好哦，记得喝下午茶～",
+            night: "晚饭吃了吗，今天怎么样?",
+            goodnight: "你怎么还不睡觉？",
+        },
+        sayhello2: ["你在按什么？","你还按！","不可以按这里！"],
+        sayhello3: {
+            prefix: '你好，',
+            back: '欢迎回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: {"mode":{"dark":"深色模式","light":"浅色模式"},"img_error":"此图片无法复制与下载","translate":true,"ctrlOriginalMenu":"按住 Ctrl + 鼠标右键可打开原生右键菜单"},
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">互动</div><div class="author-content-item-title">最新评论<a class="recent-comment-more" href="/recentcomment/" title="最近评论"><i class="solitude fa-solid fa-circle-chevron-right"></i></a></div></div><div class="console_recentcomments"><script pjax>(async () => {
+    document.querySelector('.console-card .console_recentcomments').textContent = `正在加载...`
+    const emojiReg = /<img class="tk-owo-emotion" [^>]+>/g
+    let cache = utils.saveToLocal.get('twikoo-recent-comments-console')
+    if (cache) {
+        setHtml(document.querySelector('.console-card .console_recentcomments'), cache)
+        return
+    }
+    let ls = []
+
+    await fetch('https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo', {
+        method: "POST",
+        body: JSON.stringify({
+            "event": "GET_RECENT_COMMENTS",
+            "includeReply": true,
+            "pageSize": 6
+        }),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json()).then(async ({data}) => {
+        for (const i of data) {
+            if (i.avatar === undefined) i.avatar = '/avatar/d615d5793929e8c7d70eab5f00f7f5f1?d=mp'
+            let title = ''
+            if (i.url) {
+                await fetch(i.url).then(res => res.text()).then(html => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(html, 'text/html')
+                    title = doc.querySelector('title').innerText
+                }).catch(() => {
+                    title = i.url
+                })
+            }
+            if (title.indexOf('|') > 0) {
+                title = title.split('|')[0]
+            }
+            ls.push({
+                avatar: i.avatar,
+                nick: i.nick,
+                title: title,
+                content: i.comment,
+                url: i.url + '#' + i.id,
+                time: i.created
+            })
+        }
+        setHtml(document.querySelector('.console-card .console_recentcomments'), ls)
+        utils.saveToLocal.set('twikoo-recent-comments-console', ls, 0.5)
+    });
+
+    function setHtml(el, data) {
+        el.innerHTML = data.map(i => `
+            <div class="comment-card" title="${i.title}" onclick="pjax.loadUrl('${i.url}')">
+                <div class="comment-info">
+                    <img src="${i.avatar}" class="nolazyload" alt="${i.nick}">
+                    <div>
+                        <span class="comment-user">${i.nick}</span>
+                    </div>
+                    <time class="comment-time" datetime="${new Date(i.time)}"></time>
+                </div>
+                <div class="comment-content">${formatContent(i.content)}</div>
+                <div class="comment-title">
+                <i class="solitude fa-solid fa-comment"></i>
+                ${i.title}</div>
+            </div>
+        `).join('')
+        if (typeof sco !== 'undefined') sco.changeTimeFormat(document.querySelectorAll('.comment-time'))
+        else {
+            document.addEventListener('pjax:complete', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+            document.addEventListener('DOMContentLoaded', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+        }
+    }
+
+    function formatContent(content) {
+        content = content.replace(emojiReg, '表情')
+        content = content.replace(/<\/*br>|[\s\uFEFF\xA0]+/g, '');
+        content = content.replace(/<img.*?>/g, '[图片]');
+        content = content.replace(/<a.*?>.*?<\/a>/g, '[链接]');
+        content = content.replace(/<pre.*?>.*?<\/pre>/g, '[代码]');
+        content = content.replace(/<.*?>/g, '');
+        return content
+    }
+})()</script></div></div></div><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/02/"><span class="card-archive-list-date">2025/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">13</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">2025/01</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">2024/12</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">2024/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><span class="sidebar-menu-item-title">网站信息</span><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="item-icon solitude fa-solid fa-file-word"></i><div class="item-name">本站字数 :</div></div><div class="item-count">33.8k</div></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div></div><a id="site-name" href="/" title="返回主页"><span class="title">V1hZ</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">计算机网络 CS144 - 第二单元 - 传输层</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机文章" href="javascript:void(0);"><i class="solitude fa-solid fa-dice-d6"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/img/default.avif" alt="计算机网络 CS144 - 第二单元 - 传输层"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="tags-name tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>计算机网络</span></a></div></div></div></div><h1 class="post-title">计算机网络 CS144 - 第二单元 - 传输层</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2025-02-18 00:00:00"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2025-02-18T00:00:00.000Z">2025-02-18T00:00:00.000Z</time></span><span class="post-meta-date" title="最后更新于 2025-07-04 16:15:48"><i class="post-meta-icon solitude fa-solid fa-arrows-rotate"></i><time datetime="2025-07-04T16:15:48.463Z">2025-07-04T16:15:48.463Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fa-solid fa-file-word" title="文章字数"></i><span class="word-count">4.6k</span><span class="post-meta-separator"></span></span><span class="post-meta-position" title="作者IP归属地为China"><i class="post-meta-icon solitude fas fa-location-dot"></i><span>China</span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h1>TCP 服务模型（TCP Service Model）</h1>
+<h2 id="工作流程">工作流程</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051807041.png" alt="TCP 工作流程"></p>
+<ol>
+<li>应用层想要传输数据，于是调用 TCP 层并传递想要传输的数据</li>
+<li>TCP 将拿到的数据放入 TCP 段中，然后将 TCP 段传递给 IP 层（网络层）</li>
+<li>IP 层将拿到的数据封装为一个 IP 数据报并添加 IP 地址，然后将 IP 数据报传递给链路层</li>
+<li>链路层构建链路帧，并添加链路地址（比如以太网地址），然后将其发送到网络中</li>
+</ol>
+<h2 id="双向连接的建立——三次握手">双向连接的建立——三次握手</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051814153.png" alt="三次握手"><br>
+要建立双向连接，需要经过以下流程：</p>
+<ol>
+<li>A 向 B 发送 Syn 信息表示请求 A 到 B 的连接</li>
+<li>B 向 A 发送 Ack 信息表示同意 A 到 B 的连接，同时附带 Syn 信息表示请求 B 到 A 的连接</li>
+<li>A 向 B 发送 Ack 信息表示同意 B 到 A 的连接</li>
+</ol>
+<p>同时两端会各自维护一个状态机，后面会讲到</p>
+<h2 id="双向连接的断开——四次挥手">双向连接的断开——四次挥手</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051820914.png" alt="四次挥手"><br>
+要断开双向连接，需要经过以下流程：</p>
+<ol>
+<li>A 向 B 发送 Fin 信息，表示想要断开 A 到 B 的连接</li>
+<li>B 向 A 发送 Ack 信息，表示同意断开 A 到 B 的连接，同时可能附带还未发送完的数据</li>
+<li>一段时间后，B 完成了所有需要发给 A 的数据的发送，向 A 发送 Fin 信息，表示想要断开 B 到 A 的连接</li>
+<li>A 向 B 发送 Ack 信息，表示同意断开 B 到 A 的连接</li>
+</ol>
+<h2 id="TCP-为应用层提供的服务">TCP 为应用层提供的服务</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051828039.png" alt="TCP 为应用层提供的服务"></p>
+<ul>
+<li>TCP 保证数据会到达，如果传输中断，TCP 会重新发送</li>
+<li>TCP 通过以下方式保证传输是可靠的：
+<ul>
+<li>当 TCP 接收到数据时，会发送一个确认包给发送方，表示数据正确到达</li>
+<li>使用校验和来检测数据是否损坏</li>
+<li>使用序列号用于检测数据是否丢失（每个数据段头部会有一个序列号）</li>
+<li>流量控制来防止接收方过载：接收方会不断告知发送方是否可以继续发送，即告诉发送方缓冲区中还有多少空间可以接收新数据</li>
+</ul>
+</li>
+<li>TCP 会保证给应用层的数据是符合顺序的，即如果接收到的数据是乱序的，TCP 会使用序列号将数据重新排序</li>
+<li>TCP 会试图在所有使用网络的 TCP 连接之间平均分配网络容量（拥塞控制机制）</li>
+</ul>
+<h2 id="TCP-段内部格式">TCP 段内部格式</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051905022.png" alt="TCP段内部格式"></p>
+<ul>
+<li>Destination Port：目标端口说明数据应该传输给接收方的哪一个应用（比如 SSH 服务就是 22 端口）</li>
+<li>Source Port：源端口说明接收方应该使用哪个端口发送回数据（即接收方将发送方的源端口作为自己的目标端口）</li>
+<li>Sequence：序列号表示 TCP 数据字段中第一个字节在字节流中的位置</li>
+<li>Acknowledgement Sequence：<br>
+确认序列号告诉另一端期望接收的下一个字节号，同时这也表明了该字节号前的所有字节数据均被成功接收</li>
+<li>Checksum：校验和是根据整个头部和数据计算得到的，用于帮助接收方确认数据是否损坏</li>
+<li>HLEN：说明 TCP 字段的头部长度为多少</li>
+<li>TCP options：可选字段包含了 TCP 标准建立后新添加的头部字段，HLEN 也说明了有多少可选字段存在（通常是没有的）</li>
+<li>Flags：
+<ul>
+<li>ACK：表明确认序列号是有效的，确认了之前接收到的所有数据</li>
+<li>SYN：表明正在发送同步信号，即三次握手中的一部分</li>
+<li>FIN：表示关闭单方向的连接</li>
+<li>PSH：表示数据到达时，对方 TCP 端应该立即交付数据给应用层（这对一些时间敏感的操作很有用，比如按键操作）</li>
+</ul>
+</li>
+</ul>
+<h2 id="TCP-连接的唯一标识">TCP 连接的唯一标识</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051910674.png" alt="组成唯一标识的五个字段"></p>
+<p>图中的五个字段组成了 TCP 连接的唯一标识：</p>
+<p>IPv4 头部字段中的 IP DA 和 IP SA 指定了两台机器在网络中的位置，Protocol ID 指定了传输层使用的协议为 TCP</p>
+<p>TCP 头部字段中的 Source Port 和 Destination Port 指定了两台机器中的指定应用</p>
+<blockquote>
+<p>然而，这样的唯一标识只有在下述条件成立时才有效：连接的两端使用唯一的源端口用于 TCP 服务。</p>
+<p>比如主机 A 使用 20 端口用于与 B 的一个连接服务，再选择 20 端口用于另一个连接服务就会导致错误。</p>
+</blockquote>
+<p>一般采用一个简单的方法来避免这种情况：对于每一个新增的连接，使用递增的源端口号。</p>
+<p>但是这样做也有可能会导致错误，比如主机 A 突然新增了大量的到主机 B 的连接，端口的递增可能会超出位数限制从而绕回到一个已经使用的端口。</p>
+<p>使用同一个端口用于两个服务，会导致接收数据的混淆。</p>
+<h3 id="序列号的作用">序列号的作用</h3>
+<p>为了减少混淆的可能性，TCP 连接会在初始化时使用一个随机的序列号来引用字节流中的字节（这并不是万无一失的，但是确实减少了混淆的可能性）</p>
+<p>由于初始化序列号的存在，三次握手时会附带相关数据，即图中的 ISN(Initial Sequence Number)：</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051934242.png" alt="包含 ISN 的三次握手"></p>
+<p>序列号在 TCP 中的工作如图：</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502051940726.png" alt="序列号的工作图"></p>
+<h1>UDP 服务模型（UDP Service Model）</h1>
+<h2 id="UDP-段内部格式">UDP 段内部格式</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151432083.png" alt="UDP 段内部格式"></p>
+<ul>
+<li>Checksum：校验和的使用是可选的，如果不使用，则为全零；如果使用，校验和的计算会包含 UDP 头部和数据、IPv4 头部的起止地址和UDP协议 ID（这违反了层次的清晰分离原则，但是这使得 UDP 层能够检测到被错误投递的数据报）</li>
+<li>Length：至少为 8 字节，因为这是 UDP 头部的长度</li>
+</ul>
+<h2 id="UDP-的三个特性">UDP 的三个特性</h2>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151442957.png" alt="UDP 的三个特性"></p>
+<ol>
+<li>无连接的数据报服务：数据的传输不需要建立连接，且数据包可能乱序到达，也可能丢失</li>
+<li>自包含的数据报：即每个数据报包含足够多的信息，可以被独立传输、处理</li>
+<li>不可靠传输：无确认、无丢包检测、无流量控制</li>
+</ol>
+<blockquote>
+<p>总的来说，UDP 提供了一种更简单的数据报传输服务</p>
+</blockquote>
+<h1>ICMP 服务模型（ICMP Service Model）</h1>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151510787.png" alt="三种确保网络层正常工作的机制"></p>
+<h2 id="ICMP-的工作">ICMP 的工作</h2>
+<p>ICMP 位于传输层，用于向网络层传递错误信息</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151513600.png" alt=""></p>
+<p>以下为几个错误信息的示例</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151520269.png" alt=""></p>
+<h2 id="ping-命令是怎么使用-ICMP-的？"><code>ping</code> 命令是怎么使用 ICMP 的？</h2>
+<p><code>ping</code> 用于测试另一台主机的活跃状态，比如在终端中运行下面这行命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping bilibili.com</span><br></pre></td></tr></table></figure>
+<p>便可以看到类似下面的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Pinging bilibili.com [198.18.0.16] with 32 bytes of data:</span><br><span class="line">Reply from 198.18.0.16: bytes=32 time&lt;1ms TTL=128</span><br><span class="line">Reply from 198.18.0.16: bytes=32 time&lt;1ms TTL=128</span><br><span class="line">Reply from 198.18.0.16: bytes=32 time&lt;1ms TTL=128</span><br><span class="line">Reply from 198.18.0.16: bytes=32 time&lt;1ms TTL=128</span><br><span class="line"></span><br><span class="line">Ping statistics for 198.18.0.16:</span><br><span class="line">    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),</span><br><span class="line">Approximate round trip times in milli-seconds:</span><br><span class="line">    Minimum = 0ms, Maximum = 0ms, Average = 0ms</span><br></pre></td></tr></table></figure>
+<p>其中的过程如图，ping 直接调用 ICMP，发送一个 ICMP 回显请求，然后接收方返回一个回显应答</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151539074.png" alt="ping 调用 ICMP"></p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>ICMP 提供了网络层到终端主机和路由器的信息</li>
+<li>ICMP 位于网络层上方，所以属于传输层，但是 ICMP 是为网络层服务的</li>
+<li><code>ping</code> 和 <code>traceroute</code> 等命令都依赖于 ICMP</li>
+</ul>
+<h1>端到端原则（End to End Principle）</h1>
+<p>在主机 A 到主机 B 的连接中，网络其实可以做很多事情来进行优化，比如压缩数据、重新格式化或者优化请求、添加安全措施等等，但是通常来说，网路并没有怎么做，这是为什么？因为要遵循 <strong>端到端原则</strong>。</p>
+<h2 id="端到端原则的来源">端到端原则的来源</h2>
+<p>之所以会有端到端原则，是因为以下这样一个例子：</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151627459.png" alt="一个栗子"></p>
+<p>文件从源主机到目标主机，每两个机器之间的链路都有错误检测。</p>
+<p>理想状况是，传输中出现错误，检测到错误，拒收文件然后重新发送。</p>
+<p>但是问题在于链路上的错误检测只能检测传输层面的错误，如果出现内存层面的错误就无法检测了，如图</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151630485.png" alt="内存层面的错误"></p>
+<p>确保文件正确到达的唯一方法就是进行端到端的检查。</p>
+<h2 id="端到端功能之外的优化">端到端功能之外的优化</h2>
+<p>考虑无线链路和有线链路的可靠性，有线链路的传输往往是极其可靠的，而无线链路的传输则并没有那么可靠。</p>
+<p>链路层的重传机制可以通过有效地检测和纠正错误、减少丢包、提高数据的可靠性，极大地优化无线链路的性能。</p>
+<h1>错误检测（Error Detection）</h1>
+<p><strong>错误检测</strong> 有三种方法：</p>
+<ul>
+<li>Checksum（校验和）</li>
+<li>CRC（循环冗余校验码，cyclic redundancy code）</li>
+<li>MAC（消息认证码，message authenciation code）</li>
+</ul>
+<p>Ethernet 会在尾部增添一个 CRC，TLS 在尾部增添一个 MAC</p>
+<p>IP 则在数据头部增添一个 Checksum</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151706934.png" alt=""></p>
+<p>三种错误检测方法，各有优劣</p>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151710912.png" alt=""></p>
+<h2 id="Checksum">Checksum</h2>
+<p><strong>Checksum</strong> 是一种简单的错误检测方法，它通过对数据内容进行求和（通常是按字节、按块或按固定长度的单位）得到一个和校验值。然后，发送端和接收端都计算并比较这个校验和值，以判断数据是否在传输过程中发生了错误。</p>
+<ul>
+<li>优点：实现简单，计算量小，计算速度快</li>
+<li>缺点：鲁棒性低，无法检测偶数个比特位的错误以及其他的特定错误</li>
+</ul>
+<p>Checksum 主要用于<strong>简单的数据完整性检测</strong>，例如传输协议（如IP、TCP、UDP）或存储系统中的错误检测。</p>
+<h2 id="CRC">CRC</h2>
+<p><strong>CRC</strong> 是一种比 Checksum 更强大的错误检测方法，它基于多项式除法。数据被看作一个大的二进制数，使用一个预定的“生成多项式”进行除法运算。除法的余数（也叫 CRC 校验码）就是要附加到数据中的校验值。</p>
+<ul>
+<li>优点：鲁棒性高，错误检测能力强</li>
+<li>缺点：实现复杂，计算成本高</li>
+</ul>
+<p>CRC 被广泛应用于<strong>通信系统</strong>（如以太网、硬盘、CD/DVD）以及<strong>文件压缩和存储</strong>，例如在磁带存储中检测传输错误，或在互联网传输过程中检测数据完整性。</p>
+<h2 id="MAC">MAC</h2>
+<p><strong>MAC</strong> 是一种结合了加密和哈希的检测方法，除了用于验证数据的完整性外，还能验证数据的<strong>身份</strong>（即消息的真实性）。MAC 使用一个密钥和一个哈希算法（如HMAC）对消息进行加密处理，生成一个短小的“验证码”。只有知道密钥的双方才能生成和验证该验证码。但是，MAC <strong>无法检测任何内容上的错误！</strong></p>
+<ul>
+<li>优点：不仅保证数据未被篡改，还能够验证数据的来源，抗篡改性强</li>
+<li>缺点：计算成本较高，依赖于同一个共享密钥，<strong>无法检测到内容的错误</strong></li>
+</ul>
+<p>MAC 被广泛应用于<strong>加密通信协议</strong>（如SSL/TLS）、<strong>身份验证</strong>、<strong>数字签名</strong>和<strong>支付系统</strong>中，确保数据的安全性和完整性。</p>
+<h1>有限状态机（Finite State Machines）</h1>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151832642.png" alt="有限状态机"></p>
+<p>有限状态机是一个状态转换模型，它包括：</p>
+<ul>
+<li><strong>状态（State）</strong>：系统可能处于的不同阶段。</li>
+<li><strong>事件（Event）</strong>：系统状态转移的触发因素，可以是输入的外部信号或某些条件的变化。</li>
+<li><strong>状态转移（Transition）</strong>：从一个状态到另一个状态的变化过程。</li>
+<li><strong>动作（Action）</strong>：在状态转移时执行的操作，如发送数据包、接收数据等。</li>
+</ul>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151839414.png" alt="TCP 有限状态机"></p>
+<h1>流量控制（Flow Control）</h1>
+<p>问题在于，如果主机 A 以每秒 500,000 个数据包的速度发送，但是 主机 B 只能每秒接收 200,000 个数据包，这就会导致多余的数据包被丢弃。</p>
+<p>如今大多数协议中使用两种方法</p>
+<ul>
+<li>Stop and Wait</li>
+<li>Sliding Window</li>
+</ul>
+<h2 id="停止-等待（Stop-and-Wait）">停止-等待（Stop and Wait）</h2>
+<ul>
+<li>发送方一次只发送一个数据包</li>
+<li>每当接收到数据时，接收方发送确认信息（ACK）</li>
+<li>发送方接收到确认信息时发送下一个数据包</li>
+<li>若超时为收到确认信息，发送方重新发送数据</li>
+<li>使用一位计数器来检测是否是重复的数据</li>
+</ul>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502151936575.png" alt="停止-等待协议的有限状态机"></p>
+<h2 id="滑动窗口（Sliding-Window）">滑动窗口（Sliding Window）</h2>
+<p>每个数据段都有一个序列号（SeqNo），用于确保数据包被正确接收、乱序回复、丢包检测等</p>
+<h3 id="发送方的工作机制">发送方的工作机制</h3>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502161426822.png" alt="发送方的工作机制"></p>
+<ol>
+<li>
+<p>维护以下三个变量：</p>
+<ul>
+<li>
+<p>发送窗口大小（Send Window Size, SWS）：<br>
+表示当前允许发送但尚未收到确认的最大数据段数，发送窗口的大小决定了 TCP 连接的流量控制能力</p>
+</li>
+<li>
+<p>最后一个已确认的数据段（Last Acknowledgment Received, LAR）：<br>
+这是发送方收到的 ACK 号，即 所有比它小的序列号的数据都已经成功到达接收方</p>
+</li>
+<li>
+<p>最后一个已发送的数据段（Last Segment Sent, LSS）：<br>
+这是当前发送方已经发送的 最大序列号</p>
+</li>
+</ul>
+</li>
+<li>
+<p>维护不等式：<mjx-container class="MathJax" jax="SVG" style="direction: ltr; position: relative;"><svg style="overflow: visible; min-height: 1px; min-width: 1px; vertical-align: -0.312ex;" xmlns="http://www.w3.org/2000/svg" width="20.486ex" height="1.932ex" role="img" focusable="false" viewBox="0 -716 9055 854" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(681,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(1326,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g><g data-mml-node="mo" transform="translate(2193.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(3193.4,0)"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(3874.4,0)"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(4624.4,0)"><path data-c="1D445" d="M230 637Q203 637 198 638T193 649Q193 676 204 682Q206 683 378 683Q550 682 564 680Q620 672 658 652T712 606T733 563T739 529Q739 484 710 445T643 385T576 351T538 338L545 333Q612 295 612 223Q612 212 607 162T602 80V71Q602 53 603 43T614 25T640 16Q668 16 686 38T712 85Q717 99 720 102T735 105Q755 105 755 93Q755 75 731 36Q693 -21 641 -21H632Q571 -21 531 4T487 82Q487 109 502 166T517 239Q517 290 474 313Q459 320 449 321T378 323H309L277 193Q244 61 244 59Q244 55 245 54T252 50T269 48T302 46H333Q339 38 339 37T336 19Q332 6 326 0H311Q275 2 180 2Q146 2 117 2T71 2T50 1Q33 1 33 10Q33 12 36 24Q41 43 46 45Q50 46 61 46H67Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628Q287 635 230 637ZM630 554Q630 586 609 608T523 636Q521 636 500 636T462 637H440Q393 637 386 627Q385 624 352 494T319 361Q319 360 388 360Q466 361 492 367Q556 377 592 426Q608 449 619 486T630 554Z" style="stroke-width: 3;"/></g><g data-mml-node="mo" transform="translate(5661.2,0)"><path data-c="2264" d="M674 636Q682 636 688 630T694 615T687 601Q686 600 417 472L151 346L399 228Q687 92 691 87Q694 81 694 76Q694 58 676 56H670L382 192Q92 329 90 331Q83 336 83 348Q84 359 96 365Q104 369 382 500T665 634Q669 636 674 636ZM84 -118Q84 -108 99 -98H678Q694 -104 694 -118Q694 -130 679 -138H98Q84 -131 84 -118Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(6717,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(7362,0)"><path data-c="1D44A" d="M436 683Q450 683 486 682T553 680Q604 680 638 681T677 682Q695 682 695 674Q695 670 692 659Q687 641 683 639T661 637Q636 636 621 632T600 624T597 615Q597 603 613 377T629 138L631 141Q633 144 637 151T649 170T666 200T690 241T720 295T759 362Q863 546 877 572T892 604Q892 619 873 628T831 637Q817 637 817 647Q817 650 819 660Q823 676 825 679T839 682Q842 682 856 682T895 682T949 681Q1015 681 1034 683Q1048 683 1048 672Q1048 666 1045 655T1038 640T1028 637Q1006 637 988 631T958 617T939 600T927 584L923 578L754 282Q586 -14 585 -15Q579 -22 561 -22Q546 -22 542 -17Q539 -14 523 229T506 480L494 462Q472 425 366 239Q222 -13 220 -15T215 -19Q210 -22 197 -22Q178 -22 176 -15Q176 -12 154 304T131 622Q129 631 121 633T82 637H58Q51 644 51 648Q52 671 64 683H76Q118 680 176 680Q301 680 313 683H323Q329 677 329 674T327 656Q322 641 318 637H297Q236 634 232 620Q262 160 266 136L501 550L499 587Q496 629 489 632Q483 636 447 637Q428 637 422 639T416 648Q416 650 418 660Q419 664 420 669T421 676T424 680T428 682T436 683Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(8410,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline" style="top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; position: absolute; padding: 1px 0px 0px 0px; border: 0px; display: block; width: auto; overflow: hidden;"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi><mi>S</mi><mi>S</mi><mo>−</mo><mi>L</mi><mi>A</mi><mi>R</mi><mo>≤</mo><mi>S</mi><mi>W</mi><mi>S</mi></math></mjx-assistive-mml></mjx-container></p>
+</li>
+<li>
+<p>接收新的 ACK 后，推进 <mjx-container class="MathJax" jax="SVG" style="direction: ltr; position: relative;"><svg style="overflow: visible; min-height: 1px; min-width: 1px; vertical-align: -0.048ex;" xmlns="http://www.w3.org/2000/svg" width="4.955ex" height="1.667ex" role="img" focusable="false" viewBox="0 -716 2190 737" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(681,0)"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(1431,0)"><path data-c="1D445" d="M230 637Q203 637 198 638T193 649Q193 676 204 682Q206 683 378 683Q550 682 564 680Q620 672 658 652T712 606T733 563T739 529Q739 484 710 445T643 385T576 351T538 338L545 333Q612 295 612 223Q612 212 607 162T602 80V71Q602 53 603 43T614 25T640 16Q668 16 686 38T712 85Q717 99 720 102T735 105Q755 105 755 93Q755 75 731 36Q693 -21 641 -21H632Q571 -21 531 4T487 82Q487 109 502 166T517 239Q517 290 474 313Q459 320 449 321T378 323H309L277 193Q244 61 244 59Q244 55 245 54T252 50T269 48T302 46H333Q339 38 339 37T336 19Q332 6 326 0H311Q275 2 180 2Q146 2 117 2T71 2T50 1Q33 1 33 10Q33 12 36 24Q41 43 46 45Q50 46 61 46H67Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628Q287 635 230 637ZM630 554Q630 586 609 608T523 636Q521 636 500 636T462 637H440Q393 637 386 627Q385 624 352 494T319 361Q319 360 388 360Q466 361 492 367Q556 377 592 426Q608 449 619 486T630 554Z" style="stroke-width: 3;"/></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline" style="top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; position: absolute; padding: 1px 0px 0px 0px; border: 0px; display: block; width: auto; overflow: hidden;"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi><mi>A</mi><mi>R</mi></math></mjx-assistive-mml></mjx-container>，腾出窗口空间，发送新数据</p>
+</li>
+<li>
+<p>使用缓存存储未确认的数据，提高数据传输效率</p>
+</li>
+</ol>
+<h3 id="接收方的工作机制">接收方的工作机制</h3>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502161441212.png" alt="接收方的工作机制"></p>
+<ol>
+<li>维护三个变量
+<ul>
+<li>接收窗口大小（Receive Window Size，RWS）</li>
+<li>最大可接受的序列号（Last Acceptable Segment，LAS）</li>
+<li>最后一个成功接收并按序存储的段（Last Segment Received，LSR）</li>
+</ul>
+</li>
+<li>维护不等式：<mjx-container class="MathJax" jax="SVG" style="direction: ltr; position: relative;"><svg style="overflow: visible; min-height: 1px; min-width: 1px; vertical-align: -0.312ex;" xmlns="http://www.w3.org/2000/svg" width="20.744ex" height="1.932ex" role="img" focusable="false" viewBox="0 -716 9169 854" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(681,0)"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(1431,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g><g data-mml-node="mo" transform="translate(2298.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(3298.4,0)"><path data-c="1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(3979.4,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(4624.4,0)"><path data-c="1D445" d="M230 637Q203 637 198 638T193 649Q193 676 204 682Q206 683 378 683Q550 682 564 680Q620 672 658 652T712 606T733 563T739 529Q739 484 710 445T643 385T576 351T538 338L545 333Q612 295 612 223Q612 212 607 162T602 80V71Q602 53 603 43T614 25T640 16Q668 16 686 38T712 85Q717 99 720 102T735 105Q755 105 755 93Q755 75 731 36Q693 -21 641 -21H632Q571 -21 531 4T487 82Q487 109 502 166T517 239Q517 290 474 313Q459 320 449 321T378 323H309L277 193Q244 61 244 59Q244 55 245 54T252 50T269 48T302 46H333Q339 38 339 37T336 19Q332 6 326 0H311Q275 2 180 2Q146 2 117 2T71 2T50 1Q33 1 33 10Q33 12 36 24Q41 43 46 45Q50 46 61 46H67Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628Q287 635 230 637ZM630 554Q630 586 609 608T523 636Q521 636 500 636T462 637H440Q393 637 386 627Q385 624 352 494T319 361Q319 360 388 360Q466 361 492 367Q556 377 592 426Q608 449 619 486T630 554Z" style="stroke-width: 3;"/></g><g data-mml-node="mo" transform="translate(5661.2,0)"><path data-c="2264" d="M674 636Q682 636 688 630T694 615T687 601Q686 600 417 472L151 346L399 228Q687 92 691 87Q694 81 694 76Q694 58 676 56H670L382 192Q92 329 90 331Q83 336 83 348Q84 359 96 365Q104 369 382 500T665 634Q669 636 674 636ZM84 -118Q84 -108 99 -98H678Q694 -104 694 -118Q694 -130 679 -138H98Q84 -131 84 -118Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(6717,0)"><path data-c="1D445" d="M230 637Q203 637 198 638T193 649Q193 676 204 682Q206 683 378 683Q550 682 564 680Q620 672 658 652T712 606T733 563T739 529Q739 484 710 445T643 385T576 351T538 338L545 333Q612 295 612 223Q612 212 607 162T602 80V71Q602 53 603 43T614 25T640 16Q668 16 686 38T712 85Q717 99 720 102T735 105Q755 105 755 93Q755 75 731 36Q693 -21 641 -21H632Q571 -21 531 4T487 82Q487 109 502 166T517 239Q517 290 474 313Q459 320 449 321T378 323H309L277 193Q244 61 244 59Q244 55 245 54T252 50T269 48T302 46H333Q339 38 339 37T336 19Q332 6 326 0H311Q275 2 180 2Q146 2 117 2T71 2T50 1Q33 1 33 10Q33 12 36 24Q41 43 46 45Q50 46 61 46H67Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628Q287 635 230 637ZM630 554Q630 586 609 608T523 636Q521 636 500 636T462 637H440Q393 637 386 627Q385 624 352 494T319 361Q319 360 388 360Q466 361 492 367Q556 377 592 426Q608 449 619 486T630 554Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(7476,0)"><path data-c="1D44A" d="M436 683Q450 683 486 682T553 680Q604 680 638 681T677 682Q695 682 695 674Q695 670 692 659Q687 641 683 639T661 637Q636 636 621 632T600 624T597 615Q597 603 613 377T629 138L631 141Q633 144 637 151T649 170T666 200T690 241T720 295T759 362Q863 546 877 572T892 604Q892 619 873 628T831 637Q817 637 817 647Q817 650 819 660Q823 676 825 679T839 682Q842 682 856 682T895 682T949 681Q1015 681 1034 683Q1048 683 1048 672Q1048 666 1045 655T1038 640T1028 637Q1006 637 988 631T958 617T939 600T927 584L923 578L754 282Q586 -14 585 -15Q579 -22 561 -22Q546 -22 542 -17Q539 -14 523 229T506 480L494 462Q472 425 366 239Q222 -13 220 -15T215 -19Q210 -22 197 -22Q178 -22 176 -15Q176 -12 154 304T131 622Q129 631 121 633T82 637H58Q51 644 51 648Q52 671 64 683H76Q118 680 176 680Q301 680 313 683H323Q329 677 329 674T327 656Q322 641 318 637H297Q236 634 232 620Q262 160 266 136L501 550L499 587Q496 629 489 632Q483 636 447 637Q428 637 422 639T416 648Q416 650 418 660Q419 664 420 669T421 676T424 680T428 682T436 683Z" style="stroke-width: 3;"/></g><g data-mml-node="mi" transform="translate(8524,0)"><path data-c="1D446" d="M308 24Q367 24 416 76T466 197Q466 260 414 284Q308 311 278 321T236 341Q176 383 176 462Q176 523 208 573T273 648Q302 673 343 688T407 704H418H425Q521 704 564 640Q565 640 577 653T603 682T623 704Q624 704 627 704T632 705Q645 705 645 698T617 577T585 459T569 456Q549 456 549 465Q549 471 550 475Q550 478 551 494T553 520Q553 554 544 579T526 616T501 641Q465 662 419 662Q362 662 313 616T263 510Q263 480 278 458T319 427Q323 425 389 408T456 390Q490 379 522 342T554 242Q554 216 546 186Q541 164 528 137T492 78T426 18T332 -20Q320 -22 298 -22Q199 -22 144 33L134 44L106 13Q83 -14 78 -18T65 -22Q52 -22 52 -14Q52 -11 110 221Q112 227 130 227H143Q149 221 149 216Q149 214 148 207T144 186T142 153Q144 114 160 87T203 47T255 29T308 24Z" style="stroke-width: 3;"/></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline" style="top: 0px; left: 0px; clip: rect(1px, 1px, 1px, 1px); -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; position: absolute; padding: 1px 0px 0px 0px; border: 0px; display: block; width: auto; overflow: hidden;"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi><mi>A</mi><mi>S</mi><mo>−</mo><mi>L</mi><mi>S</mi><mi>R</mi><mo>≤</mo><mi>R</mi><mi>W</mi><mi>S</mi></math></mjx-assistive-mml></mjx-container></li>
+<li>发送 ACK：接收方使用 <strong>累积确认（Cumulative ACKs）</strong>，即只确认到最后一个连续的段，比如接收到 <code>1, 2, 3, 5</code> 则会发送 <code>ACK 4</code>（TCP ACK 指的是 “下一个期望的数据”，即 <code>ACK = 4</code> 表示 “请发送 4”）</li>
+</ol>
+<h1>可靠传输（Reliable Connection）</h1>
+<h2 id="重传策略（Retransmission-Strategies）">重传策略（Retransmission Strategies）</h2>
+<p>针对滑动窗口的重传策略如下</p>
+<p>发送方发送数据时，启动一个定时器，若 ACK 超时，则会重传数据</p>
+<p>重传策略有两种，<strong>回退重传</strong> 和 <strong>选择重传</strong></p>
+<h3 id="回退重传">回退重传</h3>
+<p>重传当前窗口的所有数据</p>
+<ul>
+<li>优点：实现简单，适合高丢包率的环境（当大量数据丢失时，恢复速度更快）</li>
+<li>缺点：浪费带宽，不适合高吞吐量的环境</li>
+</ul>
+<h3 id="选择重传">选择重传</h3>
+<p>只重传 ACK 超时的数据包</p>
+<ul>
+<li>优点：提高带宽利用率，更适应网络抖动</li>
+<li>缺点：接收端复杂度更高，需要额外的缓冲区</li>
+</ul>
+<h2 id="TCP-连接和断开（TCP-Setup-and-Teardown）">TCP 连接和断开（TCP Setup and Teardown）</h2>
+<h3 id="三次握手">三次握手</h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>客户端 ©</th>
+<th>服务器 (S)</th>
+<th>关键字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SYN</strong></td>
+<td><code>SEQ=X</code></td>
+<td>-</td>
+<td><code>SYN=1, ACK=0</code></td>
+<td>客户端请求连接</td>
+</tr>
+<tr>
+<td><strong>SYN-ACK</strong></td>
+<td>-</td>
+<td><code>SEQ=Y, ACK=X+1</code></td>
+<td><code>SYN=1, ACK=1</code></td>
+<td>服务器确认并发送 SYN</td>
+</tr>
+<tr>
+<td><strong>ACK</strong></td>
+<td><code>SEQ=X+1, ACK=Y+1</code></td>
+<td>-</td>
+<td><code>ACK=1</code></td>
+<td>客户端确认，连接建立</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TCP 还支持另一种连接方式，称为 <strong>同时打开（Simultaneous Open）</strong></p>
+<p>两方同时发送 SYN 然后一同发送 SYN+ACK，这需要四条消息而不是三次握手的三条</p>
+</blockquote>
+<h3 id="四次挥手">四次挥手</h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>发送方</th>
+<th>接收方</th>
+<th>关键标志位</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FIN</strong></td>
+<td>客户端 → 服务器</td>
+<td><code>FIN=1, ACK=1</code></td>
+<td>客户端请求断开</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>ACK</strong></td>
+<td>服务器 → 客户端</td>
+<td><code>ACK=1</code></td>
+<td>服务器确认 FIN</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>FIN</strong></td>
+<td>服务器 → 客户端</td>
+<td><code>FIN=1, ACK=1</code></td>
+<td>服务器也准备断开</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>ACK</strong></td>
+<td>客户端 → 服务器</td>
+<td><code>ACK=1</code></td>
+<td>客户端确认 FIN，进入 TIME_WAIT</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<h4 id="关于-TIME-WAIT">关于 TIME_WAIT</h4>
+<p>在客户端发送 最后一个 ACK 之后，会进入 <strong>TIME_WAIT 状态</strong>，持续 <strong>2 倍最大报文段生存时间（2MSL, Maximum Segment Lifetime）</strong>。这样做的目的如下：</p>
+<ol>
+<li>
+<p>确保服务器收到了 ACK：<br>
+如果最后的 ACK 丢失，服务器会重新发送 FIN，客户端可以重新 ACK。</p>
+</li>
+<li>
+<p>防止旧连接影响新连接：<br>
+旧的 TCP 连接可能会有延迟的数据包，TIME_WAIT 确保它们都被丢弃。</p>
+</li>
+</ol>
+</blockquote>
+<h1>总结</h1>
+<p>在计算机网络中，传输层协议的设计至关重要，它直接影响数据在网络中的传输方式与可靠性。TCP、UDP 和 ICMP 各自提供了不同的通信模型，适用于不同的应用需求。</p>
+<ul>
+<li><strong>TCP 服务模型（TCP Service Model）</strong> 采用连接导向的通信方式，提供可靠的数据传输、流量控制和拥塞控制，确保数据的顺序性和完整性。它适用于对数据可靠性要求较高的应用，如网页浏览（HTTP/HTTPS）和文件传输（FTP）。</li>
+<li><strong>UDP 服务模型（UDP Service Model）</strong> 采用无连接的通信方式，不保证数据可靠性、顺序性和完整性，但具有低延迟、高吞吐的优点，适用于实时音视频通信（如 VoIP、在线游戏）等应用。</li>
+<li><strong>ICMP 服务模型（ICMP Service Model）</strong> 主要用于网络诊断和错误报告，帮助主机和路由器报告网络问题，如 <code>ping</code> 和 <code>traceroute</code>。</li>
+</ul>
+<p>在传输过程中，端到端原则（End-to-End Principle）强调应在通信的终端系统（如应用层）实现可靠性，而非依赖网络中的中间节点。</p>
+<p>错误检测（Error Detection）机制（如 TCP 校验和、UDP 校验和和 ICMP 误码报告）在数据传输中起到了关键作用，确保数据完整性。</p>
+<p>有限状态机（Finite State Machines, FSM）是 TCP 连接管理的核心，定义了从连接建立（三次握手）到连接终止（四次挥手）的完整状态转换过程。流量控制（Flow Control）机制，如 TCP 的滑动窗口协议，确保发送方不会发送超过接收方缓存能力的数据，防止接收端溢出。</p>
+<p>可靠传输（Reliable Connection）是 TCP 的核心特性之一，它通过 <strong>ACK 机制、超时重传、滑动窗口、拥塞控制（如 AIMD、慢启动）</strong> 来确保数据的正确、完整、有序传输。在不同网络条件下，TCP 还能动态调整其发送策略，以提高传输效率和网络利用率。</p>
+<p>综合来看，计算机网络协议的设计在可靠性、性能和复杂性之间做出了权衡，不同的应用场景需要选择合适的传输方式，以实现最优的通信效果。</p>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><a class="post-copyright__author_img" href="/about/"><img class="post-copyright__author_img_front" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></a><div class="post-copyright__author_name">V1hZ's Blog</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">V1hZ's Blog</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>计算机网络<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/2dfac39c.html"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JavaScript 快速入门</div></div></a></div><div class="next-post pull-right"><a href="/post/c29c2b2c.html"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">主题的修改记录</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fa-solid fa-comment"></i><span> 评论</span><span class="count"> (<span class="twikoo-count"><i class="solitude fa-solid fa-spinner fa-spin"></i></span>)</span></div></div><div class="comment-wrap"><div id="twikoo-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="author-info__top-group"><div class="author-info__sayhi" id="author-info__sayhi" onclick="sco.changeSayHelloText()">sayhello.morning</div></div></div><div class="avatar-img-group"><img class="avatar-img" alt="头像" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></div><div class="author-info__description_group"><div class="author-info__description">Beyond the stars,</div><div class="author-info__description2">Splitting the seas.</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><div class="author-info__name">V1hZ</div><div class="author-info__desc"></div></a><div class="card-info-social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/WXY-V1hZ" title="Github"><i class="solitude  fab fa-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fa-solid fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">TCP 服务模型（TCP Service Model）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E2%80%94%E2%80%94%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">双向连接的建立——三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%96%AD%E5%BC%80%E2%80%94%E2%80%94%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-text">双向连接的断开——四次挥手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E4%B8%BA%E5%BA%94%E7%94%A8%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-text">TCP 为应用层提供的服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E6%AE%B5%E5%86%85%E9%83%A8%E6%A0%BC%E5%BC%8F"><span class="toc-text">TCP 段内部格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86"><span class="toc-text">TCP 连接的唯一标识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8F%B7%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">序列号的作用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">UDP 服务模型（UDP Service Model）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-%E6%AE%B5%E5%86%85%E9%83%A8%E6%A0%BC%E5%BC%8F"><span class="toc-text">UDP 段内部格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-%E7%9A%84%E4%B8%89%E4%B8%AA%E7%89%B9%E6%80%A7"><span class="toc-text">UDP 的三个特性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">ICMP 服务模型（ICMP Service Model）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP-%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="toc-text">ICMP 的工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ping-%E5%91%BD%E4%BB%A4%E6%98%AF%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8-ICMP-%E7%9A%84%EF%BC%9F"><span class="toc-text">ping 命令是怎么使用 ICMP 的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">端到端原则（End to End Principle）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%8E%9F%E5%88%99%E7%9A%84%E6%9D%A5%E6%BA%90"><span class="toc-text">端到端原则的来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%8A%9F%E8%83%BD%E4%B9%8B%E5%A4%96%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-text">端到端功能之外的优化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">错误检测（Error Detection）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Checksum"><span class="toc-text">Checksum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRC"><span class="toc-text">CRC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MAC"><span class="toc-text">MAC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">有限状态机（Finite State Machines）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">流量控制（Flow Control）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2-%E7%AD%89%E5%BE%85%EF%BC%88Stop-and-Wait%EF%BC%89"><span class="toc-text">停止-等待（Stop and Wait）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%88Sliding-Window%EF%BC%89"><span class="toc-text">滑动窗口（Sliding Window）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%96%B9%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">发送方的工作机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E6%94%B6%E6%96%B9%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">接收方的工作机制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">可靠传输（Reliable Connection）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E4%BC%A0%E7%AD%96%E7%95%A5%EF%BC%88Retransmission-Strategies%EF%BC%89"><span class="toc-text">重传策略（Retransmission Strategies）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E9%80%80%E9%87%8D%E4%BC%A0"><span class="toc-text">回退重传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E9%87%8D%E4%BC%A0"><span class="toc-text">选择重传</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E8%BF%9E%E6%8E%A5%E5%92%8C%E6%96%AD%E5%BC%80%EF%BC%88TCP-Setup-and-Teardown%EF%BC%89"><span class="toc-text">TCP 连接和断开（TCP Setup and Teardown）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">三次握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-text">四次挥手</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-TIME-WAIT"><span class="toc-text">关于 TIME_WAIT</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fa-solid fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/post/2dfac39c.html" title="JavaScript 快速入门"><div class="content"><span class="title" href="/post/2dfac39c.html" title="JavaScript 快速入门">JavaScript 快速入门</span><span class="article-recent_post_categories" href="/post/2dfac39c.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层"><div class="content"><span class="title" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层">计算机网络 CS144 - 第二单元 - 传输层</span><span class="article-recent_post_categories" href="/post/6f3aef06.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/c29c2b2c.html" title="主题的修改记录"><div class="content"><span class="title" href="/post/c29c2b2c.html" title="主题的修改记录">主题的修改记录</span><span class="article-recent_post_categories" href="/post/c29c2b2c.html">博客</span></div></a><a class="aside-list-item" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建"><div class="content"><span class="title" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建">从零开始的 Hexo 博客搭建</span><span class="article-recent_post_categories" href="/post/6b5e6b32.html">博客</span></div></a><a class="aside-list-item" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建"><div class="content"><span class="title" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建">如何用 scoop 简化你的软件安装以及环境搭建</span><span class="article-recent_post_categories" href="/post/9382a5ca.html">好物推荐</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg">V1hZ</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" alt="Powered by Hexo">Powered by Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka" alt="Theme Eureka">Theme Eureka</a><a class="footer-bar-link cc" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><i class="solitude fa-solid fa-copyright"></i><i class="solitude fa-brands fa-creative-commons-by"></i><i class="solitude fa-brands fa-creative-commons-nc"></i><i class="solitude fa-brands fa-creative-commons-nd"></i></a></div></div></div></footer></div><!-- right_menu--><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="solitude fa-solid fa-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="solitude fa-solid fa-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="solitude fa-solid fa-arrows-rotate"></i></div><div class="rightMenu-item" id="menu-top"><i class="solitude fa-solid fa-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="solitude fa-solid fa-clone"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="solitude fa-solid fa-clipboard"></i><span>粘贴文本</span></div><div class="rightMenu-item" id="menu-commenttext"><i class="solitude fa-solid fa-comment-medical"></i><span>引用到评论</span></div><div class="rightMenu-item" id="menu-newwindow"><i class="solitude fa-regular fa-window-maximize"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="solitude fa-solid fa-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="solitude fa-solid fa-clone"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="solitude fa-solid fa-cloud-arrow-down"></i><span>下载此图片</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-randomPost" onclick="toRandomPost()||rm.hideRightMenu()"><i class="solitude fas fa-shuffle"></i><span>随便看看</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/categories/')||rm.hideRightMenu()"><i class="solitude fas fa-clone"></i><span>博客分类</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/tags/')||rm.hideRightMenu()"><i class="solitude fas fa-tags"></i><span>文章标签</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-darkmode" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span class="menu-darkmode-text">浅色模式</span></div><div class="rightMenu-item" id="menu-translate"><i class="solitude fa-solid fa-language"></i><span>轉為繁體</span></div></div></div><div id="rightmenu-mask"></div><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/8.8.7/index.umd.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/19.1.3/lazyload.iife.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script>var meting_api = 'https://meting.boke.fun/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><script src="/js/right_menu.js?v=2.1.10"></script><script defer pjax src="/js/countdown.js"></script><div class="js-pjax"><script>(() => {
+    const getCount = () => {
+        const ele = document.querySelectorAll('.twikoo-count')
+        if (!ele) return
+        twikoo.getCommentsCount({
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            urls: [window.location.pathname],
+            includeReply: false
+        }).then(res => {
+            ele.forEach(item => item.textContent = res[0].count)
+        }).catch(err => {
+            console.error(err)
+        })
+    }
+    const init = () => {
+        twikoo.init(Object.assign({
+            el: '#twikoo-wrap',
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            path: window.location.pathname,
+            onCommentLoaded: () => {
+                GLOBAL_CONFIG.lightbox && utils.lightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+            }
+        }, null))
+
+         && getCount()
+        sco.owoBig({
+            body: '.OwO-body',
+            item: '.OwO-items li'
+        })
+
+        false && barrageTwikoo()
+    }
+
+    const loadTwikoo = () => {
+        if (typeof twikoo === 'object') setTimeout(init,0)
+        else utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.41/twikoo.all.min.js').then(init)
+    }
+
+    if ('Twikoo' === 'Twikoo' || false) {
+        if (false) utils.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+        else loadTwikoo()
+    } else {
+        window.loadTwoComment = loadTwikoo
+    }
+})()
+</script><script>mermaid.run();</script></div></div><script>const links = [{"name":null,"link":null}]
+const randomText = '点击前往按钮进入随机一个友链，不能保证跳转网站的可用性。本次随机到的是：⌈ ${name} ⌋'
+function travelling() {
+    const link = links[utils.randomNum(links.length)];
+    Snackbar.show({
+        text: randomText.replace(/\$\{name}/,link.name),
+        duration: 8000,
+        pos: 'top-center',
+        actionText: '前往',
+        onActionClick: function(element) {
+            element.style.opacity = 0;
+            window.open(link.link, '_blank');
+        }
+    });
+}
+</script><script>function randomLinksList() {
+    const linkcard = document.getElementById('friend-links-in-footer');
+    if (linkcard == null) return;
+
+    let data = '';
+    let linksCopy = [...links];
+    let count = Math.min(3, linksCopy.length);
+
+    for (let i = 0; i < count; i++) {
+        let index = utils.randomNum(linksCopy.length);
+        const {link, name} = linksCopy[index];
+        data += `<a class="footer-item" href="${link}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`;
+        linksCopy.splice(index, 1);
+    }
+
+    linkcard.innerHTML = data + '<a class="footer-item" href="/links/">更多</a>';
+}</script><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--></body></html>
+        <script>
+            const posts = ["post/2dfac39c.html","post/6f3aef06.html","post/c29c2b2c.html","post/6b5e6b32.html","post/9382a5ca.html","post/26778e02.html","post/d0f380b1.html","post/a320eb10.html","post/d73767c3.html","post/ce0d96ff.html","post/ffbc6743.html","post/eca2d255.html","post/e0be4916.html","post/5f3613b5.html","post/ed648fbb.html","post/96db0bd9.html","post/3fb56f9d.html","post/95b07011.html","post/e909e61e.html","post/718dd583.html","post/22d666a2.html"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>

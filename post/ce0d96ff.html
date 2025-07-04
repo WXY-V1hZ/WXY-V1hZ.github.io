@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MySQL 主从复制的配置及应用 | V1hZ's Blog</title><noscript>开启JavaScript才能访问本站！</noscript><link rel="icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="https://v1hz.blog/post/ce0d96ff.html"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="什么是 MySQL 主从复制？ 异步 的复制过程 底层基于 MySQL 数据库自带的 二进制日志 功能 MySQL 数据库自带主从复制的功能 就是一台或多台 MySQL 数据库（slave）从另一台 MySQL 数据库（master）进行日志的复制然后解析日志并应用到自身，最终实现 从库数据和主"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="V1hZ's Blog"><meta name="theme-color" content="var(--rin-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--rin-main)"><link rel="bookmark" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"><link rel="apple-touch-icon" href="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg" sizes="180x180"><script>console.log(
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>let mdate = "7-7,9-18,12-13";
+mdate = (mdate.split(","));
+let ndate = new Date();
+for (let i of mdate) {
+    if (i === (ndate.getMonth()+1) + "-" + (ndate.getDate())) {
+        document.documentElement.classList.add('memorial');
+    }
+}
+</script><link rel="stylesheet" href="/css/custom.css"><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    else
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    typeof rm === 'object' && rm.mode(cachedMode === undefined || cachedMode === 'dark')
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: 'false',
+    lazyload: {
+        enable: true,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":114514,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: true,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"已成功复制选定内容！","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请注意遵循 GPL 协议。","totalk":"请在空行下面直接输入评论"},
+    aside: {
+        sayhello: {
+            morning: "早上好，是新的一天！",
+            noon: "你吃午饭了吗？要吃好哦。",
+            afternoon: "下午好哦，记得喝下午茶～",
+            night: "晚饭吃了吗，今天怎么样?",
+            goodnight: "你怎么还不睡觉？",
+        },
+        sayhello2: ["你在按什么？","你还按！","不可以按这里！"],
+        sayhello3: {
+            prefix: '你好，',
+            back: '欢迎回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: {"mode":{"dark":"深色模式","light":"浅色模式"},"img_error":"此图片无法复制与下载","translate":true,"ctrlOriginalMenu":"按住 Ctrl + 鼠标右键可打开原生右键菜单"},
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">互动</div><div class="author-content-item-title">最新评论<a class="recent-comment-more" href="/recentcomment/" title="最近评论"><i class="solitude fa-solid fa-circle-chevron-right"></i></a></div></div><div class="console_recentcomments"><script pjax>(async () => {
+    document.querySelector('.console-card .console_recentcomments').textContent = `正在加载...`
+    const emojiReg = /<img class="tk-owo-emotion" [^>]+>/g
+    let cache = utils.saveToLocal.get('twikoo-recent-comments-console')
+    if (cache) {
+        setHtml(document.querySelector('.console-card .console_recentcomments'), cache)
+        return
+    }
+    let ls = []
+
+    await fetch('https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo', {
+        method: "POST",
+        body: JSON.stringify({
+            "event": "GET_RECENT_COMMENTS",
+            "includeReply": true,
+            "pageSize": 6
+        }),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json()).then(async ({data}) => {
+        for (const i of data) {
+            if (i.avatar === undefined) i.avatar = '/avatar/d615d5793929e8c7d70eab5f00f7f5f1?d=mp'
+            let title = ''
+            if (i.url) {
+                await fetch(i.url).then(res => res.text()).then(html => {
+                    const parser = new DOMParser()
+                    const doc = parser.parseFromString(html, 'text/html')
+                    title = doc.querySelector('title').innerText
+                }).catch(() => {
+                    title = i.url
+                })
+            }
+            if (title.indexOf('|') > 0) {
+                title = title.split('|')[0]
+            }
+            ls.push({
+                avatar: i.avatar,
+                nick: i.nick,
+                title: title,
+                content: i.comment,
+                url: i.url + '#' + i.id,
+                time: i.created
+            })
+        }
+        setHtml(document.querySelector('.console-card .console_recentcomments'), ls)
+        utils.saveToLocal.set('twikoo-recent-comments-console', ls, 0.5)
+    });
+
+    function setHtml(el, data) {
+        el.innerHTML = data.map(i => `
+            <div class="comment-card" title="${i.title}" onclick="pjax.loadUrl('${i.url}')">
+                <div class="comment-info">
+                    <img src="${i.avatar}" class="nolazyload" alt="${i.nick}">
+                    <div>
+                        <span class="comment-user">${i.nick}</span>
+                    </div>
+                    <time class="comment-time" datetime="${new Date(i.time)}"></time>
+                </div>
+                <div class="comment-content">${formatContent(i.content)}</div>
+                <div class="comment-title">
+                <i class="solitude fa-solid fa-comment"></i>
+                ${i.title}</div>
+            </div>
+        `).join('')
+        if (typeof sco !== 'undefined') sco.changeTimeFormat(document.querySelectorAll('.comment-time'))
+        else {
+            document.addEventListener('pjax:complete', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+            document.addEventListener('DOMContentLoaded', () => sco.changeTimeFormat(document.querySelectorAll('.comment-time')))
+        }
+    }
+
+    function formatContent(content) {
+        content = content.replace(emojiReg, '表情')
+        content = content.replace(/<\/*br>|[\s\uFEFF\xA0]+/g, '');
+        content = content.replace(/<img.*?>/g, '[图片]');
+        content = content.replace(/<a.*?>.*?<\/a>/g, '[链接]');
+        content = content.replace(/<pre.*?>.*?<\/pre>/g, '[代码]');
+        content = content.replace(/<.*?>/g, '');
+        return content
+    }
+})()</script></div></div></div><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/02/"><span class="card-archive-list-date">2025/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">13</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">2025/01</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">2024/12</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span class="card-archive-list-count-unit">篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">2024/02</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"><a href="/tags/%E5%9F%9F%E5%90%8D/">域名<sup>1</sup></a><a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/">网络<sup>1</sup></a><a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">入门教程<sup>1</sup></a><a href="/tags/JavaScript/">JavaScript<sup>1</sup></a><a href="/tags/MySQL/">MySQL<sup>1</sup></a><a href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">主从复制<sup>1</sup></a><a href="/tags/Nginx/">Nginx<sup>1</sup></a><a href="/tags/mathjax/">mathjax<sup>1</sup></a><a href="/tags/%E4%B8%BB%E9%A2%98/">主题<sup>1</sup></a><a href="/tags/%E6%95%99%E7%A8%8B/">教程<sup>1</sup></a><a href="/tags/%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9/">字体压缩<sup>1</sup></a><a href="/tags/Swagger/">Swagger<sup>1</sup></a><a href="/tags/Nginx-%E5%89%8D%E7%AB%AF%E9%83%A8%E7%BD%B2/">Nginx 前端部署<sup>1</sup></a><a href="/tags/%E7%89%A9%E7%90%86/">物理<sup>1</sup></a><a href="/tags/scoop/">scoop<sup>1</sup></a><a href="/tags/PowerShell/">PowerShell<sup>1</sup></a><a href="/tags/%E4%BC%98%E5%8C%96/">优化<sup>1</sup></a><a href="/tags/MySQL%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL远程连接<sup>1</sup></a><a href="/tags/Debug/">Debug<sup>1</sup></a><a href="/tags/%E5%9B%BE%E5%BA%8A/">图床<sup>1</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/">写作<sup>1</sup></a><a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">数学分析<sup>4</sup></a><a href="/tags/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/">离散数学<sup>1</sup></a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络<sup>1</sup></a></div></div><span class="sidebar-menu-item-title">网站信息</span><div class="webinfo"><div class="webinfo-item"><div class="webinfo-item-title"><i class="item-icon solitude fa-solid fa-file-word"></i><div class="item-name">本站字数 :</div></div><div class="item-count">33.8k</div></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">下一站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://travel.moe/go" title="异次元旅行"><img class="nolazyload back-menu-item-icon" src="https://icp.gov.moe/favicon.ico" alt="异次元旅行"><span class="back-menu-item-text">异次元旅行</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://storeweb.cn" title="个站商店"><img class="nolazyload back-menu-item-icon" src="https://storeweb.cn/static/favicon.ico" alt="个站商店"><span class="back-menu-item-text">个站商店</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com" title="BlogFinder"><img class="nolazyload back-menu-item-icon" src="https://bf.zzxworld.com/favicon.ico" alt="BlogFinder"><span class="back-menu-item-text">BlogFinder</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://zhblogs.ohyee.cc" title="博客导航"><img class="nolazyload back-menu-item-icon" src="https://zhblogs.ohyee.cc/favicon.ico" alt="博客导航"><span class="back-menu-item-text">博客导航</span></a></div></div></div></div><a id="site-name" href="/" title="返回主页"><span class="title">V1hZ</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">MySQL 主从复制的配置及应用</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文章</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>所有</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/about/"><i class="solitude  fas fa-address-card"></i><span>关于我</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机文章" href="javascript:void(0);"><i class="solitude fa-solid fa-dice-d6"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/img/default.avif" alt="MySQL 主从复制的配置及应用"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/"><span class="tags-name tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>MySQL</span></a><a class="post-meta__tags" href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"><span class="tags-name tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>主从复制</span></a></div></div></div></div><h1 class="post-title">MySQL 主从复制的配置及应用</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2025-02-10 17:50:19"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2025-02-10T17:50:19.000Z">2025-02-10T17:50:19.000Z</time></span><span class="post-meta-date" title="最后更新于 2025-07-04 16:15:48"><i class="post-meta-icon solitude fa-solid fa-arrows-rotate"></i><time datetime="2025-07-04T16:15:48.461Z">2025-07-04T16:15:48.461Z</time></span><span class="post-meta-wordcount"><i class="post-meta-icon solitude fa-solid fa-file-word" title="文章字数"></i><span class="word-count">1.4k</span><span class="post-meta-separator"></span></span><span class="post-meta-position" title="作者IP归属地为China"><i class="post-meta-icon solitude fas fa-location-dot"></i><span>China</span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h2 id="什么是-MySQL-主从复制？">什么是 MySQL 主从复制？</h2>
+<ul>
+<li><strong>异步</strong> 的复制过程</li>
+<li>底层基于 MySQL 数据库自带的 <strong>二进制日志</strong> 功能</li>
+<li>MySQL 数据库自带主从复制的功能</li>
+</ul>
+<p>就是一台或多台 MySQL 数据库（slave）从另一台 MySQL 数据库（master）进行日志的复制然后解析日志并应用到自身，最终实现 <strong>从库数据和主库数据保持一致</strong> 。</p>
+<p>MySQL 复制过程分为三步：</p>
+<ol>
+<li>master 将改变记录二进制日志（binlog）</li>
+<li>slave 将 master 的 binlog 拷贝到它的中继日志（relay log）</li>
+<li>slave 重做中继日志中的事件，将改变应用到自己的数据库中</li>
+</ol>
+<p><img src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202502101431714.png" alt="MySQL 主从复制（图片来自黑马程序员）"></p>
+<h2 id="配置-MySQL-主从复制">配置 MySQL 主从复制</h2>
+<blockquote>
+<p>我自己操作的时候是用 Windows 的 Hyper-V 创建的 Debian 虚拟机，</p>
+<p>Debian 作为主库，Windows 作为从库</p>
+</blockquote>
+<h3 id="主库的配置">主库的配置</h3>
+<p><strong>第一步</strong>，修改 MySQL 配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/mysql/mysql.conf.d/mysqld.cnf</span><br></pre></td></tr></table></figure>
+<p>在 <code>[mysql]</code> 字段下添加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log-bin         = mysql-bin</span><br><span class="line">server-id       = 100</span><br></pre></td></tr></table></figure>
+<p><code>mysql-bin</code> 即二进制日志的名称（也可以填写具体的路径）</p>
+<p><code>server-id</code> 可以随意设置，但必须唯一</p>
+<p><code>binlog_do_db</code> 指定要复制的数据库（这里没写上去，所以默认为所有）</p>
+<p>然后重启一下 MySQL 服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart mysql</span><br></pre></td></tr></table></figure>
+<p><strong>第二步</strong>，创建从库用户</p>
+<p>登录 MySQL 主库</p>
+<p>若 MySQL 为 8.0 以下版本，则执行以下语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;v1hz-slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;your_password&#x27;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这行 SQL 语句表示，创建一个名为 <code>v1hz-slave</code> 的用户，允许该用户从任意 IP 地址连接（<code>'%'</code>），将权限授予所有数据库的所有表（<code>*.*</code>），用户密码为 <code>your_password</code>，授予该用户从属复制的权限（<code>grant replication slave</code>）</p>
+<p>也可以将 <code>'%'</code> 替换为从库的 IP 地址 或 将 <code>*.*</code> 替换为指定的数据库和表 提高安全性</p>
+</blockquote>
+<p>若 MySQL 为 8.0 及更高版本，则不能直接在 <code>GRANT</code> 语句中使用 <code>IDENTIFIED BY</code> 来设置密码，需要将创建用户和授权分为两步（由于 MySQL 的安全策略，第二步必须在本地执行）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;v1hz-slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;your_password&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;v1hz-slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>第三步</strong>，查看 MySQL 主库的状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show master status;</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| mysql-bin.000002 |      1414 |              |                  |                   |</span><br><span class="line">+------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>前两列表示日志的名称和位置，待会儿在从库的配置中会用到。</p>
+<h3 id="从库的配置">从库的配置</h3>
+<p><strong>第一步</strong>，修改 MySQL 配置文件</p>
+<p>我的从库是 Windows 下的，所以配置文件位于 <code>/path/to/mysql/my.ini</code></p>
+<p>在 <code>[mysql]</code> 字段下添加以下内容（此处的 <code>server-id</code> 必须和主库中配置的不同）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server-id=101</span><br></pre></td></tr></table></figure>
+<p>然后重启一下 MySQL 服务</p>
+<p><strong>第二步</strong>，指定主库</p>
+<p>执行以下 SQL 语句（此处的所有字段均替换为上述设置的内容）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># MySQL <span class="number">8.0</span><span class="operator">+</span></span><br><span class="line">CHANGE REPLICATION SOURCE <span class="keyword">TO</span> </span><br><span class="line">SOURCE_HOST<span class="operator">=</span><span class="string">&#x27;172.22.160.2&#x27;</span>,</span><br><span class="line">SOURCE_USER<span class="operator">=</span><span class="string">&#x27;v1hz-slave&#x27;</span>,</span><br><span class="line">SOURCE_PASSWORD<span class="operator">=</span><span class="string">&#x27;nenood1091&#x27;</span>,</span><br><span class="line">SOURCE_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000002&#x27;</span>,</span><br><span class="line">SOURCE_LOG_POS<span class="operator">=</span><span class="number">1414</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">START</span> REPLICA;</span><br><span class="line"></span><br><span class="line"># MySQL <span class="number">5.</span>x</span><br><span class="line">CHANGE MASTER <span class="keyword">TO</span> </span><br><span class="line">MASTER_HOST<span class="operator">=</span><span class="string">&#x27;172.22.160.2&#x27;</span>,</span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;v1hz-slave&#x27;</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;nenood1091&#x27;</span>,</span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000002&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">1414</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">START</span> SLAVE;</span><br></pre></td></tr></table></figure>
+<p><strong>第三步</strong>，检查主从复制状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> replica status\G;</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">             Replica_IO_State: Waiting <span class="keyword">for</span> source <span class="keyword">to</span> send event</span><br><span class="line">                  Source_Host: <span class="number">172.22</span><span class="number">.160</span><span class="number">.2</span></span><br><span class="line">                  Source_User: v1hz<span class="operator">-</span>slave</span><br><span class="line">                  Source_Port: <span class="number">3306</span></span><br><span class="line">                Connect_Retry: <span class="number">60</span></span><br><span class="line">              Source_Log_File: mysql<span class="operator">-</span>bin<span class="number">.000002</span></span><br><span class="line">          Read_Source_Log_Pos: <span class="number">1414</span></span><br><span class="line">               Relay_Log_File: V1hZ<span class="operator">-</span>DESKTOP<span class="operator">-</span>relay<span class="operator">-</span>bin<span class="number">.000004</span></span><br><span class="line">                Relay_Log_Pos: <span class="number">327</span></span><br><span class="line">        Relay_Source_Log_File: mysql<span class="operator">-</span>bin<span class="number">.000002</span></span><br><span class="line">           Replica_IO_Running: Yes</span><br><span class="line">          Replica_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB:</span><br><span class="line">          Replicate_Ignore_DB:</span><br><span class="line">           Replicate_Do_Table:</span><br><span class="line">       Replicate_Ignore_Table:</span><br><span class="line">      Replicate_Wild_Do_Table:</span><br><span class="line">  Replicate_Wild_Ignore_Table:</span><br><span class="line">                   Last_Errno: <span class="number">0</span></span><br><span class="line">                   Last_Error:</span><br><span class="line">                 Skip_Counter: <span class="number">0</span></span><br><span class="line">          Exec_Source_Log_Pos: <span class="number">1414</span></span><br><span class="line">              Relay_Log_Space: <span class="number">714</span></span><br><span class="line">              Until_Condition: <span class="keyword">None</span></span><br><span class="line">               Until_Log_File:</span><br><span class="line">                Until_Log_Pos: <span class="number">0</span></span><br><span class="line">           Source_SSL_Allowed: <span class="keyword">No</span></span><br><span class="line">           Source_SSL_CA_File:</span><br><span class="line">           Source_SSL_CA_Path:</span><br><span class="line">              Source_SSL_Cert:</span><br><span class="line">            Source_SSL_Cipher:</span><br><span class="line">               Source_SSL_Key:</span><br><span class="line">        Seconds_Behind_Source: <span class="number">0</span></span><br><span class="line">Source_SSL_Verify_Server_Cert: <span class="keyword">No</span></span><br><span class="line">                Last_IO_Errno: <span class="number">0</span></span><br><span class="line">                Last_IO_Error:</span><br><span class="line">               Last_SQL_Errno: <span class="number">0</span></span><br><span class="line">               Last_SQL_Error:</span><br><span class="line">  Replicate_Ignore_Server_Ids:</span><br><span class="line">             Source_Server_Id: <span class="number">100</span></span><br><span class="line">                  Source_UUID: <span class="number">1</span>ca9aa76<span class="operator">-</span>e773<span class="number">-11</span>ef<span class="operator">-</span>af5e<span class="number">-00155</span>d01090c</span><br><span class="line">             Source_Info_File: mysql.slave_master_info</span><br><span class="line">                    SQL_Delay: <span class="number">0</span></span><br><span class="line">          SQL_Remaining_Delay: <span class="keyword">NULL</span></span><br><span class="line">    Replica_SQL_Running_State: Replica has read <span class="keyword">all</span> relay log; waiting <span class="keyword">for</span> more updates</span><br><span class="line">           Source_Retry_Count: <span class="number">10</span></span><br><span class="line">                  Source_Bind:</span><br><span class="line">      Last_IO_Error_Timestamp:</span><br><span class="line">     Last_SQL_Error_Timestamp:</span><br><span class="line">               Source_SSL_Crl:</span><br><span class="line">           Source_SSL_Crlpath:</span><br><span class="line">           Retrieved_Gtid_Set:</span><br><span class="line">            Executed_Gtid_Set:</span><br><span class="line">                Auto_Position: <span class="number">0</span></span><br><span class="line">         Replicate_Rewrite_DB:</span><br><span class="line">                 Channel_Name:</span><br><span class="line">           Source_TLS_Version:</span><br><span class="line">       Source_public_key_path:</span><br><span class="line">        Get_Source_public_key: <span class="number">0</span></span><br><span class="line">            Network_Namespace:</span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">ERROR:</span><br><span class="line"><span class="keyword">No</span> query specified</span><br></pre></td></tr></table></figure>
+<h3 id="可能遇到的问题">可能遇到的问题</h3>
+<p>我在实际操作中运行 <code>show replica status\G</code> 后遇到报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authentication plugin ‘caching_sha2_password‘ reported error: Authentication...</span><br></pre></td></tr></table></figure>
+<p>在主库中运行以下语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">&#x27;v1hz-slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">WITH</span> mysql_native_password <span class="keyword">BY</span> <span class="string">&#x27;your_password&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<p>由于运行以上语句会导致主库的二进制日志改变，所以需要运行 <code>show master status</code> 查看新的日志名称和位置</p>
+<p>重启从库的 MySQL，停止复制后重新运行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">STOP REPLICA;</span><br><span class="line"></span><br><span class="line">CHANGE REPLICATION SOURCE <span class="keyword">TO</span> </span><br><span class="line">SOURCE_HOST<span class="operator">=</span><span class="string">&#x27;172.22.160.2&#x27;</span>,</span><br><span class="line">SOURCE_USER<span class="operator">=</span><span class="string">&#x27;v1hz-slave&#x27;</span>,</span><br><span class="line">SOURCE_PASSWORD<span class="operator">=</span><span class="string">&#x27;nenood1091&#x27;</span>,</span><br><span class="line">SOURCE_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000002&#x27;</span>,</span><br><span class="line">SOURCE_LOG_POS<span class="operator">=</span><span class="number">1414</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">START</span> REPLICA;</span><br></pre></td></tr></table></figure>
+<h3 id="测试-MySQL-主从复制">测试 MySQL 主从复制</h3>
+<p>在主库中运行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE test</span><br><span class="line">    <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> <span class="operator">=</span> <span class="string">&#x27;utf8mb4&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>然后刷新从库，就可以看到从库中也新建了一个名为 <code>test</code> 的数据库</p>
+<blockquote>
+<p>一开始配置主库的时候运行的是 <code>grant replication slave on *.* ...</code></p>
+<p>所以所有的数据库和表都会同步</p>
+<p>如果指定数据库或表就不会有这样的效果了</p>
+</blockquote>
+<h2 id="使用-Sharding-JDBC-实现读写分离">使用 Sharding-JDBC 实现读写分离</h2>
+<p>在 <code>pom.xml</code> 中添加以下 Maven 坐标</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.shardingsphere<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sharding-jdbc-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后修改 <code>application.yml</code>，添加如下设置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">shardingsphere:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">names:</span></span><br><span class="line">      <span class="string">master,</span> <span class="string">slave</span> <span class="comment"># 数据源的名称，与下面的配置对应</span></span><br><span class="line">    <span class="attr">master:</span> <span class="comment"># master 数据源的相关配置</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">      <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">      <span class="attr">url:</span> <span class="string">jdbc:mysql://172.22.160.2:3306/reggie?characterEncoding=utf-8</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">your_password</span></span><br><span class="line">    <span class="attr">slave:</span> <span class="comment"># slave 数据源的相关配置</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">      <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">      <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/reggie?characterEncoding=utf-8</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">your_password</span></span><br><span class="line">  <span class="attr">masterslave:</span> <span class="comment"># 配置读写分离规则</span></span><br><span class="line">    <span class="attr">load-balance-algorithm-type:</span> <span class="string">round_robin</span> <span class="comment"># 负载均衡采用轮询算法</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dataSource</span></span><br><span class="line">    <span class="attr">master-data-source-name:</span> <span class="string">master</span></span><br><span class="line">    <span class="attr">slave-data-source-names:</span> <span class="string">slave</span></span><br><span class="line">  <span class="attr">props:</span> <span class="comment"># 开启 SQL 显示日志</span></span><br><span class="line">    <span class="attr">sql:</span></span><br><span class="line">      <span class="attr">show:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">main:</span></span><br><span class="line">  <span class="attr">allow-bean-definition-overriding:</span> <span class="literal">true</span> <span class="comment"># 允许 bean 定义覆盖配置项</span></span><br></pre></td></tr></table></figure>
+<p>然后项目就能启用读写分离了</p>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><a class="post-copyright__author_img" href="/about/"><img class="post-copyright__author_img_front" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></a><div class="post-copyright__author_name">V1hZ's Blog</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">V1hZ's Blog</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>MySQL<span class="tagsPageCount">1</span></span></a><a class="post-meta__tags" href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"><span class="tags-punctuation"><i class="solitude fa-solid fa-hashtag"></i>主从复制<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/d73767c3.html"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Nginx 入门</div></div></a></div><div class="next-post pull-right"><a href="/post/ffbc6743.html"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hyper-V 虚拟机配置静态 IP 并访问外网</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fa-solid fa-comment"></i><span> 评论</span><span class="count"> (<span class="twikoo-count"><i class="solitude fa-solid fa-spinner fa-spin"></i></span>)</span></div></div><div class="comment-wrap"><div id="twikoo-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="author-info__top-group"><div class="author-info__sayhi" id="author-info__sayhi" onclick="sco.changeSayHelloText()">sayhello.morning</div></div></div><div class="avatar-img-group"><img class="avatar-img" alt="头像" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg"></div><div class="author-info__description_group"><div class="author-info__description">Beyond the stars,</div><div class="author-info__description2">Splitting the seas.</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><div class="author-info__name">V1hZ</div><div class="author-info__desc"></div></a><div class="card-info-social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/WXY-V1hZ" title="Github"><i class="solitude  fab fa-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fa-solid fa-bars"></i><span>文章目录</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-MySQL-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%9F"><span class="toc-text">什么是 MySQL 主从复制？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-MySQL-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">配置 MySQL 主从复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%BA%93%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">主库的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E5%BA%93%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">从库的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">可能遇到的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95-MySQL-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">测试 MySQL 主从复制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Sharding-JDBC-%E5%AE%9E%E7%8E%B0%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-text">使用 Sharding-JDBC 实现读写分离</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fa-solid fa-map"></i><span>最近发布</span></div><div class="aside-list"><a class="aside-list-item" href="/post/2dfac39c.html" title="JavaScript 快速入门"><div class="content"><span class="title" href="/post/2dfac39c.html" title="JavaScript 快速入门">JavaScript 快速入门</span><span class="article-recent_post_categories" href="/post/2dfac39c.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层"><div class="content"><span class="title" href="/post/6f3aef06.html" title="计算机网络 CS144 - 第二单元 - 传输层">计算机网络 CS144 - 第二单元 - 传输层</span><span class="article-recent_post_categories" href="/post/6f3aef06.html">学习笔记</span></div></a><a class="aside-list-item" href="/post/c29c2b2c.html" title="主题的修改记录"><div class="content"><span class="title" href="/post/c29c2b2c.html" title="主题的修改记录">主题的修改记录</span><span class="article-recent_post_categories" href="/post/c29c2b2c.html">博客</span></div></a><a class="aside-list-item" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建"><div class="content"><span class="title" href="/post/6b5e6b32.html" title="从零开始的 Hexo 博客搭建">从零开始的 Hexo 博客搭建</span><span class="article-recent_post_categories" href="/post/6b5e6b32.html">博客</span></div></a><a class="aside-list-item" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建"><div class="content"><span class="title" href="/post/9382a5ca.html" title="如何用 scoop 简化你的软件安装以及环境搭建">如何用 scoop 简化你的软件安装以及环境搭建</span><span class="article-recent_post_categories" href="/post/9382a5ca.html">好物推荐</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src= "" data-lazy-src="https://fastly.jsdelivr.net/gh/V1hZ/img@main/PicGo/202501292252139.jpg">V1hZ</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://hexo.io/" alt="Powered by Hexo">Powered by Hexo</a><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/r1i1na/hexo-theme-eureka" alt="Theme Eureka">Theme Eureka</a><a class="footer-bar-link cc" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><i class="solitude fa-solid fa-copyright"></i><i class="solitude fa-brands fa-creative-commons-by"></i><i class="solitude fa-brands fa-creative-commons-nc"></i><i class="solitude fa-brands fa-creative-commons-nd"></i></a></div></div></div></footer></div><!-- right_menu--><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="solitude fa-solid fa-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="solitude fa-solid fa-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="solitude fa-solid fa-arrows-rotate"></i></div><div class="rightMenu-item" id="menu-top"><i class="solitude fa-solid fa-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="solitude fa-solid fa-clone"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="solitude fa-solid fa-clipboard"></i><span>粘贴文本</span></div><div class="rightMenu-item" id="menu-commenttext"><i class="solitude fa-solid fa-comment-medical"></i><span>引用到评论</span></div><div class="rightMenu-item" id="menu-newwindow"><i class="solitude fa-regular fa-window-maximize"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="solitude fa-solid fa-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="solitude fa-solid fa-clone"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="solitude fa-solid fa-cloud-arrow-down"></i><span>下载此图片</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-randomPost" onclick="toRandomPost()||rm.hideRightMenu()"><i class="solitude fas fa-shuffle"></i><span>随便看看</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/categories/')||rm.hideRightMenu()"><i class="solitude fas fa-clone"></i><span>博客分类</span></div><div class="rightMenu-item" onclick="pjax.loadUrl('/tags/')||rm.hideRightMenu()"><i class="solitude fas fa-tags"></i><span>文章标签</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><div class="rightMenu-item" id="menu-darkmode" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span class="menu-darkmode-text">浅色模式</span></div><div class="rightMenu-item" id="menu-translate"><i class="solitude fa-solid fa-language"></i><span>轉為繁體</span></div></div></div><div id="rightmenu-mask"></div><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/8.8.7/index.umd.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/19.1.3/lazyload.iife.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script>var meting_api = 'https://meting.boke.fun/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><script src="/js/right_menu.js?v=2.1.10"></script><script defer pjax src="/js/countdown.js"></script><div class="js-pjax"><script>(() => {
+    const getCount = () => {
+        const ele = document.querySelectorAll('.twikoo-count')
+        if (!ele) return
+        twikoo.getCommentsCount({
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            urls: [window.location.pathname],
+            includeReply: false
+        }).then(res => {
+            ele.forEach(item => item.textContent = res[0].count)
+        }).catch(err => {
+            console.error(err)
+        })
+    }
+    const init = () => {
+        twikoo.init(Object.assign({
+            el: '#twikoo-wrap',
+            envId: 'https://v1hz-twikoo.netlify.app/.netlify/functions/twikoo',
+            region: '',
+            path: window.location.pathname,
+            onCommentLoaded: () => {
+                GLOBAL_CONFIG.lightbox && utils.lightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+            }
+        }, null))
+
+         && getCount()
+        sco.owoBig({
+            body: '.OwO-body',
+            item: '.OwO-items li'
+        })
+
+        false && barrageTwikoo()
+    }
+
+    const loadTwikoo = () => {
+        if (typeof twikoo === 'object') setTimeout(init,0)
+        else utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.41/twikoo.all.min.js').then(init)
+    }
+
+    if ('Twikoo' === 'Twikoo' || false) {
+        if (false) utils.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+        else loadTwikoo()
+    } else {
+        window.loadTwoComment = loadTwikoo
+    }
+})()
+</script><script>mermaid.run();</script></div></div><script>const links = [{"name":null,"link":null}]
+const randomText = '点击前往按钮进入随机一个友链，不能保证跳转网站的可用性。本次随机到的是：⌈ ${name} ⌋'
+function travelling() {
+    const link = links[utils.randomNum(links.length)];
+    Snackbar.show({
+        text: randomText.replace(/\$\{name}/,link.name),
+        duration: 8000,
+        pos: 'top-center',
+        actionText: '前往',
+        onActionClick: function(element) {
+            element.style.opacity = 0;
+            window.open(link.link, '_blank');
+        }
+    });
+}
+</script><script>function randomLinksList() {
+    const linkcard = document.getElementById('friend-links-in-footer');
+    if (linkcard == null) return;
+
+    let data = '';
+    let linksCopy = [...links];
+    let count = Math.min(3, linksCopy.length);
+
+    for (let i = 0; i < count; i++) {
+        let index = utils.randomNum(linksCopy.length);
+        const {link, name} = linksCopy[index];
+        data += `<a class="footer-item" href="${link}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`;
+        linksCopy.splice(index, 1);
+    }
+
+    linkcard.innerHTML = data + '<a class="footer-item" href="/links/">更多</a>';
+}</script><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--></body></html>
+        <script>
+            const posts = ["post/2dfac39c.html","post/6f3aef06.html","post/c29c2b2c.html","post/6b5e6b32.html","post/9382a5ca.html","post/26778e02.html","post/d0f380b1.html","post/a320eb10.html","post/d73767c3.html","post/ce0d96ff.html","post/ffbc6743.html","post/eca2d255.html","post/e0be4916.html","post/5f3613b5.html","post/ed648fbb.html","post/96db0bd9.html","post/3fb56f9d.html","post/95b07011.html","post/e909e61e.html","post/718dd583.html","post/22d666a2.html"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
